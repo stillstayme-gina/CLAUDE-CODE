@@ -5,7 +5,7 @@ window.GC = window.GC || {};
 GC.provinces = [
   /* ── 소규모·관입체·분지: 먼저 검사 ───────────────────────────── */
   {
-    id: 'hantan', name: '한탄강 용암대지', era: 'cz2', hit: 1,
+    id: 'hantan', name: '한탄강 용암대지', era: 'cz2', noFallback: true, hit: 1,
     birthMa: 0.5, ageText: '약 50만 년 전', ageNum: '50', ageUnit: '만 년',
     rocks: ['현무암', '주상절리'],
     headline: '강 위를 용암이 덮은 땅',
@@ -14,7 +14,7 @@ GC.provinces = [
     poly: [[127.05,38.28],[127.48,38.22],[127.52,37.96],[127.28,37.80],[127.00,37.86],[126.88,38.06]]
   },
   {
-    id: 'seoul-granite', name: '서울 화강암체', era: 'mz1', hit: 1,
+    id: 'seoul-granite', name: '서울 화강암체', era: 'mz1', noFallback: true, hit: 1,
     birthMa: 170, ageText: '약 1억 7천만 년 전', ageNum: '1.7', ageUnit: '억 년',
     rocks: ['흑운모 화강암'],
     headline: '도시 한복판에 드러난 마그마 방',
@@ -23,7 +23,7 @@ GC.provinces = [
     poly: [[126.92,37.73],[127.11,37.75],[127.14,37.62],[126.95,37.585],[126.88,37.645]]
   },
   {
-    id: 'seorak-granite', name: '설악 화강암체', era: 'mz2', shade: 1, hit: 1,
+    id: 'seorak-granite', name: '설악 화강암체', era: 'mz2', shade: 1, noFallback: true, hit: 1,
     birthMa: 87, ageText: '약 8,700만 ~ 5,000만 년 전', ageNum: '8,700', ageUnit: '만 년',
     rocks: ['화강암'],
     headline: '수직으로 쪼개진 화강암',
@@ -32,7 +32,7 @@ GC.provinces = [
     poly: [[128.18,38.28],[128.66,38.22],[128.64,37.90],[128.24,37.88],[128.12,38.06]]
   },
   {
-    id: 'pohang', name: '포항·장기분지', era: 'cz1', hit: 1,
+    id: 'pohang', name: '포항·장기분지', era: 'cz1', noFallback: true, hit: 1,
     birthMa: 17, ageText: '약 1,700만 년 전', ageNum: '1,700', ageUnit: '만 년',
     rocks: ['이암', '사암', '역암', '응회암'],
     headline: '동해가 열릴 때 내려앉은 자리',
@@ -41,7 +41,7 @@ GC.provinces = [
     poly: [[129.20,36.25],[129.47,36.30],[129.42,36.00],[129.33,35.88],[129.18,35.98]]
   },
   {
-    id: 'westcoast', name: '서해안 백악기 분지대', era: 'mz2', shade: -1, hit: 2,
+    id: 'westcoast', name: '서해안 백악기 분지대', era: 'mz2', shade: -1, noFallback: true, hit: 2,
     birthMa: 90, ageText: '약 9,000만 년 전', ageNum: '9,000', ageUnit: '만 년',
     rocks: ['유문암', '응회암', '역암'],
     headline: '화산재가 굳어 만든 해식절벽',
@@ -68,7 +68,7 @@ GC.provinces = [
     poly: [[126.15,33.30],[126.35,33.55],[126.75,33.57],[126.95,33.50],[126.90,33.25],[126.55,33.20],[126.25,33.22]]
   },
   {
-    id: 'ulleung', name: '울릉도', era: 'cz2', shade: -1, hit: 1, inset: true,
+    id: 'ulleung', name: '울릉도', era: 'cz2', shade: -1, noFallback: true, hit: 1, inset: true,
     birthMa: 2.5, ageText: '약 250만 년 전 ~ 1만 년 전', ageNum: '250', ageUnit: '만 년',
     rocks: ['조면암', '포놀라이트', '화산쇄설암'],
     headline: '3,000m 해저산의 꼭대기',
@@ -77,7 +77,7 @@ GC.provinces = [
     poly: [[130.79,37.56],[130.95,37.56],[130.95,37.44],[130.79,37.44]]
   },
   {
-    id: 'dokdo', name: '독도', era: 'cz1', hit: 1, inset: true,
+    id: 'dokdo', name: '독도', era: 'cz1', noFallback: true, hit: 1, inset: true,
     birthMa: 4.6, ageText: '약 460만 ~ 250만 년 전', ageNum: '460', ageUnit: '만 년',
     rocks: ['조면암', '응회암'],
     headline: '울릉도보다 나이가 많다',
@@ -88,7 +88,7 @@ GC.provinces = [
 
   /* ── 대규모 지질구 ─────────────────────────────────────────── */
   {
-    id: 'imjin', name: '임진강대', era: 'mz1', hit: 5,
+    id: 'imjin', name: '임진강대', era: 'mz1', noFallback: true, hit: 5,
     birthMa: 230, ageText: '약 2억 3천만 년 전', ageNum: '2.3', ageUnit: '억 년',
     rocks: ['편암', '편마암', '함류석 변성암'],
     headline: '대륙이 충돌한 자리로 지목되는 띠',

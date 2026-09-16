@@ -56,7 +56,7 @@ window.GC = window.GC || {};
     }
     var best = null, bestD = Infinity;
     GC.provinces.forEach(function (p) {
-      if (p.inset) return;
+      if (p.inset || p.noFallback) return;
       var c = GC.centroid(p.poly);
       var dx = (c[0] - lng) * K, dy = c[1] - lat;
       var d = dx * dx + dy * dy;
@@ -85,3 +85,13 @@ window.GC = window.GC || {};
     return mix(base, p.shade > 0 ? 0.28 : -0.26);
   };
 })();
+
+/* 지질구 폴리곤은 해안선까지 정확히 닿지 않습니다. 중심에서 조금 부풀린
+   사본을 밑에 한 겹 깔면 해안 가장자리의 빈 땅이 메워지고, 그 위에 원본을
+   그리면 내부 경계는 원래대로 유지됩니다. (바다로 넘친 부분은 육지 클립이 잘라냅니다) */
+GC.expandPoly = function (poly, k) {
+  var c = GC.centroid(poly);
+  return poly.map(function (p) {
+    return [c[0] + (p[0] - c[0]) * (1 + k), c[1] + (p[1] - c[1]) * (1 + k)];
+  });
+};
