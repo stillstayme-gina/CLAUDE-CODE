@@ -1,0 +1,196 @@
+<nav class="strat" aria-label="구간 이동">
+  <a class="strat-link" href="#footprint" style="--ec:#E0C775"><span>발밑</span></a>
+  <a class="strat-link" href="#map" style="--ec:#D69A44"><span>지질도</span></a>
+  <a class="strat-link" href="#mountains" style="--ec:#94A64C"><span>산</span></a>
+  <a class="strat-link" href="#stories" style="--ec:#7A6DA6"><span>이야기</span></a>
+  <a class="strat-link" href="#quake" style="--ec:#C4462F"><span>단층</span></a>
+  <a class="strat-link" href="#quiz" style="--ec:#4E8C96"><span>퀴즈</span></a>
+  <a class="strat-link" href="#about" style="--ec:#8E5C7C"><span>출처</span></a>
+</nav>
+
+<div class="shell">
+
+  <header class="hero">
+    <p class="eyebrow">한반도 지질 안내</p>
+    <h1 class="hero-h">한반도는 작지만,<br>지구 역사의 절반이 들어 있다</h1>
+    <p class="hero-p">
+      일본처럼 화산이 터지지 않아서, 한국 땅은 지질학적으로 심심하다고들 합니다.
+      사실은 반대입니다. 남한 10만 km&sup2; 안에 <strong>19억 년 전 변성암부터 수천 년 전 화산재까지</strong>
+      압축되어 있습니다. 이런 땅은 세계적으로도 드뭅니다.
+    </p>
+    <p class="hero-p hero-p--last">
+      그 압축 파일을 여는 가장 빠른 방법은, 지금 당신이 서 있는 자리에서 시작하는 것입니다.
+    </p>
+  </header>
+
+  <section id="footprint" class="sec sec--fp">
+    <div class="sec-hd">
+      <p class="sec-k">01 — 시작점</p>
+      <h2 class="sec-h">발밑의 시간</h2>
+      <p class="sec-p">지금 서 있는 자리의 땅은 몇 살일까요. 지역을 고르거나 위치를 켜보세요.</p>
+    </div>
+
+    <div class="fp-ctl">
+      <button type="button" class="btn btn-solid" id="fpGeo">내 위치로 찾기</button>
+      <div class="fp-search">
+        <label class="sr-only" for="fpRegion">시·군·구</label>
+        <input id="fpRegion" list="fpList" placeholder="시·군·구 이름 (예: 경북 청송군)" autocomplete="off">
+        <datalist id="fpList"></datalist>
+        <button type="button" class="btn btn-line" id="fpGo">조회</button>
+      </div>
+    </div>
+    <p class="fp-status" id="fpStatus" role="status"></p>
+
+    <div class="fp-card" id="fpCard" data-state="empty"></div>
+  </section>
+
+  <section id="map" class="sec">
+    <div class="sec-hd">
+      <p class="sec-k">02 — 지질도</p>
+      <h2 class="sec-h">한반도가 자라난 순서</h2>
+      <p class="sec-p">
+        지질도는 색이 백 가지라 암호처럼 보입니다. 딱 하나만 기억하세요.
+        <strong>색은 나이입니다.</strong> 아래 손잡이를 왼쪽 끝에서 오른쪽으로 밀어보세요.
+        그 시점에 이미 존재하던 땅만 색이 켜집니다.
+      </p>
+    </div>
+
+    <div class="time">
+      <div class="time-row">
+        <button type="button" class="step" id="timePrev" aria-label="이전 시대">&#8592;</button>
+        <input type="range" id="timeSlider" min="0" max="11" value="11" step="1"
+               aria-label="지질 시대" role="slider">
+        <button type="button" class="step" id="timeNext" aria-label="다음 시대">&#8594;</button>
+      </div>
+      <div class="time-ticks" id="timeTicks"></div>
+      <div class="tl-card">
+        <p class="tl-label" id="tlLabel"></p>
+        <h3 class="tl-title" id="tlTitle"></h3>
+        <p class="tl-lead" id="tlLead"></p>
+        <p class="tl-note" id="tlNote"></p>
+        <p class="tl-count">이 시점에 존재하던 지질구 <b id="tlCount"></b></p>
+      </div>
+    </div>
+
+    <div class="map-wrap">
+      <div class="map-stage" id="mapStage"></div>
+      <div class="map-side">
+        <div class="map-tools">
+          <label class="switch">
+            <input type="checkbox" id="faultToggle">
+            <span class="switch-ui" aria-hidden="true"></span>
+            <span>활성단층 · 지진</span>
+          </label>
+          <p class="fault-note" id="faultNote" hidden>
+            붉은 선은 양산·울산 단층대, 붉은 원은 2016 경주와 2017 포항 지진입니다.
+          </p>
+        </div>
+        <p class="lg-cap">지질구 — 오래된 순</p>
+        <div class="legend" id="mapLegend"></div>
+        <p class="lg-foot">삼각형은 아래 &lsquo;산의 탄생&rsquo;에서 다루는 일곱 개 산입니다. 눌러보세요.</p>
+      </div>
+    </div>
+
+    <div class="prov-detail" id="provDetail" hidden></div>
+  </section>
+
+  <section id="mountains" class="sec">
+    <div class="sec-hd">
+      <p class="sec-k">03 — 산</p>
+      <h2 class="sec-h">이 산은 어떻게 이 모양이 되었나</h2>
+      <p class="sec-p">
+        높이나 코스가 아니라 모양에서 시작합니다. 설악산이 뾰족하고 지리산이 둥근 것은
+        취향의 문제가 아니라 <strong>암석과 절리와 시간</strong>의 문제입니다.
+      </p>
+    </div>
+    <div class="mt-grid" id="mtGrid"></div>
+    <div class="mt-detail" id="mtDetail"></div>
+  </section>
+
+  <section id="stories" class="sec">
+    <div class="sec-hd">
+      <p class="sec-k">04 — 이야기</p>
+      <h2 class="sec-h">한반도를 만든 세 사건</h2>
+      <p class="sec-p">지질 용어를 몰라도 읽히도록 썼습니다. 제목을 누르면 펼쳐집니다.</p>
+    </div>
+    <div class="story-list" id="storyList"></div>
+  </section>
+
+  <section id="quake" class="sec sec--quake">
+    <div class="sec-hd">
+      <p class="sec-k">05 — 지금</p>
+      <h2 class="sec-h">한반도는 지진 안전지대가 아니다</h2>
+      <p class="sec-p">
+        지질학을 알아야 할 가장 실용적인 이유입니다. 한반도 동남부에는 양산단층대를 비롯한
+        활성단층이 지나가고, 최근 10년 사이 두 번의 피해 지진이 있었습니다.
+      </p>
+    </div>
+    <ul class="quake-list" id="quakeList"></ul>
+    <p class="quake-foot">
+      위 지질도에서 <b>활성단층 · 지진</b>을 켜면 단층선과 진앙 위치를 함께 볼 수 있습니다.
+      경상분지의 백악기 퇴적층과 그 뒤 동해가 열리며 생긴 응력이, 지금도 이 단층들을 움직이고 있습니다.
+    </p>
+  </section>
+
+  <section id="quiz" class="sec sec--quiz">
+    <div class="sec-hd">
+      <p class="sec-k">06 — 확인</p>
+      <h2 class="sec-h">널리 퍼진 열 가지 오해</h2>
+      <p class="sec-p">O · X로 답해보세요. 틀려도 설명이 나옵니다.</p>
+    </div>
+    <div class="qz">
+      <div class="qz-bar">
+        <span id="qzProg" class="qz-prog"></span>
+        <span id="qzScore" class="qz-score"></span>
+      </div>
+      <p class="qz-q" id="qzQ"></p>
+      <div class="qz-btns">
+        <button type="button" class="qz-b" id="qzO">O</button>
+        <button type="button" class="qz-b" id="qzX">X</button>
+      </div>
+      <p class="qz-why" id="qzWhy" hidden></p>
+      <button type="button" class="btn btn-solid qz-next" id="qzNext" hidden></button>
+    </div>
+  </section>
+
+  <section id="about" class="sec sec--about">
+    <div class="sec-hd">
+      <p class="sec-k">07 — 출처와 한계</p>
+      <h2 class="sec-h">이 페이지가 말하지 않는 것</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-b">
+        <h4>지질구 경계는 개략입니다</h4>
+        <p>
+          지도의 경계선은 1:25만급 지질도를 크게 단순화한 것입니다. 실제 지질 경계는 훨씬 복잡하고,
+          같은 시·군 안에서도 암석은 여러 번 바뀝니다. 학술·실무 목적이라면
+          한국지질자원연구원(KIGAM) 지질정보시스템의 원본 지질도를 사용하세요.
+        </p>
+      </div>
+      <div class="about-b">
+        <h4>연대는 대푯값입니다</h4>
+        <p>
+          &lsquo;19억 년&rsquo;은 그 지질구에서 가장 널리 인용되는 값 하나를 고른 것입니다.
+          하나의 육괴 안에도 수억 년 차이가 나는 암석이 함께 있습니다. 옥천대의 퇴적 시기처럼
+          아직 학계에서 결론이 나지 않은 항목은 본문에 그렇게 적었습니다.
+        </p>
+      </div>
+      <div class="about-b">
+        <h4>다음에 들어갈 것</h4>
+        <p>
+          국가지질공원·유네스코 세계지질공원 명소 도감과 현장 체크인, 지질 트레일의 단면도
+          (&ldquo;이 코스 5km를 걸으면 3억 년을 지나갑니다&rdquo;), 그리고 교실용 워크시트.
+        </p>
+      </div>
+      <div class="about-b">
+        <h4>확인해 볼 원자료</h4>
+        <p>
+          한국지질자원연구원 지질정보시스템 · 국가지질공원 누리집 · 기상청 지진화산 정보 ·
+          국립공원공단 탐방 정보. 공개 데이터의 이용 조건(공공누리 유형)은 반영 전 확인이 필요합니다.
+        </p>
+      </div>
+    </div>
+    <p class="colophon">발밑의 시간 &mdash; 한반도 지질 안내 · 시안</p>
+  </section>
+
+</div>
