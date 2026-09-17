@@ -115,6 +115,21 @@ window.GC = window.GC || {};
     });
     svg.appendChild(gM);
 
+    /* 산 160곳 — 작은 점. 깊이 다룬 일곱 곳은 위의 삼각형으로 따로 표시됩니다 */
+    var gP = el('g', { class: 'lyr-peak' });
+    var deepNames = {};
+    GC.mountains.forEach(function (m) { deepNames[m.name] = 1; });
+    GC.peaks.forEach(function (pk) {
+      if (deepNames[pk[0]] || pk[3] > 130) return;
+      var c = GC.project(pk[3], pk[4]);
+      var g = el('g', { class: 'peak', 'data-pk': pk[0], tabindex: '0', role: 'button' });
+      g.appendChild(el('circle', { cx: c[0], cy: c[1], r: 1.7, class: 'peak-dot' }));
+      var t = el('title'); t.textContent = pk[0] + ' ' + pk[1] + 'm · ' + pk[2];
+      g.appendChild(t);
+      gP.appendChild(g);
+    });
+    svg.appendChild(gP);
+
     var gS = el('g', { class: 'lyr-site' });
     GC.geoparks.forEach(function (gp) {
       gp.sites.forEach(function (s) {
@@ -168,7 +183,7 @@ window.GC = window.GC || {};
     applyStop();
 
     /* 지도는 해당 페이지를 처음 열 때 만들어지므로, 체크박스의 현재 상태를 반영합니다 */
-    ['siteToggle:lyr-site', 'faultToggle:lyr-fault'].forEach(function (pair) {
+    ['siteToggle:lyr-site', 'faultToggle:lyr-fault', 'peakToggle:lyr-peak'].forEach(function (pair) {
       var bits = pair.split(':');
       var box = document.getElementById(bits[0]);
       GC.toggleLayer(bits[1], !!(box && box.checked));
@@ -178,6 +193,8 @@ window.GC = window.GC || {};
   function onPick(e) {
     var mt = e.target.closest('.mt');
     if (mt) { GC.go('mountains', mt.getAttribute('data-mt')); return; }
+    var pk = e.target.closest('.peak');
+    if (pk) { GC.go('mountains'); setTimeout(function () { GC.openPeakByName(pk.getAttribute('data-pk')); }, 80); return; }
     var st = e.target.closest('.site');
     if (st) { GC.go('geoparks', st.getAttribute('data-gp')); return; }
     var pv = e.target.closest('[data-id]');

@@ -2,17 +2,18 @@
 window.GC = window.GC || {};
 
 (function () {
-  var PAGES = ['home', 'footprint', 'map', 'mountains', 'geoparks', 'trails', 'stories', 'rock', 'quiz', 'about'];
+  var PAGES = ['home', 'footprint', 'map', 'mountains', 'geoparks', 'trails', 'stories', 'rock', 'visits', 'quiz', 'about'];
   var inited = {};
   var current = null;
 
   var LAZY = {
     map: function () { GC.buildMap(); },
-    mountains: function () { GC.initMountains(); },
+    mountains: function () { GC.initPeaks(); GC.initMountains(); },
     geoparks: function () { GC.initGeoparks(); },
     trails: function () { GC.initTrails(); },
     stories: function () { GC.initStories(); },
     rock: function () { GC.initRockId(); },
+    visits: function () { GC.initVisits(); },
     quiz: function () { GC.initQuiz(); }
   };
 

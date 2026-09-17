@@ -12,8 +12,10 @@ window.GC = window.GC || {};
       GC.toggleLayer('lyr-fault', t.checked);
       note.hidden = !t.checked;
     });
-    var st = document.getElementById('siteToggle');
-    st.addEventListener('change', function () { GC.toggleLayer('lyr-site', st.checked); });
+    [['siteToggle', 'lyr-site'], ['peakToggle', 'lyr-peak']].forEach(function (pair) {
+      var box = document.getElementById(pair[0]);
+      box.addEventListener('change', function () { GC.toggleLayer(pair[1], box.checked); });
+    });
 
     var qn = document.getElementById('quakeList');
     GC.quakes.forEach(function (q) {

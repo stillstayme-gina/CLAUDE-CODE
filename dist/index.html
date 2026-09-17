@@ -11,6 +11,7 @@
   --ok:#3F6B4A; --warn:#A8471F;
   --e-pc:#A83A82; --e-pz1:#0E7C9E; --e-pz2:#96541E; --e-mz1:#5B4FCC;
   --e-mz2:#5F9E22; --e-cz1:#D9731E; --e-cz2:#B99A10; --e-volc:#BE3320;
+  --ramp:#EFE3D8 #E0BFA2 #CE9468 #B96B38 #A8471F;   /* 순차 색상: 한 색조, 밝은 쪽에서 어두운 쪽 */
   --ring:0 0 0 2px var(--bg),0 0 0 4px var(--accent);
   --sh:0 1px 1px rgba(29,25,21,.04),0 10px 28px -14px rgba(29,25,21,.28);
   --f-disp:"Noto Serif KR",Georgia,"Nanum Myeongjo",serif;
@@ -25,6 +26,7 @@
   --ok:#7FB98C; --warn:#E08A4C;
   --e-pc:#C25BA0; --e-pz1:#2E9CBE; --e-pz2:#AE7038; --e-mz1:#8579E8;
   --e-mz2:#66A02C; --e-cz1:#D8802F; --e-cz2:#9D9030; --e-volc:#D9503B;
+  --ramp:#3A2A1C #5C3D22 #8A5A2C #B8763A #E08A4C;
   --sh:0 1px 1px rgba(0,0,0,.4),0 14px 34px -16px rgba(0,0,0,.7);
 }}
 :root[data-theme="dark"]{
@@ -35,6 +37,7 @@
   --ok:#7FB98C; --warn:#E08A4C;
   --e-pc:#C25BA0; --e-pz1:#2E9CBE; --e-pz2:#AE7038; --e-mz1:#8579E8;
   --e-mz2:#66A02C; --e-cz1:#D8802F; --e-cz2:#9D9030; --e-volc:#D9503B;
+  --ramp:#3A2A1C #5C3D22 #8A5A2C #B8763A #E08A4C;
   --sh:0 1px 1px rgba(0,0,0,.4),0 14px 34px -16px rgba(0,0,0,.7);
 }
 
@@ -663,6 +666,143 @@ p{margin:0}
 .tr-points p{font-size:13.8px; line-height:1.75; color:var(--text-2)}
 .tr-foot{display:flex; flex-wrap:wrap; gap:10px 20px; align-items:baseline; padding:20px 26px 22px; border-top:1px solid var(--line-soft); background:var(--sunk)}
 .tr-access{flex:1 1 280px; font-size:13px; line-height:1.7; color:var(--text-3)}
+
+/* ── 산 도감 ──────────────────────────────────────────── */
+.pk-ctl{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
+.pk-q{
+  flex:1 1 260px; min-width:0; font:400 14.5px/1 var(--f-body); padding:11px 13px;
+  border-radius:2px; color:var(--text); background:var(--surface); border:1px solid var(--line);
+}
+.pk-q::placeholder{color:var(--text-3)}
+.pk-sel{
+  flex:0 1 auto; font:400 14px/1 var(--f-body); padding:11px 12px; border-radius:2px;
+  color:var(--text); background:var(--surface); border:1px solid var(--line); cursor:pointer;
+}
+.pk-meta{display:flex; gap:14px; align-items:baseline; margin-top:12px; font:500 12.5px/1 var(--f-mono); color:var(--text-3)}
+.pk-meta b{color:var(--accent)}
+.pk-meta span{font-family:var(--f-body); font-weight:400}
+
+.pk-wrap{display:grid; gap:20px; margin-top:16px}
+@media (min-width:860px){ .pk-wrap{grid-template-columns:minmax(0,1fr) minmax(0,340px); align-items:start} }
+.pk-list{
+  max-height:560px; overflow-y:auto; border:1px solid var(--line-soft); border-radius:3px;
+  background:var(--surface);
+}
+.pk-row{
+  display:grid; grid-template-columns:10px minmax(0,1fr) auto auto auto; gap:12px; align-items:center;
+  width:100%; padding:11px 14px; text-align:left; cursor:pointer; color:var(--text);
+  background:none; border:0; border-bottom:1px solid var(--line-soft); transition:.15s;
+}
+.pk-row:last-child{border-bottom:0}
+.pk-row:hover{background:var(--surface-2)}
+.pk-row.is-sel{background:var(--surface-2); box-shadow:inset 3px 0 0 var(--accent)}
+.pk-sw{width:10px; height:10px; border-radius:2px}
+.pk-n{display:flex; align-items:center; gap:7px; font-size:14.5px; font-weight:500; min-width:0}
+.pk-n em{
+  font:600 9.5px/1 var(--f-mono); font-style:normal; letter-spacing:.06em; padding:3px 5px;
+  border-radius:2px; color:var(--accent); border:1px solid currentColor; flex:0 0 auto;
+}
+.pk-sd{font:400 11.5px/1 var(--f-mono); color:var(--text-3)}
+.pk-pv{font-size:12px; color:var(--text-2); display:none}
+@media (min-width:620px){ .pk-pv{display:block} }
+.pk-h{font:500 12.5px/1 var(--f-mono); color:var(--text-2); font-variant-numeric:tabular-nums}
+.pk-h i{font-style:normal; color:var(--text-3); margin-left:1px}
+.pk-d{font:600 11.5px/1 var(--f-mono); color:var(--accent)}
+.pk-empty{padding:28px 16px; text-align:center; font-size:14px; color:var(--text-3)}
+
+.pk-detail{
+  background:var(--surface); border:1px solid var(--line-soft); border-radius:3px;
+  box-shadow:var(--sh); overflow:hidden; align-self:start;
+}
+.pk-head{padding:20px 22px 16px; border-left:4px solid var(--ec); background:var(--surface-2); border-bottom:1px solid var(--line-soft)}
+.pk-loc{font:500 11.5px/1 var(--f-mono); letter-spacing:.08em; color:var(--text-3); margin-bottom:9px}
+.pk-title{font-size:21px; display:flex; align-items:baseline; gap:9px; flex-wrap:wrap}
+.pk-title span{font:400 13px var(--f-mono); color:var(--text-3)}
+.pk-body{padding:20px 22px 4px}
+.pk-acts{display:flex; flex-direction:column; gap:8px; padding:14px 22px 0}
+.pk-acts .btn{width:100%}
+.pk-caveat{padding:14px 22px 18px; font-size:12.3px; line-height:1.7; color:var(--text-3)}
+.peak{cursor:pointer}
+.peak-dot{fill:var(--text); fill-opacity:.55; stroke:var(--bg); stroke-width:.5}
+.peak:hover .peak-dot{fill:var(--accent); fill-opacity:1; r:3}
+.lyr-peak{transition:opacity .25s}
+.lyr-peak:not(.is-on){opacity:0; pointer-events:none}
+.mt-deep{margin-top:56px; padding-top:34px; border-top:1px solid var(--line-soft)}
+.mt-deep .mt-grid{margin-top:20px}
+
+/* ── 돌 이름: 탭 · 사진 ───────────────────────────────── */
+.rk-tabs{display:flex; gap:4px; margin-bottom:14px}
+.rk-tab{
+  padding:10px 16px; border-radius:2px; cursor:pointer; font:600 14px/1 var(--f-body);
+  color:var(--text-2); background:var(--surface-2); border:1px solid var(--line-soft); transition:.18s;
+}
+.rk-tab.is-on{color:var(--accent-ink); background:var(--accent); border-color:var(--accent)}
+.rk-tab:disabled{opacity:.45; cursor:not-allowed}
+
+.rk-drop{
+  display:grid; gap:7px; justify-items:center; text-align:center; cursor:pointer;
+  padding:36px 22px; border-radius:4px; background:var(--surface-2);
+  border:2px dashed var(--line); transition:.18s;
+}
+.rk-drop:hover,.rk-drop.is-over{border-color:var(--accent); background:var(--accent-soft)}
+.rk-drop.is-off{opacity:.5; cursor:not-allowed}
+.rk-drop-i{
+  width:34px; height:26px; border-radius:3px; border:2px solid var(--accent); position:relative;
+}
+.rk-drop-i::before{content:""; position:absolute; inset:auto 6px 4px 6px; height:9px; border-radius:2px 2px 0 0; background:var(--accent)}
+.rk-drop-i::after{content:""; position:absolute; top:-6px; left:11px; width:12px; height:5px; border-radius:2px 2px 0 0; background:var(--accent)}
+.rk-drop-t{font-family:var(--f-disp); font-size:17px; font-weight:600}
+.rk-drop-s{font-size:13px; line-height:1.6; color:var(--text-3); max-width:34ch}
+.rk-prev{display:flex; align-items:flex-start; gap:14px; margin-top:16px; flex-wrap:wrap}
+.rk-prev img{width:150px; height:150px; object-fit:cover; border-radius:3px; border:1px solid var(--line)}
+.rk-msg{margin-top:14px; font-size:13.5px; color:var(--text-2); min-height:20px}
+.rk-out{display:grid; gap:10px; margin-top:16px}
+.rk-scene{font-size:14px; color:var(--text-3); line-height:1.7}
+.rk-none{font-size:14.5px; line-height:1.8; color:var(--text-2)}
+.rk-cand{padding:18px 20px; border-radius:3px; background:var(--surface-2); border-left:4px solid var(--ec)}
+.rk-cand.is-top{background:var(--surface); border:1px solid var(--line-soft); border-left:4px solid var(--ec); box-shadow:var(--sh)}
+.rk-cand header{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:12px}
+.rk-rank{font:600 10.5px/1 var(--f-mono); letter-spacing:.1em; color:var(--text-3)}
+.rk-cand h4{font-size:20px; color:var(--ec)}
+.rk-conf{font:600 11px/1 var(--f-mono); padding:5px 8px; border-radius:2px; border:1px solid currentColor}
+.rk-conf--hi{color:var(--ok)} .rk-conf--mid{color:var(--text-2)} .rk-conf--lo{color:var(--text-3)}
+.rk-why2,.rk-check{font-size:14.2px; line-height:1.8; color:var(--text-2); margin-bottom:9px}
+.rk-why2 span,.rk-check span{display:block; font:600 10.5px/1 var(--f-mono); letter-spacing:.1em; color:var(--text-3); margin-bottom:6px}
+.rk-check{padding:12px 14px; background:var(--sunk); border-radius:2px}
+
+/* ── 방문 지도 ────────────────────────────────────────── */
+.vz-off{padding:26px 0; font-size:14.5px; line-height:1.8; color:var(--text-2)}
+.vz-top{display:flex; flex-wrap:wrap; gap:12px 36px; padding:20px 22px; border-radius:3px; background:var(--surface); border:1px solid var(--line-soft); margin-bottom:20px}
+.vz-stat{display:flex; align-items:baseline; gap:7px}
+.vz-stat b{font:600 2rem/1 var(--f-mono); color:var(--accent); font-variant-numeric:tabular-nums; letter-spacing:-.03em}
+.vz-stat span{font-size:13px; color:var(--text-2)}
+.vz-grid{display:grid; gap:24px}
+@media (min-width:820px){ .vz-grid{grid-template-columns:minmax(0,320px) minmax(0,1fr); align-items:start} }
+.vz-fig{margin:0}
+.vz-fig figcaption{font:600 11.5px/1 var(--f-mono); letter-spacing:.1em; color:var(--text-3); margin-bottom:12px}
+.vz-svg{max-width:320px; margin-inline:auto}
+.vz-sido{stroke:var(--bg); stroke-width:.6}
+.vz-sido.is-zero{opacity:.55}
+.vz-scale{display:flex; align-items:center; gap:9px; margin-top:12px; font:400 11px/1 var(--f-mono); color:var(--text-3)}
+.vz-ramp{flex:1 1 auto; height:8px; border-radius:4px; background:linear-gradient(90deg,#EFE3D8,#E0BFA2,#CE9468,#B96B38,#A8471F)}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .vz-ramp{background:linear-gradient(90deg,#3A2A1C,#5C3D22,#8A5A2C,#B8763A,#E08A4C)} }
+:root[data-theme="dark"] .vz-ramp{background:linear-gradient(90deg,#3A2A1C,#5C3D22,#8A5A2C,#B8763A,#E08A4C)}
+.vz-bars{list-style:none; margin:0 0 26px; padding:0; display:grid; gap:7px}
+.vz-bars li{display:grid; grid-template-columns:104px minmax(0,1fr) 40px; gap:12px; align-items:center; font-size:13.5px}
+.vz-l{display:flex; align-items:center; gap:7px; color:var(--text)}
+.vz-sw{width:10px; height:10px; border-radius:2px; flex:0 0 auto}
+.vz-b{height:8px; border-radius:4px; background:var(--surface-2); overflow:hidden}
+.vz-b i{display:block; height:100%; background:var(--accent); border-radius:4px}
+.vz-v{font:500 12px/1 var(--f-mono); color:var(--text-2); text-align:right; font-variant-numeric:tabular-nums}
+.vz-policy{margin-top:40px; padding:22px 24px; border-radius:3px; background:var(--surface); border:1px solid var(--line-soft)}
+.vz-policy h4{font-size:15px; margin-bottom:14px}
+.vz-policy ul{margin:0; padding-left:20px; display:grid; gap:9px}
+.vz-policy li{font-size:14px; line-height:1.8; color:var(--text-2)}
+.vz-policy b{color:var(--text); font-weight:600}
+.vz-law{margin-top:16px; padding-top:14px; border-top:1px solid var(--line-soft); font-size:13px; line-height:1.8; color:var(--text-3)}
+.fp-visit{margin-top:14px; padding:16px 20px; border-radius:3px; background:var(--surface-2); border:1px solid var(--line-soft)}
+.fp-visit-n{margin-top:10px; font-size:12.6px; line-height:1.7; color:var(--text-3); max-width:58ch}
+.rk-fallback{margin-bottom:14px; padding:12px 15px; border-radius:2px; background:var(--surface-2); border-left:3px solid var(--accent); font-size:13.4px; line-height:1.7; color:var(--text-2); max-width:62ch}
 </style>
 <header class="topbar">
   <a class="brand" href="#/" data-nav="home">
@@ -677,6 +817,7 @@ p{margin:0}
     <a href="#/trails" data-nav="trails">트레일</a>
     <a href="#/stories" data-nav="stories">이야기</a>
     <a href="#/rock" data-nav="rock">돌 이름</a>
+    <a href="#/visits" data-nav="visits">방문 지도</a>
     <a href="#/quiz" data-nav="quiz">퀴즈</a>
     <a href="#/about" data-nav="about">만든 사람</a>
   </nav>
@@ -735,11 +876,12 @@ p{margin:0}
     </a>
     <a class="hub-c" href="#/rock" style="--ec:var(--e-pc)">
       <span class="hub-k">07</span><span class="hub-n">이 돌 이름이 뭐예요</span>
-      <span class="hub-d">산에서 주운 돌, 질문 두세 개로 이름 찾기</span>
+      <span class="hub-d">사진을 찍어 올리면 어떤 암석인지 알려드립니다</span>
     </a>
   </nav>
 
   <p class="home-foot">
+    <a href="#/visits">방문 지도</a> ·
     <a href="#/quiz">널리 퍼진 오해 열 가지 풀어보기</a> ·
     <a href="#/about">이 페이지를 만든 사람</a>
   </p>
@@ -762,6 +904,7 @@ p{margin:0}
   </div>
   <p class="fp-status" id="fpStatus" role="status"></p>
   <div class="fp-card" id="fpCard"></div>
+  <div class="fp-visit" id="fpVisit" hidden></div>
 </section>
 
 <!-- ═══ 지질도 ═══ -->
@@ -796,6 +939,10 @@ p{margin:0}
     <div class="map-stage" id="mapStage"></div>
     <div class="map-side">
       <div class="map-tools">
+        <label class="switch">
+          <input type="checkbox" id="peakToggle" checked>
+          <span class="switch-ui" aria-hidden="true"></span><span>산 160곳</span>
+        </label>
         <label class="switch">
           <input type="checkbox" id="siteToggle" checked>
           <span class="switch-ui" aria-hidden="true"></span><span>지질명소</span>
@@ -833,14 +980,40 @@ p{margin:0}
 <section class="page" id="page-mountains" hidden>
   <div class="sec-hd">
     <p class="sec-k">03 — 산</p>
-    <h2 class="sec-h">이 산은 어떻게 이 모양이 되었나</h2>
+    <h2 class="sec-h">어느 산이든, 발밑은 무엇인가</h2>
     <p class="sec-p">
-      높이나 코스가 아니라 모양에서 시작합니다. 설악산이 뾰족하고 지리산이 둥근 것은
-      취향이 아니라 <strong>암석과 절리와 시간</strong>의 문제입니다.
+      국내 주요 산 <strong id="pkTotal">160</strong>곳입니다. 이름으로 찾거나 지역·지질구로 걸러보세요.
+      각 산의 지질구와 암석은 정상부 좌표로 자동 판정합니다.
     </p>
   </div>
-  <div class="mt-grid" id="mtGrid"></div>
-  <div class="mt-detail" id="mtDetail"></div>
+
+  <div class="pk-ctl">
+    <label class="sr-only" for="pkQ">산 이름 검색</label>
+    <input id="pkQ" class="pk-q" placeholder="산 이름 · 지역 · 암석 (예: 화강암)" autocomplete="off">
+    <label class="sr-only" for="pkSido">지역</label>
+    <select id="pkSido" class="pk-sel"><option value="">전체 지역</option></select>
+    <label class="sr-only" for="pkProv">지질구</label>
+    <select id="pkProv" class="pk-sel"><option value="">전체 지질구</option></select>
+    <button type="button" class="btn btn-line" id="pkNear">가까운 순</button>
+    <button type="button" class="btn btn-ghost" id="pkClear">초기화</button>
+  </div>
+  <p class="pk-meta"><b id="pkCount"></b><span id="pkNearNote" hidden>내 위치에서 가까운 순으로 정렬했습니다.</span></p>
+
+  <div class="pk-wrap">
+    <div class="pk-list" id="pkList"></div>
+    <div class="pk-detail" id="pkDetail" hidden></div>
+  </div>
+  <p class="gp-note" id="pkNote"></p>
+
+  <div class="mt-deep" id="mtDeep">
+    <h3 class="sub-h">더 깊이 본 산 일곱 곳</h3>
+    <p class="sec-p">
+      모양에서 시작합니다. 설악산이 뾰족하고 지리산이 둥근 것은 취향이 아니라
+      <strong>암석과 절리와 시간</strong>의 문제입니다.
+    </p>
+    <div class="mt-grid" id="mtGrid"></div>
+    <div class="mt-detail" id="mtDetail"></div>
+  </div>
 </section>
 
 <!-- ═══ 지질공원 ═══ -->
@@ -937,17 +1110,52 @@ p{margin:0}
     <p class="sec-k">07 — 암석</p>
     <h2 class="sec-h">이 돌 이름이 뭐예요</h2>
     <p class="sec-p">
-      등산 중에 가장 많이 나오는 질문입니다. 눈과 손으로 확인할 수 있는 것만 물어보고,
-      두세 번 만에 후보를 좁힙니다.
+      등산 중에 가장 많이 나오는 질문입니다. <strong>사진을 찍어 올리면</strong> 어떤 암석인지 추정해 드립니다.
+      사진이 없으면 질문 두세 개로 좁힐 수도 있습니다.
     </p>
   </div>
-  <div class="rk" id="rkStage"></div>
+
+  <div class="rk-tabs" role="tablist">
+    <button type="button" class="rk-tab is-on" id="rkTabPhoto" role="tab">사진으로 찾기</button>
+    <button type="button" class="rk-tab" id="rkTabQuiz" role="tab">질문으로 찾기</button>
+  </div>
+
+  <p class="rk-fallback" id="rkFallback" hidden></p>
+  <div class="rk" id="rkPhotoPane"></div>
+  <div class="rk" id="rkQuizPane" hidden><div id="rkQuiz"></div></div>
+</section>
+
+<!-- ═══ 방문 지도 ═══ -->
+<section class="page" id="page-visits" hidden>
+  <div class="sec-hd">
+    <p class="sec-k">08 — 방문 지도</p>
+    <h2 class="sec-h">어느 땅에서 보고 있나</h2>
+    <p class="sec-p">
+      이 페이지를 본 사람들이 어느 지역, 어느 지질구에 있었는지 모아서 보여줍니다.
+      <strong>직접 누른 경우에만</strong> 기록되고, 저장하는 것은 <strong>시·도와 지질구 두 가지뿐</strong>입니다.
+    </p>
+  </div>
+  <div id="vzBody"></div>
+  <div class="vz-policy">
+    <h4>무엇을 저장하고 무엇을 저장하지 않나</h4>
+    <ul>
+      <li><b>저장합니다</b> — 시·도 이름(예: 강원), 지질구 이름(예: 태백산분지), 날짜(일 단위).</li>
+      <li><b>저장하지 않습니다</b> — 정확한 좌표, 시·군·구, 시각, 기기 정보, 누구인지 알 수 있는 어떤 값도.</li>
+      <li>기록은 개별로 보이지 않고 <b>합계로만</b> 표시됩니다.</li>
+      <li>&lsquo;방문 지도에 남기기&rsquo;를 누르지 않으면 아무것도 저장되지 않습니다. 위치 조회만으로는 기록되지 않습니다.</li>
+    </ul>
+    <p class="vz-law">
+      한국에서 개인의 정확한 위치정보를 모아 보관하는 일은 위치정보법과 개인정보보호법의 규율을 받습니다.
+      이 시안이 시·도 단위 합계만 남기는 이유입니다. 더 자세한 분석이 필요하면 이용약관과 동의 절차,
+      보관 기간을 먼저 갖춘 뒤에 설계하는 것이 맞습니다.
+    </p>
+  </div>
 </section>
 
 <!-- ═══ 퀴즈 ═══ -->
 <section class="page" id="page-quiz" hidden>
   <div class="sec-hd">
-    <p class="sec-k">08 — 확인</p>
+    <p class="sec-k">09 — 확인</p>
     <h2 class="sec-h">널리 퍼진 열 가지 오해</h2>
     <p class="sec-p">O · X로 답해보세요. 틀려도 설명이 나옵니다.</p>
   </div>
@@ -969,7 +1177,7 @@ p{margin:0}
 <!-- ═══ 만든 사람 ═══ -->
 <section class="page" id="page-about" hidden>
   <div class="sec-hd">
-    <p class="sec-k">09 — 만든 사람</p>
+    <p class="sec-k">10 — 만든 사람</p>
     <h2 class="sec-h">아는 만큼 보입니다</h2>
   </div>
 
@@ -1178,7 +1386,7 @@ GC.provinces = [
     headline: '강 위를 용암이 덮은 땅',
     thenHere: '북쪽 오리산에서 흘러나온 아주 묽은 용암이 한탄강 계곡을 따라 100km 넘게 흘러들어, 있던 강을 통째로 메웠습니다. 강은 그 굳은 현무암을 다시 깎아 지금의 협곡을 만들었습니다.',
     seeIt: '철원 직탕폭포와 고석정, 연천 재인폭포. 수직으로 쪼개진 검은 기둥(주상절리) 절벽이 강 양쪽에 서 있습니다.',
-    poly: [[127.05,38.28],[127.48,38.22],[127.52,37.96],[127.28,37.80],[127.00,37.86],[126.88,38.06]]
+    poly: [[126.92,38.14],[127.08,38.32],[127.40,38.28],[127.40,38.12],[127.20,38.04],[127.00,38.06]]
   },
   {
     id: 'seoul-granite', name: '서울 화강암체', era: 'mz1', noFallback: true, hit: 1,
@@ -1297,7 +1505,7 @@ GC.provinces = [
     headline: '남한에서 가장 넓고 오래된 땅',
     thenHere: '경기육괴와 마찬가지로 지하 깊은 곳에서 구워진 아주 오래된 변성암입니다. 워낙 오래 침식을 받아 뾰족한 봉우리가 남아 있지 않고, 능선이 두툼하고 둥근 산을 만듭니다.',
     seeIt: '지리산 천왕봉, 소백산 비로봉, 덕유산. 설악산처럼 날카롭지 않고 어깨가 넓은 이유가 바로 이 오래된 변성암이기 때문입니다.',
-    poly: [[126.65,35.95],[126.90,36.00],[127.30,36.15],[127.70,36.40],[128.10,36.75],[128.20,37.00],[128.60,36.80],[128.50,36.50],[128.20,36.20],[127.90,35.80],[127.70,35.40],[127.50,35.00],[127.66,34.72],[127.30,34.60],[127.10,34.55],[126.55,34.35],[126.40,34.75],[126.30,34.95],[126.35,35.30],[126.45,35.70]]
+    poly: [[126.65,35.95],[126.90,36.00],[127.30,36.15],[127.70,36.40],[128.10,36.75],[128.20,37.00],[128.60,36.80],[128.50,36.50],[128.20,36.20],[127.90,35.80],[127.95,35.45],[127.80,35.05],[127.66,34.72],[127.30,34.60],[127.10,34.55],[126.55,34.35],[126.40,34.75],[126.30,34.95],[126.35,35.30],[126.45,35.70]]
   },
   {
     id: 'gyeongsang', name: '경상분지', era: 'mz2', hit: 9,
@@ -1306,7 +1514,7 @@ GC.provinces = [
     headline: '공룡이 걸어다닌 거대한 호수',
     thenHere: '백악기 내내 경상도 전역이 하나의 거대한 내륙 분지였습니다. 건기와 우기가 반복되며 호수가 커졌다 줄었다 했고, 진흙 바닥에 공룡이 발자국을 남겼습니다. 후기에는 분지 곳곳에서 화산이 터지고 그 아래로 화강암이 뚫고 올라왔습니다.',
     seeIt: '고성 상족암 공룡 발자국, 주왕산 절벽, 경주 남산의 화강암 불상. 붉은빛이 도는 사암·이암이 보이면 산소가 많은 육상 환경에서 쌓였다는 뜻입니다.',
-    poly: [[128.20,36.20],[128.50,36.50],[128.60,36.80],[129.10,36.85],[129.42,37.00],[129.45,36.45],[129.35,36.20],[129.40,35.66],[129.47,35.48],[129.35,35.32],[129.22,35.14],[129.02,35.02],[128.45,34.80],[128.05,34.85],[127.70,34.70],[127.50,35.00],[127.70,35.40],[127.90,35.80]]
+    poly: [[128.20,36.20],[128.50,36.50],[128.60,36.80],[129.10,36.85],[129.42,37.00],[129.45,36.45],[129.35,36.20],[129.40,35.66],[129.47,35.48],[129.35,35.32],[129.22,35.14],[129.02,35.02],[128.45,34.80],[128.05,34.85],[127.70,34.70],[127.80,35.05],[127.95,35.45],[127.90,35.80]]
   }
 ];
 
@@ -2422,12 +2630,310 @@ GC.trails = [
       { at: 2.4, name: '용암문 부근', what: '바위 표면이 양파 껍질처럼 벗겨진 자리를 찾아보세요. 판상절리입니다.' },
       { at: 4.0, name: '백운대', what: '정상 바위에 코를 대보세요. 쌀알만 한 흰 장석과 반짝이는 흑운모가 보입니다.' }
     ]
+  }  ,
+  {
+    id: 'jiri-jungsanri',
+    name: '지리산 중산리 ~ 천왕봉',
+    where: '경남 산청 · 지리산국립공원',
+    link: { page: 'mountains', id: 'jirisan' },
+    distKm: 5.4, gainM: 1315, timeMin: 300, level: '어려움',
+    heroNum: '19억', heroUnit: '년',
+    heroLabel: '남한 육지 최고봉을 이루는 암석의 나이',
+    lead: '처음부터 끝까지 한 가지 암석입니다. 19억 년 된 편마암이 1,915m까지 그대로 이어집니다. ' +
+          '경계가 없다는 것이 이 산의 특징입니다.',
+    punch: '가장 높은데 가장 둥근 이유는, 너무 오래 깎여서 뾰족할 것이 남지 않았기 때문입니다.',
+    access: '서울남부터미널 → 진주 → 중산리. 성수기에는 탐방 예약이 필요할 수 있습니다.',
+    profile: [[0,600],[0.6,720],[1.2,860],[1.8,1010],[2.4,1180],[3.0,1360],
+              [3.6,1530],[4.2,1680],[4.8,1810],[5.4,1915]],
+    units: [
+      { rock: '편마암 (영남육괴)', era: 'pc', age: '약 19억 년', base: -999,
+        note: '한 방향으로 늘어선 검고 흰 줄무늬가 특징입니다. 화강암처럼 특정 방향으로 쉽게 쪼개지지 않아 절벽이 잘 생기지 않고, 능선이 두툼해집니다.' }
+    ],
+    points: [
+      { at: 1.4, name: '칼바위', what: '바위 표면의 줄무늬가 휘어 있는지 보세요. 땅속에서 암석이 엿가락처럼 늘어났던 흔적입니다.' },
+      { at: 3.6, name: '법계사', what: '남한에서 가장 높은 절입니다. 축대와 주변 바위가 같은 편마암입니다.' },
+      { at: 5.4, name: '천왕봉', what: '사방 능선이 전부 완만합니다. 설악산 정상에서 보이는 풍경과 비교해 보세요.' }
+    ]
+  },
+  {
+    id: 'halla-seongpanak',
+    name: '한라산 성판악 ~ 백록담',
+    where: '제주 · 한라산국립공원',
+    link: { page: 'geoparks', id: 'jeju' },
+    distKm: 9.6, gainM: 1197, timeMin: 450, level: '어려움',
+    heroNum: '180만', heroUnit: '년',
+    heroLabel: '섬 전체를 만든 화산활동의 기간',
+    lead: '대부분의 구간은 묽은 용암이 멀리 흘러 쌓인 현무암 위를 완만하게 걷습니다. ' +
+          '정상 가까이에서 끈적한 조면암으로 바뀌며 갑자기 가팔라집니다.',
+    punch: '경사가 변하는 그 지점이, 마그마의 성질이 바뀐 지점입니다.',
+    access: '제주시외버스터미널 → 성판악. 탐방 예약제이며 입산 시간이 엄격합니다.',
+    profile: [[0,750],[1.2,830],[2.4,930],[3.6,1040],[4.8,1160],[6.0,1300],
+              [7.2,1470],[8.0,1620],[8.8,1780],[9.6,1947]],
+    units: [
+      { rock: '조면암 (정상 돔)', era: 'cz2', shade: 1, age: '약 2만 5천 년', base: 1650,
+        note: '끈적해서 멀리 흐르지 못하고 분출구 위에 뭉쳤습니다. 그래서 정상부만 급경사가 됩니다.' },
+      { rock: '현무암 · 조면현무암', era: 'cz2', age: '약 180만 ~ 수천 년', base: -999,
+        note: '묽은 용암이 수십 km를 흘러 완만한 방패 모양을 만들었습니다. 검고 구멍이 숭숭 뚫려 있습니다.' }
+    ],
+    points: [
+      { at: 4.8, name: '사라오름 갈림', what: '옆으로 15분이면 산정호수가 있는 오름입니다. 옆구리에서 따로 터진 작은 화산입니다.' },
+      { at: 7.3, name: '진달래밭 대피소', what: '통제 시각이 정해져 있습니다. 여기서 위로 암석이 바뀌기 시작합니다.' },
+      { at: 9.6, name: '백록담', what: '분화구 벽의 암석이 아래쪽 검은 현무암과 다른 밝은 회색입니다. 그것이 조면암입니다.' }
+    ]
+  },
+  {
+    id: 'songni-munjangdae',
+    name: '속리산 법주사 ~ 문장대',
+    where: '충북 보은 · 속리산국립공원',
+    link: { page: 'mountains', id: 'bukhansan' },
+    distKm: 5.8, gainM: 754, timeMin: 240, level: '보통',
+    heroNum: '5억 3천만', heroUnit: '년',
+    heroLabel: '들머리와 정상 사이의 시간 차이',
+    lead: '아래쪽은 옥천대의 변성암, 위쪽은 그것을 뚫고 올라온 화강암입니다. ' +
+          '문장대의 흰 바위 봉우리가 관입한 마그마의 윗부분입니다.',
+    punch: '무른 변성암은 깎여 내려가고 단단한 화강암만 남아 봉우리가 되었습니다.',
+    access: '동서울터미널 → 속리산. 법주사 앞에서 출발합니다.',
+    profile: [[0,300],[0.8,360],[1.6,440],[2.4,540],[3.2,660],[4.0,790],
+              [4.8,920],[5.8,1054]],
+    units: [
+      { rock: '화강암', era: 'mz2', age: '약 8,000만 년', base: 640,
+        note: '알갱이가 굵고 흰빛이 돕니다. 절리를 따라 침식돼 문장대·입석대 같은 기암이 만들어졌습니다.' },
+      { rock: '변성암 (옥천대)', era: 'pc', age: '약 7억 년 (논쟁 중)', base: -999,
+        note: '얇게 벗겨지는 반질반질한 암석입니다. 이 지층의 나이는 100년 가까이 결론이 나지 않았습니다.' }
+    ],
+    points: [
+      { at: 0.3, name: '법주사', what: '경내 석조물의 돌과 계곡 바위를 비교해 보세요.' },
+      { at: 3.0, name: '경계 구간', what: '어두운 변성암이 끝나고 밝은 화강암이 시작됩니다. 계곡 바닥의 자갈 색이 먼저 바뀝니다.' },
+      { at: 5.8, name: '문장대', what: '사방이 트인 너럭바위입니다. 발밑 바위의 알갱이가 눈으로 구분됩니다.' }
+    ]
+  },
+  {
+    id: 'wolchul-cheonhwang',
+    name: '월출산 천황사 ~ 천황봉',
+    where: '전남 영암 · 월출산국립공원',
+    link: { page: 'mountains', id: 'bukhansan' },
+    distKm: 3.4, gainM: 709, timeMin: 180, level: '어려움',
+    heroNum: '19억', heroUnit: '년',
+    heroLabel: '들판과 봉우리 사이의 시간 차이',
+    lead: '평야 한가운데 갑자기 바위산이 솟아 있습니다. 주변의 오래된 변성암을 뚫고 올라온 화강암만 ' +
+          '침식에 버티고 남았기 때문입니다.',
+    punch: '산이 특별해서 남은 것이 아니라, 주변이 먼저 깎여서 남은 것입니다.',
+    access: 'KTX 나주역 또는 광주송정역 → 영암. 천황사 주차장에서 출발합니다.',
+    profile: [[0,100],[0.4,180],[0.8,280],[1.2,390],[1.6,480],[2.0,570],
+              [2.4,650],[2.8,730],[3.4,809]],
+    units: [
+      { rock: '화강암', era: 'mz2', age: '약 8,500만 년', base: 260,
+        note: '수직·수평 절리가 잘 발달해 구름다리 일대의 기암괴석을 만들었습니다.' },
+      { rock: '편마암 · 변성암', era: 'pc', age: '약 19억 년', base: -999,
+        note: '화강암이 관입하기 전부터 있던 땅입니다. 주변 들판 아래에 넓게 깔려 있습니다.' }
+    ],
+    points: [
+      { at: 0.2, name: '천황사 계곡', what: '계곡 바닥에서 어두운 변성암을 확인해 두세요.' },
+      { at: 1.4, name: '구름다리', what: '양쪽 절벽이 수직 절리를 따라 갈라진 면입니다.' },
+      { at: 3.4, name: '천황봉', what: '아래 들판과 발밑 바위가 완전히 다른 암석입니다. 그 차이가 이 산을 만들었습니다.' }
+    ]
+  },
+  {
+    id: 'naejang-ridge',
+    name: '내장산 서래봉 ~ 신선봉',
+    where: '전북 정읍 · 내장산국립공원',
+    link: { page: 'geoparks', id: 'jeonbuk' },
+    distKm: 5.0, gainM: 660, timeMin: 240, level: '보통',
+    heroNum: '8,000만', heroUnit: '년',
+    heroLabel: '이 능선이 만들어진 때',
+    lead: '단풍으로 유명하지만 지형이 먼저입니다. 말발굽 모양으로 둘러싼 능선은 ' +
+          '백악기 화산암이 한 덩어리로 굳은 뒤 안쪽이 깎여 나간 결과입니다.',
+    punch: '단풍이 아름다운 이유도 지형입니다. 둘러싸인 분지가 안개와 일교차를 만듭니다.',
+    access: '정읍역 → 내장산 버스. 능선 종주는 체력 소모가 큽니다.',
+    profile: [[0,150],[0.6,420],[1.2,560],[1.8,620],[2.4,580],[3.0,650],
+              [3.6,700],[4.2,730],[5.0,763]],
+    units: [
+      { rock: '응회암 · 유문암', era: 'mz2', age: '약 8,000만 년', base: -999,
+        note: '백악기 화산 활동이 남긴 화산재와 용암이 두껍게 쌓여 굳었습니다. 능선 전체가 한 덩어리입니다.' }
+    ],
+    points: [
+      { at: 0.9, name: '서래봉', what: '바위 면의 각진 조각들을 보세요. 폭발 때 함께 날아온 파편입니다.' },
+      { at: 2.7, name: '까치봉', what: '말발굽 모양의 능선 전체가 한눈에 보입니다.' },
+      { at: 5.0, name: '신선봉', what: '내장산 최고봉입니다. 안쪽 분지가 얼마나 깊게 파였는지 확인해 보세요.' }
+    ]
+  },
+  {
+    id: 'palgong-birobong',
+    name: '팔공산 동화사 ~ 비로봉',
+    where: '대구 · 팔공산',
+    link: { page: 'mountains', id: 'bukhansan' },
+    distKm: 5.5, gainM: 893, timeMin: 240, level: '보통',
+    heroNum: '6,500만', heroUnit: '년',
+    heroLabel: '대구를 둘러싼 바위의 나이',
+    lead: '대구 분지 북쪽을 막아선 거대한 화강암체입니다. 경상분지의 퇴적층을 뚫고 올라온 마그마가 ' +
+          '식은 뒤, 위를 덮은 지층이 깎여 나가며 드러났습니다.',
+    punch: '대구가 분지인 것과 팔공산이 화강암인 것은 같은 사건의 앞뒤입니다.',
+    access: '대구 지하철 1호선 아양교역 → 팔공산 버스. 케이블카로 일부 구간 단축 가능합니다.',
+    profile: [[0,300],[0.7,400],[1.4,520],[2.1,650],[2.8,790],[3.5,910],
+              [4.2,1020],[4.9,1120],[5.5,1193]],
+    units: [
+      { rock: '화강암 (불국사 화강암)', era: 'mz2', age: '약 6,500만 년', base: -999,
+        note: '백악기 말에 관입한 화강암입니다. 경주 남산의 불상들도 같은 시기의 화강암에 새겨졌습니다.' }
+    ],
+    points: [
+      { at: 0.2, name: '동화사', what: '석탑과 석등의 돌이 곧 이 산의 암석입니다.' },
+      { at: 3.0, name: '염불봉 부근', what: '양파 껍질처럼 벗겨진 판상절리를 찾아보세요.' },
+      { at: 5.5, name: '비로봉', what: '남쪽으로 대구 분지가 한눈에 들어옵니다. 분지 바닥은 백악기 퇴적층입니다.' }
+    ]
+  },
+  {
+    id: 'geumjeong-godang',
+    name: '금정산 범어사 ~ 고당봉',
+    where: '부산 · 금정산',
+    link: { page: 'geoparks', id: 'busan' },
+    distKm: 4.0, gainM: 601, timeMin: 150, level: '보통',
+    heroNum: '7,000만', heroUnit: '년',
+    heroLabel: '부산을 떠받친 바위의 나이',
+    lead: '대도시 한복판에서 화강암과 그 아래 화산암의 경계를 걸어서 지납니다. ' +
+          '지하철로 들머리까지 갈 수 있는 지질 답사 코스입니다.',
+    punch: '고당봉의 흰 바위와 산 아래 어두운 바위는 나이가 다릅니다.',
+    access: '부산 지하철 1호선 범어사역 → 마을버스. 접근성이 국내 최상급입니다.',
+    profile: [[0,200],[0.5,290],[1.0,390],[1.5,480],[2.0,560],[2.5,640],
+              [3.0,700],[3.5,755],[4.0,801]],
+    units: [
+      { rock: '화강암', era: 'mz2', age: '약 7,000만 년', base: 430,
+        note: '금정산 능선과 고당봉을 이룹니다. 절리를 따라 깎여 바위 봉우리와 금샘 같은 웅덩이가 생겼습니다.' },
+      { rock: '안산암 · 응회암', era: 'mz2', shade: 1, age: '약 8,000만 년', base: -999,
+        note: '화강암이 관입하기 전 경상분지에서 터진 화산의 산물입니다. 산 아래쪽 계곡에서 볼 수 있습니다.' }
+    ],
+    points: [
+      { at: 0.3, name: '범어사', what: '계곡 바위가 어두운 편입니다. 화산암입니다.' },
+      { at: 1.8, name: '북문 부근', what: '바위 색이 밝아집니다. 화강암으로 넘어가는 구간입니다.' },
+      { at: 4.0, name: '고당봉', what: '정상 바위의 움푹한 웅덩이(금샘)를 찾아보세요. 절리 교차점이 파인 것입니다.' }
+    ]
+  },
+  {
+    id: 'danyang-dodam',
+    name: '단양 도담삼봉 ~ 석문',
+    where: '충북 단양 · 남한강',
+    link: { page: 'geoparks', id: 'danyang' },
+    distKm: 1.2, gainM: 120, timeMin: 45, level: '쉬움',
+    heroNum: '5억', heroUnit: '년',
+    heroLabel: '이 바위가 바다였던 때',
+    lead: '가장 짧고 쉬운 코스입니다. 강 한가운데 솟은 세 봉우리와, 산 위에 뚫린 거대한 돌문을 ' +
+          '40분 만에 봅니다. 둘 다 석회암이 빗물에 녹아 만들어졌습니다.',
+    punch: '5억 년 전 적도의 얕은 바다가, 지금 남한강 한가운데 서 있습니다.',
+    access: '단양역에서 도보 또는 버스. 계단이 많지만 거리가 짧습니다.',
+    profile: [[0,130],[0.2,140],[0.4,175],[0.6,210],[0.8,235],[1.0,248],[1.2,250]],
+    units: [
+      { rock: '석회암 (조선누층군)', era: 'pz1', age: '약 5억 년', base: -999,
+        note: '적도 부근 얕고 따뜻한 바다에 쌓인 석회질 갯벌입니다. 약산성 빗물에 녹아 동굴과 돌문, 그리고 강 속의 봉우리를 만들었습니다.' }
+    ],
+    points: [
+      { at: 0.1, name: '도담삼봉', what: '주변은 다 깎여 나갔는데 이 셋만 남았습니다. 유독 단단한 석회암 덩어리였다는 뜻입니다.' },
+      { at: 1.2, name: '석문', what: '동굴 천장이 무너지고 입구만 남은 것입니다. 아치 안쪽에 종유석 흔적이 남아 있습니다.' }
+    ]
   }
 ];
 
 GC.trailNote =
   '고도 프로파일과 지층 경계는 공개 자료를 바탕으로 한 개략값이며, 지하 구조는 모식적으로 그렸습니다. ' +
   '실제 등산 계획에는 국립공원공단과 각 지자체의 최신 탐방 정보를 확인하세요.';
+
+/* 국내 주요 산 도감. [이름, 높이m, 시도, 경도, 위도]
+   좌표는 정상부 기준 개략값입니다(대개 오차 1km 내외). 지질구·암석은
+   좌표를 지질구 폴리곤에 넣어 자동으로 붙입니다. */
+window.GC = window.GC || {};
+
+GC.peaks = [
+/* 강원 */
+['설악산',1708,'강원',128.4655,38.1195],['점봉산',1424,'강원',128.4256,38.0361],
+['오대산',1563,'강원',128.5433,37.7944],['계방산',1577,'강원',128.4569,37.7333],
+['가리왕산',1561,'강원',128.5608,37.4661],['태백산',1567,'강원',128.9147,37.0950],
+['함백산',1573,'강원',128.9186,37.1603],['치악산',1288,'강원',128.0553,37.3717],
+['두타산',1353,'강원',129.0197,37.4056],['청옥산',1404,'강원',129.0000,37.4283],
+['방태산',1444,'강원',128.3644,37.9556],['백덕산',1350,'강원',128.2178,37.3439],
+['발왕산',1458,'강원',128.6789,37.6394],['선자령',1157,'강원',128.7500,37.7100],
+['황병산',1407,'강원',128.6647,37.7719],['공작산',887,'강원',127.9506,37.7211],
+['삼악산',654,'강원',127.6350,37.8600],['오봉산',779,'강원',127.7900,37.9700],
+['용화산',878,'강원',127.7514,38.0100],['명성산',923,'강원',127.3100,38.0600],
+['민둥산',1119,'강원',128.7600,37.2300],['가리산',1051,'강원',127.8886,37.8206],
+['응봉산',999,'강원',129.3300,37.0700],['두위봉',1466,'강원',128.7800,37.2100],
+['노인봉',1338,'강원',128.5900,37.7800],['석병산',1055,'강원',128.9300,37.5000],
+['덕항산',1071,'강원',128.9800,37.3400],['대암산',1304,'강원',128.1300,38.2000],
+['매봉산',1303,'강원',128.9500,37.2100],['백운산',883,'강원',128.7200,37.2800],
+/* 경기 · 인천 · 서울 */
+['북한산',836,'서울',126.9814,37.6589],['도봉산',740,'서울',127.0147,37.6994],
+['관악산',632,'서울',126.9644,37.4425],['수락산',638,'서울',127.0611,37.6892],
+['불암산',508,'서울',127.0917,37.6486],['인왕산',338,'서울',126.9600,37.5800],
+['남산',270,'서울',126.9880,37.5512],['아차산',287,'서울',127.1000,37.5600],
+['청계산',618,'경기',127.0533,37.4128],['용문산',1157,'경기',127.5528,37.5528],
+['유명산',862,'경기',127.4700,37.6000],['명지산',1267,'경기',127.3517,37.9128],
+['운악산',936,'경기',127.3489,37.8639],['축령산',886,'경기',127.3200,37.7600],
+['소요산',587,'경기',127.0800,37.9400],['감악산',675,'경기',126.9700,37.9400],
+['천마산',812,'경기',127.2400,37.6600],['수리산',489,'경기',126.9100,37.3700],
+['광교산',582,'경기',127.0200,37.3300],['백운산',904,'경기',127.4800,37.9500],
+['국망봉',1168,'경기',127.3900,38.0600],['화악산',1468,'경기',127.4967,37.9917],
+['연인산',1068,'경기',127.4300,37.8300],['주금산',814,'경기',127.2500,37.7700],
+['마니산',472,'인천',126.4700,37.6100],['계양산',395,'인천',126.7200,37.5500],
+/* 충북 · 충남 · 대전 */
+['속리산',1058,'충북',127.8206,36.5442],['월악산',1097,'충북',128.1150,36.8828],
+['소백산',1439,'충북',128.4856,36.9569],['칠보산',778,'충북',127.9100,36.7600],
+['구병산',876,'충북',127.8300,36.4800],['민주지산',1242,'충북',127.8800,36.0500],
+['천태산',715,'충북',127.7600,36.1400],['희양산',999,'충북',128.0100,36.7200],
+['대야산',931,'충북',127.9800,36.7000],['조령산',1017,'충북',128.0000,36.7700],
+['금수산',1016,'충북',128.2300,36.9700],['도명산',643,'충북',127.8600,36.7500],
+['계룡산',847,'충남',127.2081,36.3419],['칠갑산',561,'충남',126.8700,36.4200],
+['덕숭산',495,'충남',126.6200,36.6600],['가야산',678,'충남',126.6100,36.7100],
+['오서산',791,'충남',126.6400,36.4300],['서대산',904,'충남',127.4800,36.1000],
+['광덕산',699,'충남',127.0800,36.7000],['용봉산',381,'충남',126.6400,36.6100],
+['성주산',680,'충남',126.6600,36.3400],['대둔산',878,'충남',127.3319,36.1339],
+/* 전북 · 전남 · 광주 */
+['지리산',1915,'경남',127.7306,35.3369],['덕유산',1614,'전북',127.7472,35.8600],
+['마이산',686,'전북',127.4058,35.7622],['내장산',763,'전북',126.8892,35.4808],
+['모악산',794,'전북',127.0850,35.7297],['선운산',336,'전북',126.5800,35.5000],
+['운장산',1126,'전북',127.4500,35.9200],['적상산',1034,'전북',127.7300,35.9300],
+['장안산',1237,'전북',127.5700,35.6000],['방장산',743,'전북',126.7300,35.4200],
+['구봉산',1002,'전북',127.4600,35.9000],['백운산',1279,'전북',127.5900,35.5500],
+['바래봉',1165,'전북',127.5400,35.4200],['강천산',584,'전북',127.1000,35.4200],
+['무등산',1187,'광주',126.9886,35.1342],['월출산',809,'전남',126.7061,34.7669],
+['백암산',741,'전남',126.8790,35.4420],['천관산',723,'전남',126.9000,34.5400],
+['조계산',884,'전남',127.3200,34.9900],['백운산',1222,'전남',127.6200,35.1100],
+['두륜산',700,'전남',126.6200,34.4700],['달마산',489,'전남',126.5500,34.3600],
+['팔영산',609,'전남',127.4700,34.6300],['추월산',731,'전남',126.9700,35.3900],
+['불갑산',516,'전남',126.5800,35.2100],['유달산',228,'전남',126.3800,34.7900],
+['모후산',919,'전남',127.2200,35.0400],['제암산',807,'전남',127.0100,34.7500],
+/* 경북 · 대구 */
+['주왕산',721,'경북',129.1761,36.4022],['팔공산',1193,'대구',128.6947,36.0053],
+['가야산',1433,'경북',128.1183,35.8228],['비슬산',1084,'대구',128.5222,35.7150],
+['청량산',870,'경북',128.9100,36.7900],['일월산',1219,'경북',129.1000,36.8100],
+['금오산',976,'경북',128.3000,36.1100],['주흘산',1106,'경북',128.0800,36.7600],
+['황장산',1077,'경북',128.2400,36.8200],['문수산',1207,'경북',128.7400,36.8600],
+['운문산',1195,'경북',128.9400,35.6600],['보현산',1124,'경북',128.9800,36.1600],
+['토함산',745,'경북',129.3400,35.7800],['남산',468,'경북',129.2100,35.7800],
+['내연산',710,'경북',129.3000,36.2400],['학가산',882,'경북',128.6200,36.6500],
+['백암산',1004,'경북',129.2400,36.8100],['팔각산',628,'경북',129.2400,36.4400],
+/* 경남 · 부산 · 울산 */
+['가지산',1241,'경남',129.0000,35.6100],['신불산',1159,'울산',129.0500,35.5400],
+['간월산',1069,'울산',129.0400,35.5800],['영축산',1081,'경남',129.0400,35.5100],
+['천황산',1189,'경남',128.9600,35.5600],['재약산',1108,'경남',128.9700,35.5500],
+['황매산',1113,'경남',127.9900,35.5100],['화왕산',757,'경남',128.5300,35.5200],
+['황석산',1190,'경남',127.7400,35.6200],['기백산',1331,'경남',127.8300,35.6600],
+['금원산',1353,'경남',127.8000,35.6700],['웅석봉',1099,'경남',127.8600,35.3700],
+['연화산',528,'경남',128.2900,35.0700],['미륵산',461,'경남',128.4200,34.8300],
+['금산',705,'경남',127.9800,34.7500],['와룡산',799,'경남',128.0600,35.0000],
+['신어산',630,'경남',128.9000,35.2500],['정병산',567,'경남',128.7100,35.2500],
+['무학산',761,'경남',128.5300,35.2200],['불모산',801,'경남',128.7200,35.1800],
+['금정산',801,'부산',129.0600,35.2700],['장산',634,'부산',129.1600,35.1900],
+['황령산',427,'부산',129.0800,35.1400],
+/* 제주 · 울릉 */
+['한라산',1947,'제주',126.5333,33.3617],['성산일출봉',182,'제주',126.9330,33.4585],
+['산방산',395,'제주',126.3130,33.2350],['송악산',104,'제주',126.2960,33.2065],
+['새별오름',519,'제주',126.3570,33.3640],['따라비오름',342,'제주',126.7700,33.3800],
+['용눈이오름',248,'제주',126.8300,33.4500],['거문오름',456,'제주',126.7200,33.4600],
+['어승생악',1169,'제주',126.4900,33.3900],['다랑쉬오름',382,'제주',126.8400,33.4600],
+['물영아리오름',508,'제주',126.7100,33.3400],['군산오름',334,'제주',126.3700,33.2500],
+['성인봉',984,'경북',130.8656,37.5011]
+];
+
+GC.peakNote =
+  '산림청 100대 명산과 각 지역의 대표 산을 중심으로 추렸습니다. 좌표는 정상부 기준 개략값이고, ' +
+  '지질구와 대표 암석은 그 좌표를 지질구 경계에 넣어 자동으로 붙인 것이라 실제 정상부 암석과 다를 수 있습니다.';
 
 /* 실제 행정경계 위에 지질구를 입힌 지도 + 타임 슬라이더 */
 window.GC = window.GC || {};
@@ -2546,6 +3052,21 @@ window.GC = window.GC || {};
     });
     svg.appendChild(gM);
 
+    /* 산 160곳 — 작은 점. 깊이 다룬 일곱 곳은 위의 삼각형으로 따로 표시됩니다 */
+    var gP = el('g', { class: 'lyr-peak' });
+    var deepNames = {};
+    GC.mountains.forEach(function (m) { deepNames[m.name] = 1; });
+    GC.peaks.forEach(function (pk) {
+      if (deepNames[pk[0]] || pk[3] > 130) return;
+      var c = GC.project(pk[3], pk[4]);
+      var g = el('g', { class: 'peak', 'data-pk': pk[0], tabindex: '0', role: 'button' });
+      g.appendChild(el('circle', { cx: c[0], cy: c[1], r: 1.7, class: 'peak-dot' }));
+      var t = el('title'); t.textContent = pk[0] + ' ' + pk[1] + 'm · ' + pk[2];
+      g.appendChild(t);
+      gP.appendChild(g);
+    });
+    svg.appendChild(gP);
+
     var gS = el('g', { class: 'lyr-site' });
     GC.geoparks.forEach(function (gp) {
       gp.sites.forEach(function (s) {
@@ -2599,7 +3120,7 @@ window.GC = window.GC || {};
     applyStop();
 
     /* 지도는 해당 페이지를 처음 열 때 만들어지므로, 체크박스의 현재 상태를 반영합니다 */
-    ['siteToggle:lyr-site', 'faultToggle:lyr-fault'].forEach(function (pair) {
+    ['siteToggle:lyr-site', 'faultToggle:lyr-fault', 'peakToggle:lyr-peak'].forEach(function (pair) {
       var bits = pair.split(':');
       var box = document.getElementById(bits[0]);
       GC.toggleLayer(bits[1], !!(box && box.checked));
@@ -2609,6 +3130,8 @@ window.GC = window.GC || {};
   function onPick(e) {
     var mt = e.target.closest('.mt');
     if (mt) { GC.go('mountains', mt.getAttribute('data-mt')); return; }
+    var pk = e.target.closest('.peak');
+    if (pk) { GC.go('mountains'); setTimeout(function () { GC.openPeakByName(pk.getAttribute('data-pk')); }, 80); return; }
     var st = e.target.closest('.site');
     if (st) { GC.go('geoparks', st.getAttribute('data-gp')); return; }
     var pv = e.target.closest('[data-id]');
@@ -2812,6 +3335,8 @@ window.GC = window.GC || {};
       GC.go('map', p.id);
       setTimeout(function () { GC.setPin(lng, lat); }, 60);
     });
+
+    if (GC.offerVisit) GC.offerVisit(placeName, p);
   };
 
   /* 홈과 발밑 페이지가 같은 동작을 공유합니다 */
@@ -3119,65 +3644,367 @@ window.GC = window.GC || {};
   };
 })();
 
-/* 이 돌 이름이 뭐예요 — 현장 간이 검색표 */
+/* 산 도감 — 검색 · 필터 · 상세 */
 window.GC = window.GC || {};
 
 (function () {
   var esc = function (s) { return GC.esc(s); };
-  var trail = [];
+  var list = null, sel = null, near = null;
 
-  function ask(key) {
+  function build() {
+    if (list) return list;
+    list = GC.peaks.map(function (p, i) {
+      var f = GC.findProvince(p[3], p[4]);
+      var deep = GC.mountains.filter(function (m) { return m.name === p[0]; })[0];
+      return {
+        i: i, name: p[0], h: p[1], sido: p[2], lng: p[3], lat: p[4],
+        prov: f.p, deep: deep || null,
+        key: (p[0] + ' ' + p[2] + ' ' + f.p.name + ' ' + f.p.rocks.join(' ')).toLowerCase()
+      };
+    });
+    return list;
+  }
+
+  function match() {
+    var q = document.getElementById('pkQ').value.trim().toLowerCase();
+    var sd = document.getElementById('pkSido').value;
+    var pv = document.getElementById('pkProv').value;
+    var out = build().filter(function (p) {
+      if (sd && p.sido !== sd) return false;
+      if (pv && p.prov.id !== pv) return false;
+      if (q && p.key.indexOf(q) < 0) return false;
+      return true;
+    });
+    if (near) {
+      out.forEach(function (p) { p.d = GC.distKm(near[0], near[1], p.lng, p.lat); });
+      out.sort(function (a, b) { return a.d - b.d; });
+    } else {
+      out.sort(function (a, b) { return b.h - a.h; });
+    }
+    return out;
+  }
+
+  function render() {
+    var rows = match();
+    var host = document.getElementById('pkList');
+    document.getElementById('pkCount').textContent = rows.length + ' 곳';
+    if (!rows.length) {
+      host.innerHTML = '<p class="pk-empty">조건에 맞는 산이 없습니다. 검색어나 필터를 바꿔보세요.</p>';
+      return;
+    }
+    host.innerHTML = rows.slice(0, 200).map(function (p) {
+      return '<button type="button" class="pk-row' + (sel === p.i ? ' is-sel' : '') + '" data-i="' + p.i + '">' +
+        '<span class="pk-sw" style="background:' + GC.provFill(p.prov) + '"></span>' +
+        '<span class="pk-n">' + esc(p.name) + (p.deep ? '<em>자세히</em>' : '') + '</span>' +
+        '<span class="pk-sd">' + esc(p.sido) + '</span>' +
+        '<span class="pk-pv">' + esc(p.prov.name) + '</span>' +
+        '<span class="pk-h">' + p.h.toLocaleString() + '<i>m</i></span>' +
+        (p.d != null ? '<span class="pk-d">' + p.d.toFixed(0) + 'km</span>' : '') +
+        '</button>';
+    }).join('');
+    Array.prototype.forEach.call(host.querySelectorAll('.pk-row'), function (b) {
+      b.addEventListener('click', function () { open(+b.getAttribute('data-i')); });
+    });
+  }
+
+  function open(i) {
+    sel = i;
+    var p = build()[i];
+    var out = document.getElementById('pkDetail');
+    out.innerHTML =
+      '<div class="pk-head" style="--ec:' + GC.provFill(p.prov) + '">' +
+        '<p class="pk-loc">' + esc(p.sido) + '</p>' +
+        '<h3 class="pk-title">' + esc(p.name) + ' <span>' + p.h.toLocaleString() + 'm</span></h3>' +
+      '</div>' +
+      '<div class="pk-body">' + GC.provinceBody(p.prov) + '</div>' +
+      '<div class="pk-acts">' +
+        (p.deep ? '<button type="button" class="btn btn-solid" id="pkDeep">' + esc(p.name) + '이 이 모양이 된 과정 →</button>' : '') +
+        '<button type="button" class="btn btn-line" id="pkMap">지도에서 보기</button>' +
+      '</div>' +
+      '<p class="pk-caveat">지질구는 정상부 좌표를 지질구 경계에 넣어 자동으로 붙인 것입니다. ' +
+        '한 산 안에서도 암석은 바뀌고, 특히 경계에 걸친 산은 실제와 다를 수 있습니다.</p>';
+    out.hidden = false;
+
+    var d = document.getElementById('pkDeep');
+    if (d) d.addEventListener('click', function () {
+      GC.openMountain(p.deep.id);
+      document.getElementById('mtDeep').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    document.getElementById('pkMap').addEventListener('click', function () {
+      GC.go('map', p.prov.id);
+      setTimeout(function () { GC.setPin(p.lng, p.lat); }, 60);
+    });
+    render();
+    out.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  GC.initPeaks = function () {
+    build();
+    var sd = document.getElementById('pkSido');
+    var seen = {};
+    GC.peaks.forEach(function (p) { seen[p[2]] = 1; });
+    Object.keys(seen).sort(function (a, b) { return a.localeCompare(b, 'ko'); }).forEach(function (k) {
+      var o = document.createElement('option'); o.value = k; o.textContent = k; sd.appendChild(o);
+    });
+    var pv = document.getElementById('pkProv');
+    GC.provinces.slice().sort(function (a, b) { return b.birthMa - a.birthMa; }).forEach(function (x) {
+      var o = document.createElement('option'); o.value = x.id; o.textContent = x.name; pv.appendChild(o);
+    });
+
+    document.getElementById('pkQ').addEventListener('input', render);
+    sd.addEventListener('change', render);
+    pv.addEventListener('change', render);
+    document.getElementById('pkClear').addEventListener('click', function () {
+      document.getElementById('pkQ').value = ''; sd.value = ''; pv.value = ''; near = null;
+      document.getElementById('pkNearNote').hidden = true;
+      render();
+    });
+    document.getElementById('pkNear').addEventListener('click', function (e) {
+      var btn = e.currentTarget;
+      if (!navigator.geolocation) return;
+      btn.disabled = true;
+      navigator.geolocation.getCurrentPosition(function (pos) {
+        btn.disabled = false;
+        near = [pos.coords.longitude, pos.coords.latitude];
+        document.getElementById('pkNearNote').hidden = false;
+        render();
+      }, function () { btn.disabled = false; }, { timeout: 8000 });
+    });
+    document.getElementById('pkNote').textContent = GC.peakNote;
+    render();
+  };
+
+  GC.openPeakByName = function (name) {
+    var p = build().filter(function (x) { return x.name === name; })[0];
+    if (p) open(p.i);
+  };
+})();
+
+/* 이 돌 이름이 뭐예요 — 사진으로 묻기(기본) / 질문으로 좁히기(대안) */
+window.GC = window.GC || {};
+
+(function () {
+  var esc = function (s) { return GC.esc(s); };
+  var sampleFn = null, limits = null, trail = [], ctl = null, lastFile = null;
+
+  var KEYS = Object.keys(GC.rocks);
+  var NAMES = KEYS.map(function (k) { return GC.rocks[k].name; });
+
+  var PROMPT =
+    '당신은 한국의 야외 지질 답사를 돕습니다. 첨부한 사진은 등산객이 한국의 산이나 계곡에서 찍은 암석입니다.\n' +
+    '사진만 보고 암석의 종류를 추정하세요. 한국에 흔한 다음 암석 중에서 고르는 것을 우선하되, ' +
+    '해당하지 않으면 다른 암석 이름을 써도 됩니다.\n' +
+    '후보 목록(key: 이름): ' + KEYS.map(function (k) { return k + ': ' + GC.rocks[k].name; }).join(', ') + '\n\n' +
+    '규칙:\n' +
+    '- 사진만으로는 확정할 수 없다는 점을 전제로, 가능성이 높은 순서로 최대 3개를 제시하세요.\n' +
+    '- 각 후보마다 사진에서 실제로 보이는 근거를 한 문장으로 쓰세요(알갱이 크기, 줄무늬, 구멍, 색, 층리 등).\n' +
+    '- 각 후보마다 현장에서 손으로 확인할 방법을 한 문장으로 쓰세요.\n' +
+    '- 사진이 너무 흐리거나 암석이 보이지 않으면 candidates를 빈 배열로 두고 notEnough를 true로 하세요.\n' +
+    '- 모든 문장은 한국어 존댓말로, 군더더기 없이 씁니다.\n\n' +
+    '다음 JSON만 출력하세요:\n' +
+    '{"notEnough": false, "scene": "사진에 보이는 것 한 문장", ' +
+    '"candidates": [{"key": "granite 또는 목록에 없으면 null", "name": "암석 이름", ' +
+    '"confidence": "높음|보통|낮음", "why": "사진에서 보이는 근거", "check": "현장 확인 방법"}]}';
+
+  var ERR = {
+    not_granted: 'Claude 사용을 허용해야 사진 판별을 쓸 수 있습니다. 아래 질문으로 찾기를 이용해 주세요.',
+    sampling_disabled: '이 계정에서는 사진 판별을 쓸 수 없습니다. 아래 질문으로 찾기를 이용해 주세요.',
+    images_unavailable: '이 환경에서는 사진을 보낼 수 없습니다. 아래 질문으로 찾기를 이용해 주세요.',
+    image_rejected: '사진을 읽지 못했습니다. 다른 사진으로 다시 시도해 주세요.',
+    rate_limited: '요청이 많습니다. 잠시 후 다시 시도해 주세요.',
+    prompt_too_large: '사진이 너무 큽니다. 더 작은 사진으로 시도해 주세요.',
+    invalid_json: '답을 읽지 못했습니다. 다시 시도해 주세요.',
+    refused: '이 사진으로는 답할 수 없습니다. 암석이 잘 보이는 다른 사진을 올려주세요.',
+    cancelled: ''
+  };
+
+  /* ── 사진 ── */
+  function photoUI() {
+    return '' +
+      '<div class="rk-photo">' +
+        '<label class="rk-drop" id="rkDrop">' +
+          '<input type="file" id="rkFile" accept="image/*" capture="environment" hidden>' +
+          '<span class="rk-drop-i" aria-hidden="true"></span>' +
+          '<span class="rk-drop-t">사진 찍기 또는 고르기</span>' +
+          '<span class="rk-drop-s">바위 표면이 화면을 가득 채우게, 밝은 곳에서 찍으면 정확해집니다.</span>' +
+        '</label>' +
+        '<div class="rk-prev" id="rkPrev" hidden></div>' +
+        '<p class="rk-msg" id="rkMsg" role="status"></p>' +
+        '<div class="rk-out" id="rkOut"></div>' +
+      '</div>';
+  }
+
+  function renderResult(d) {
+    var out = document.getElementById('rkOut');
+    if (d.notEnough || !d.candidates || !d.candidates.length) {
+      out.innerHTML = '<p class="rk-none">사진에서 암석을 알아보기 어렵습니다. ' +
+        '바위 표면에 더 가까이, 밝은 곳에서 다시 찍어보세요.</p>';
+      return;
+    }
+    out.innerHTML =
+      (d.scene ? '<p class="rk-scene">' + esc(d.scene) + '</p>' : '') +
+      d.candidates.slice(0, 3).map(function (c, i) {
+        var known = c.key && GC.rocks[c.key] ? GC.rocks[c.key] : null;
+        var col = known ? GC.eraColor(known.era) : 'var(--text-3)';
+        return '<article class="rk-cand' + (i === 0 ? ' is-top' : '') + '" style="--ec:' + col + '">' +
+          '<header>' +
+            '<span class="rk-rank">' + (i === 0 ? '가장 가능성 높음' : '다음 후보') + '</span>' +
+            '<h4>' + esc(c.name || '알 수 없음') + '</h4>' +
+            '<span class="rk-conf rk-conf--' + (c.confidence === '높음' ? 'hi' : c.confidence === '낮음' ? 'lo' : 'mid') + '">' +
+              '확신 ' + esc(c.confidence || '보통') + '</span>' +
+          '</header>' +
+          (c.why ? '<p class="rk-why2"><span>사진에서 보이는 것</span>' + esc(c.why) + '</p>' : '') +
+          (c.check ? '<p class="rk-check"><span>현장에서 확인하기</span>' + esc(c.check) + '</p>' : '') +
+          (known ? '<button type="button" class="linkish" data-rk="' + c.key + '">' +
+            esc(known.name) + '은 어떻게 만들어지나 →</button>' : '') +
+          '</article>';
+      }).join('') +
+      '<p class="rk-caveat">사진만으로 하는 추정입니다. 실제 동정에는 현미경과 화학 분석이 필요하고, ' +
+      '자연에는 중간 성질의 암석이 훨씬 많습니다. 국립공원과 지질공원에서 돌을 채취하는 것은 금지되어 있습니다.</p>';
+
+    Array.prototype.forEach.call(out.querySelectorAll('[data-rk]'), function (b) {
+      b.addEventListener('click', function () { showRock(b.getAttribute('data-rk')); });
+    });
+  }
+
+  function ask(file) {
+    var msg = document.getElementById('rkMsg');
+    var out = document.getElementById('rkOut');
+    lastFile = file;
+
+    var prev = document.getElementById('rkPrev');
+    var url = URL.createObjectURL(file);
+    prev.innerHTML = '<img src="' + url + '" alt="올린 암석 사진">' +
+      '<button type="button" class="btn btn-ghost" id="rkRetry">다른 사진</button>';
+    prev.hidden = false;
+    document.getElementById('rkRetry').addEventListener('click', function () {
+      document.getElementById('rkFile').value = '';
+      document.getElementById('rkFile').click();
+    });
+
+    out.innerHTML = '';
+    msg.textContent = '사진을 보는 중…';
+    ctl = new AbortController();
+
+    sampleFn.json(PROMPT, { images: file, signal: ctl.signal, modelTier: 'default' })
+      .then(function (d) { msg.textContent = ''; renderResult(d); })
+      .catch(function (e) {
+        msg.textContent = ERR[e.code] || '판별하지 못했습니다. 다시 시도해 주세요.';
+        if (e.code === 'not_granted' || e.code === 'sampling_disabled' || e.code === 'images_unavailable') {
+          switchMode('quiz', true);
+        }
+      });
+  }
+
+  function bindPhoto() {
+    var input = document.getElementById('rkFile');
+    var drop = document.getElementById('rkDrop');
+    input.addEventListener('change', function () {
+      if (input.files && input.files[0]) ask(input.files[0]);
+    });
+    ['dragenter', 'dragover'].forEach(function (ev) {
+      drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add('is-over'); });
+    });
+    ['dragleave', 'drop'].forEach(function (ev) {
+      drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove('is-over'); });
+    });
+    drop.addEventListener('drop', function (e) {
+      var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (f && /^image\//.test(f.type)) ask(f);
+    });
+  }
+
+  /* ── 질문으로 좁히기 ── */
+  function askQ(key) {
     var q = GC.rockTree[key];
-    var out = document.getElementById('rkStage');
+    var out = document.getElementById('rkQuiz');
     out.innerHTML =
       '<p class="rk-step">질문 ' + (trail.length + 1) + '</p>' +
-      '<h3 class="rk-q">' + esc(q.q) + '</h3>' +
+      '<h4 class="rk-q">' + esc(q.q) + '</h4>' +
       '<p class="rk-hint">' + esc(q.hint) + '</p>' +
       '<div class="rk-opts">' + q.a.map(function (o, i) {
         return '<button type="button" class="rk-opt" data-i="' + i + '">' + esc(o.t) + '</button>';
       }).join('') + '</div>' +
       (trail.length ? '<button type="button" class="linkish rk-back">한 단계 뒤로</button>' : '');
-
     Array.prototype.forEach.call(out.querySelectorAll('.rk-opt'), function (b) {
       b.addEventListener('click', function () {
         var o = q.a[+b.getAttribute('data-i')];
         trail.push(key);
-        if (o.r) result(o.r); else ask(o.to);
+        if (o.r) showRock(o.r, true); else askQ(o.to);
       });
     });
     var back = out.querySelector('.rk-back');
-    if (back) back.addEventListener('click', function () { ask(trail.pop()); });
+    if (back) back.addEventListener('click', function () { askQ(trail.pop()); });
   }
 
-  function result(id) {
+  function showRock(id, inQuiz) {
     var r = GC.rocks[id];
-    var out = document.getElementById('rkStage');
+    if (!r) return;
     var mt = r.go ? GC.mountains.filter(function (m) { return m.id === r.go; })[0] : null;
-
-    out.innerHTML =
+    var html =
       '<div class="rk-res" style="--ec:' + GC.eraColor(r.era) + '">' +
-        '<p class="rk-verdict">아마도 이 돌은</p>' +
-        '<h3 class="rk-name">' + esc(r.name) + '</h3>' +
+        '<h4 class="rk-name">' + esc(r.name) + '</h4>' +
         '<p class="rk-type">' + esc(r.type) + '</p>' +
         '<div class="rk-block"><h5>어떻게 만들어졌나</h5><p>' + esc(r.made) + '</p></div>' +
         '<div class="rk-block"><h5>확인 요령</h5><p>' + esc(r.tell) + '</p></div>' +
         '<div class="rk-block rk-where"><h5>한국에서 볼 수 있는 곳</h5><p>' + esc(r.where) + '</p></div>' +
         '<div class="rk-acts">' +
-          '<button type="button" class="btn btn-solid" id="rkAgain">다시 하기</button>' +
+          (inQuiz ? '<button type="button" class="btn btn-solid" id="rkAgain">다시 하기</button>' : '') +
           (mt ? '<button type="button" class="btn btn-line" id="rkGo">' + esc(mt.name) + ' 이야기 보기</button>' : '') +
         '</div>' +
-        '<p class="rk-caveat">눈과 손으로만 하는 간이 판별입니다. 실제 암석 동정은 현미경과 화학 분석이 필요하고, ' +
-        '자연에는 중간 성질의 암석이 훨씬 많습니다. 국립공원과 지질공원에서 돌을 채취하는 것은 금지되어 있습니다.</p>' +
       '</div>';
-
-    document.getElementById('rkAgain').addEventListener('click', function () {
-      trail = []; ask(GC.rockTree.start);
-    });
-    var go = document.getElementById('rkGo');
-    if (go) go.addEventListener('click', function () { GC.go('mountains', r.go); });
+    var host = document.getElementById(inQuiz ? 'rkQuiz' : 'rkOut');
+    if (inQuiz) host.innerHTML = html; else host.insertAdjacentHTML('beforeend', html);
+    var a = document.getElementById('rkAgain');
+    if (a) a.addEventListener('click', function () { trail = []; askQ(GC.rockTree.start); });
+    var g = document.getElementById('rkGo');
+    if (g) g.addEventListener('click', function () { GC.go('mountains', r.go); });
+    host.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
-  GC.initRockId = function () { trail = []; ask(GC.rockTree.start); };
+  function switchMode(m, force) {
+    document.getElementById('rkTabPhoto').classList.toggle('is-on', m === 'photo');
+    document.getElementById('rkTabQuiz').classList.toggle('is-on', m === 'quiz');
+    document.getElementById('rkPhotoPane').hidden = m !== 'photo';
+    document.getElementById('rkQuizPane').hidden = m !== 'quiz';
+    if (m === 'quiz' && !document.getElementById('rkQuiz').innerHTML) {
+      trail = []; askQ(GC.rockTree.start);
+    }
+    if (force) document.getElementById('rkTabPhoto').disabled = true;
+  }
+
+  GC.initRockId = function () {
+    document.getElementById('rkPhotoPane').innerHTML = photoUI();
+    bindPhoto();
+    document.getElementById('rkTabPhoto').addEventListener('click', function () { switchMode('photo'); });
+    document.getElementById('rkTabQuiz').addEventListener('click', function () { switchMode('quiz'); });
+    switchMode('photo');
+
+    /* Claude를 쓸 수 없는 환경이면 질문 방식만 남깁니다 */
+    (window.claude && claude.use ? claude.use('sample') : Promise.resolve(null))
+      .then(function (fn) {
+        if (!fn) throw 0;
+        sampleFn = fn;
+        return fn.limits().catch(function () { return null; });
+      })
+      .then(function (l) {
+        limits = l;
+        if (!l || !l.images) throw 0;
+        var input = document.getElementById('rkFile');
+        input.accept = l.images.mediaTypes.join(',');
+      })
+      .catch(function () {
+        document.getElementById('rkMsg').textContent =
+          '이 환경에서는 사진 판별을 쓸 수 없습니다.';
+        document.getElementById('rkDrop').classList.add('is-off');
+        document.getElementById('rkFile').disabled = true;
+        var n = document.getElementById('rkFallback');
+        n.textContent = '사진 판별은 claude.ai에서 이 페이지를 열었을 때만 동작합니다. ' +
+          '지금은 질문으로 찾기를 이용해 주세요.';
+        n.hidden = false;
+        switchMode('quiz', true);
+      });
+  };
 })();
 
 /* 이야기 · 퀴즈 */
@@ -3581,6 +4408,173 @@ window.GC = window.GC || {};
   GC.openTrail = function (id) { open(id); };
 })();
 
+/* 방문 지도 — 동의한 방문자의 "시·도 + 지질구"만 익명으로 기록해 집계합니다.
+   좌표·시각·식별자는 저장하지 않습니다. */
+window.GC = window.GC || {};
+
+(function () {
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  var esc = function (s) { return GC.esc(s); };
+  var dbRef = null, rows = null, pending = null;
+
+  function el(t, a) { var n = document.createElementNS(SVGNS, t); for (var k in a) n.setAttribute(k, a[k]); return n; }
+  function db() {
+    if (dbRef) return dbRef;
+    dbRef = (window.claude && claude.use) ? claude.use('db') : Promise.resolve(null);
+    return dbRef;
+  }
+
+  /* 발밑 조회가 끝나면 기록 제안을 띄웁니다 (기본 꺼짐, 누를 때만 저장) */
+  GC.offerVisit = function (placeName, prov) {
+    var sido = (placeName.match(/^(서울|부산|대구|인천|광주|대전|울산|세종|경기|강원|충북|충남|전북|전남|경북|경남|제주)/) || [])[1];
+    var box = document.getElementById('fpVisit');
+    if (!box) return;
+    if (!sido) { box.hidden = true; return; }
+    pending = { sido: sido, prov: prov.id, provName: prov.name };
+    box.hidden = false;
+    box.innerHTML =
+      '<button type="button" class="btn btn-line" id="fpVisitGo">이 지역을 방문 지도에 남기기</button>' +
+      '<p class="fp-visit-n">' + esc(sido) + ' · ' + esc(prov.name) + ' 두 가지만 익명으로 기록합니다. ' +
+      '정확한 좌표와 시각, 누구인지는 저장하지 않습니다.</p>';
+    document.getElementById('fpVisitGo').addEventListener('click', function (e) {
+      var b = e.currentTarget;
+      b.disabled = true; b.textContent = '기록하는 중…';
+      db().then(function (d) {
+        if (!d) throw 0;
+        return d.collection('visits').doc().set({
+          sido: pending.sido, prov: pending.prov,
+          day: new Date().toISOString().slice(0, 10)
+        });
+      }).then(function () {
+        b.textContent = '기록했습니다';
+        box.insertAdjacentHTML('beforeend',
+          '<button type="button" class="linkish" id="fpVisitSee">방문 지도 보기 →</button>');
+        document.getElementById('fpVisitSee').addEventListener('click', function () { GC.go('visits'); });
+        rows = null;
+      }).catch(function () {
+        b.disabled = false; b.textContent = '이 지역을 방문 지도에 남기기';
+        box.querySelector('.fp-visit-n').textContent =
+          '지금은 기록할 수 없습니다. 이 페이지를 볼 수만 있는 상태이거나 저장 기능이 꺼져 있습니다.';
+      });
+    });
+  };
+
+  function load() {
+    return db().then(function (d) {
+      if (!d) return null;
+      return d.collection('visits').limit(1000).get();
+    }).then(function (snap) {
+      if (!snap) return null;
+      return (snap.docs || []).map(function (x) { return x.data || {}; });
+    }).catch(function () { return null; });
+  }
+
+  /* 순차 색상 — 한 색조를 밝은 쪽에서 어두운 쪽으로 (개수는 크기이지 정체성이 아닙니다) */
+  function ramp(t) {
+    var steps = getComputedStyle(document.documentElement)
+      .getPropertyValue('--ramp').trim().split(/\s+/);
+    if (steps.length < 5) steps = ['#EFE3D8', '#E0BFA2', '#CE9468', '#B96B38', '#A8471F'];
+    return steps[Math.max(0, Math.min(steps.length - 1, Math.floor(t * steps.length - 1e-9)))];
+  }
+
+  function draw(counts, max) {
+    var host = document.getElementById('vzMap');
+    host.innerHTML = '';
+    var b = { minX: 1e9, minY: 1e9, maxX: -1e9, maxY: -1e9 };
+    GC.base.sido.forEach(function (s) {
+      s.rings.forEach(function (r) { r.forEach(function (c) {
+        var q = GC.project(c[0], c[1]);
+        b.minX = Math.min(b.minX, q[0]); b.maxX = Math.max(b.maxX, q[0]);
+        b.minY = Math.min(b.minY, q[1]); b.maxY = Math.max(b.maxY, q[1]);
+      }); });
+    });
+    var pad = 8;
+    var svg = el('svg', {
+      viewBox: [b.minX - pad, b.minY - pad, (b.maxX - b.minX) + pad * 2, (b.maxY - b.minY) + pad * 2].join(' '),
+      class: 'kmap vz-svg', role: 'img',
+      'aria-label': '시·도별 방문 기록 수. ' + Object.keys(counts).map(function (k) {
+        return k + ' ' + counts[k] + '건';
+      }).join(', ')
+    });
+    GC.base.sido.forEach(function (s) {
+      var d = '';
+      s.rings.forEach(function (r) { d += GC.pathOf(r); });
+      var n = counts[s.name] || 0;
+      var p = el('path', {
+        d: d, class: 'vz-sido' + (n ? '' : ' is-zero'),
+        fill: n ? ramp(max ? n / max : 0) : 'var(--surface-2)'
+      });
+      var t = el('title'); t.textContent = s.name + ' ' + n + '건';
+      p.appendChild(t);
+      svg.appendChild(p);
+    });
+    host.appendChild(svg);
+  }
+
+  function render(data) {
+    var box = document.getElementById('vzBody');
+    if (data === null) {
+      box.innerHTML = '<p class="vz-off">이 환경에서는 방문 기록을 읽을 수 없습니다. ' +
+        'claude.ai에서 이 페이지를 열면 집계가 보입니다.</p>';
+      return;
+    }
+    if (!data.length) {
+      box.innerHTML = '<p class="vz-off">아직 기록이 없습니다. ' +
+        '<button type="button" class="linkish" id="vzGoFp">내 발밑</button>에서 지역을 조회한 뒤 ' +
+        '&lsquo;방문 지도에 남기기&rsquo;를 누르면 첫 기록이 됩니다.</p>';
+      document.getElementById('vzGoFp').addEventListener('click', function () { GC.go('footprint'); });
+      return;
+    }
+
+    var bySido = {}, byProv = {};
+    data.forEach(function (r) {
+      if (r.sido) bySido[r.sido] = (bySido[r.sido] || 0) + 1;
+      if (r.prov) byProv[r.prov] = (byProv[r.prov] || 0) + 1;
+    });
+    var sidoRows = Object.keys(bySido).map(function (k) { return [k, bySido[k]]; })
+      .sort(function (a, b) { return b[1] - a[1]; });
+    var provRows = Object.keys(byProv).map(function (k) {
+      var p = GC.byId(k);
+      return [p ? p.name : k, byProv[k], p];
+    }).sort(function (a, b) { return b[1] - a[1]; });
+    var max = sidoRows.length ? sidoRows[0][1] : 0;
+
+    box.innerHTML =
+      '<div class="vz-top">' +
+        '<div class="vz-stat"><b>' + data.length + '</b><span>건의 기록</span></div>' +
+        '<div class="vz-stat"><b>' + sidoRows.length + '</b><span>개 시·도</span></div>' +
+        '<div class="vz-stat"><b>' + provRows.length + '</b><span>개 지질구</span></div>' +
+      '</div>' +
+      '<div class="vz-grid">' +
+        '<figure class="vz-fig"><figcaption>시·도별 기록 수</figcaption>' +
+          '<div id="vzMap"></div>' +
+          '<div class="vz-scale"><span>적음</span><i class="vz-ramp"></i><span>많음 (' + max + '건)</span></div>' +
+        '</figure>' +
+        '<div class="vz-lists">' +
+          '<h4 class="tr-sub">지역</h4><ul class="vz-bars">' +
+            sidoRows.map(function (r) {
+              return '<li><span class="vz-l">' + esc(r[0]) + '</span>' +
+                '<span class="vz-b"><i style="width:' + (r[1] / max * 100) + '%"></i></span>' +
+                '<span class="vz-v">' + r[1] + '</span></li>';
+            }).join('') + '</ul>' +
+          '<h4 class="tr-sub">지질구</h4><ul class="vz-bars">' +
+            provRows.map(function (r) {
+              return '<li><span class="vz-l"><i class="vz-sw" style="background:' +
+                (r[2] ? GC.provFill(r[2]) : 'var(--text-3)') + '"></i>' + esc(r[0]) + '</span>' +
+                '<span class="vz-b"><i style="width:' + (r[1] / provRows[0][1] * 100) + '%"></i></span>' +
+                '<span class="vz-v">' + r[1] + '</span></li>';
+            }).join('') + '</ul>' +
+        '</div>' +
+      '</div>';
+    draw(bySido, max);
+  }
+
+  GC.initVisits = function () {
+    document.getElementById('vzBody').innerHTML = '<p class="vz-off">불러오는 중…</p>';
+    load().then(function (d) { rows = d; render(d); });
+  };
+})();
+
 /* 부팅 */
 window.GC = window.GC || {};
 
@@ -3595,8 +4589,10 @@ window.GC = window.GC || {};
       GC.toggleLayer('lyr-fault', t.checked);
       note.hidden = !t.checked;
     });
-    var st = document.getElementById('siteToggle');
-    st.addEventListener('change', function () { GC.toggleLayer('lyr-site', st.checked); });
+    [['siteToggle', 'lyr-site'], ['peakToggle', 'lyr-peak']].forEach(function (pair) {
+      var box = document.getElementById(pair[0]);
+      box.addEventListener('change', function () { GC.toggleLayer(pair[1], box.checked); });
+    });
 
     var qn = document.getElementById('quakeList');
     GC.quakes.forEach(function (q) {
@@ -3616,17 +4612,18 @@ window.GC = window.GC || {};
 window.GC = window.GC || {};
 
 (function () {
-  var PAGES = ['home', 'footprint', 'map', 'mountains', 'geoparks', 'trails', 'stories', 'rock', 'quiz', 'about'];
+  var PAGES = ['home', 'footprint', 'map', 'mountains', 'geoparks', 'trails', 'stories', 'rock', 'visits', 'quiz', 'about'];
   var inited = {};
   var current = null;
 
   var LAZY = {
     map: function () { GC.buildMap(); },
-    mountains: function () { GC.initMountains(); },
+    mountains: function () { GC.initPeaks(); GC.initMountains(); },
     geoparks: function () { GC.initGeoparks(); },
     trails: function () { GC.initTrails(); },
     stories: function () { GC.initStories(); },
     rock: function () { GC.initRockId(); },
+    visits: function () { GC.initVisits(); },
     quiz: function () { GC.initQuiz(); }
   };
 

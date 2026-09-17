@@ -87,6 +87,8 @@ window.GC = window.GC || {};
       GC.go('map', p.id);
       setTimeout(function () { GC.setPin(lng, lat); }, 60);
     });
+
+    if (GC.offerVisit) GC.offerVisit(placeName, p);
   };
 
   /* 홈과 발밑 페이지가 같은 동작을 공유합니다 */
