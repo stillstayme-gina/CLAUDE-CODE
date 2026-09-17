@@ -837,6 +837,78 @@ p{margin:0}
   100%{r:calc(20 * var(--mk)); opacity:0}
 }
 @media (prefers-reduced-motion:reduce){ .pin-ring{animation:none; opacity:.9} }
+
+/* ── 지도 위 지질구 이름 ──────────────────────────────── */
+.lyr-plbl{pointer-events:none}
+.plbl{transition:opacity .45s ease}
+.plbl.is-unborn{opacity:0}
+.plbl-n,.plbl-a{
+  text-anchor:middle; paint-order:stroke; stroke-linejoin:round;
+  stroke:var(--bg); fill:var(--text);
+}
+.plbl-n{
+  font-family:var(--f-body); font-weight:700;
+  font-size:calc(9.5px * var(--mk)); stroke-width:calc(3.2px * var(--mk));
+  transform:translateY(calc(-4px * var(--mk)));
+}
+.plbl-a{
+  font-family:var(--f-mono); font-weight:500; fill:var(--text-2);
+  font-size:calc(7.2px * var(--mk)); stroke-width:calc(3px * var(--mk));
+  transform:translateY(calc(9.5px * var(--mk)));
+}
+/* 작은 지질구 이름은 확대했을 때만 */
+.plbl--sm{opacity:0}
+.kmap.is-zoomed .plbl--sm{opacity:1}
+.kmap.is-zoomed .plbl--sm.is-unborn{opacity:0}
+.prov{stroke-linejoin:round}
+
+/* ── 자료 출처 ────────────────────────────────────────── */
+.src-line{
+  display:flex; flex-wrap:wrap; gap:8px 10px; align-items:center;
+  margin-top:26px; padding-top:16px; border-top:1px solid var(--line-soft);
+}
+.src-k{font:600 10.5px/1 var(--f-mono); letter-spacing:.12em; color:var(--text-3)}
+.src-chip{
+  font:500 11.5px/1 var(--f-body); padding:6px 9px; border-radius:2px; text-decoration:none;
+  color:var(--text-2); background:var(--surface-2); border:1px solid var(--line-soft); transition:.15s;
+}
+.src-chip:hover{color:var(--accent); border-color:var(--accent)}
+.src-more{font-size:12px!important}
+
+.src-grid{display:grid; gap:10px}
+@media (min-width:720px){ .src-grid{grid-template-columns:1fr 1fr} }
+.src-card{
+  display:grid; align-content:start; gap:7px; padding:20px 22px; border-radius:3px;
+  background:var(--surface); border:1px solid var(--line-soft); border-top:3px solid var(--accent);
+}
+.src-tag{font:600 10.5px/1 var(--f-mono); letter-spacing:.12em; color:var(--accent)}
+.src-org{font-size:17px; letter-spacing:-.01em}
+.src-name{font-size:13.5px; color:var(--text-2)}
+.src-used{margin-top:6px}
+.src-used h4{font:600 10.5px/1 var(--f-mono); letter-spacing:.1em; color:var(--text-3); margin-bottom:8px}
+.src-used ul{margin:0; padding-left:18px; display:grid; gap:4px}
+.src-used li{font-size:13.6px; line-height:1.6; color:var(--text)}
+.src-how{
+  margin-top:8px; padding:12px 14px; border-radius:2px; background:var(--surface-2);
+  font-size:13.2px; line-height:1.75; color:var(--text-2);
+}
+.src-how span{display:block; font:600 10.5px/1 var(--f-mono); letter-spacing:.1em; color:var(--text-3); margin-bottom:7px}
+.src-link{
+  margin-top:4px; font:400 12px/1.5 var(--f-mono); color:var(--accent);
+  text-decoration:none; word-break:break-all;
+}
+.src-link:hover{text-decoration:underline}
+.src-note{margin-top:24px; font-size:13.4px; line-height:1.85; color:var(--text-3); max-width:66ch}
+
+/* ── 자동 위치 ────────────────────────────────────────── */
+.fp-ask{
+  margin-top:20px; padding:20px 22px; border-radius:3px; max-width:46ch;
+  background:var(--surface); border:1px solid var(--line-soft); border-left:4px solid var(--accent);
+}
+.fp-ask-q{font-family:var(--f-disp); font-size:17px; font-weight:600; margin-bottom:8px}
+.fp-ask-s{font-size:13.4px; line-height:1.7; color:var(--text-2); margin-bottom:15px}
+.fp-ask-b{display:flex; flex-wrap:wrap; gap:8px}
+.fp-auto{margin-bottom:16px; font-size:13.8px}
 </style>
 <header class="topbar">
   <a class="brand" href="#/" data-nav="home">
@@ -853,6 +925,7 @@ p{margin:0}
     <a href="#/rock" data-nav="rock">돌 이름</a>
     <a href="#/visits" data-nav="visits">방문 지도</a>
     <a href="#/quiz" data-nav="quiz">퀴즈</a>
+    <a href="#/sources" data-nav="sources">자료 출처</a>
     <a href="#/about" data-nav="about">만든 사람</a>
   </nav>
 </header>
@@ -880,6 +953,15 @@ p{margin:0}
       </div>
     </div>
     <p class="fp-status" id="hmStatus" role="status"></p>
+    <div class="fp-ask" id="hmAsk" hidden>
+      <p class="fp-ask-q">내 위치를 써서 발밑을 바로 보여드릴까요?</p>
+      <p class="fp-ask-s">허용하면 다음부터는 들어오자마자 그 자리의 땅 나이가 보입니다.
+        위치는 이 브라우저 안에서만 쓰이고 어디로도 전송되지 않습니다.</p>
+      <div class="fp-ask-b">
+        <button type="button" class="btn btn-solid" id="hmAskYes">네, 사용할게요</button>
+        <button type="button" class="btn btn-ghost" id="hmAskNo">아니요</button>
+      </div>
+    </div>
     <div class="fp-mini" id="fpCardMini" hidden></div>
   </div>
 
@@ -928,6 +1010,11 @@ p{margin:0}
     <h2 class="sec-h">발밑의 시간</h2>
     <p class="sec-p">지역을 고르거나 위치를 켜면, 그 자리의 땅이 언제 어떻게 만들어졌는지 보여줍니다.</p>
   </div>
+  <label class="switch fp-auto">
+    <input type="checkbox" id="fpAuto">
+    <span class="switch-ui" aria-hidden="true"></span>
+    <span>들어올 때 내 위치를 자동으로 사용하기</span>
+  </label>
   <div class="fp-ctl">
     <button type="button" class="btn btn-solid" id="fpGeo">내 위치로 찾기</button>
     <div class="fp-search">
@@ -939,6 +1026,7 @@ p{margin:0}
   <p class="fp-status" id="fpStatus" role="status"></p>
   <div class="fp-card" id="fpCard"></div>
   <div class="fp-visit" id="fpVisit" hidden></div>
+  <p class="src-line" id="src-footprint"></p>
 </section>
 
 <!-- ═══ 지질도 ═══ -->
@@ -1010,6 +1098,8 @@ p{margin:0}
 
   <div class="prov-detail" id="provDetail" hidden></div>
 
+  <p class="src-line" id="src-map"></p>
+
   <div class="quake-sec">
     <h3 class="sub-h">한반도는 지진 안전지대가 아닙니다</h3>
     <p class="sec-p">
@@ -1049,6 +1139,8 @@ p{margin:0}
   </div>
   <p class="gp-note" id="pkNote"></p>
 
+  <p class="src-line" id="src-mountains"></p>
+
   <div class="mt-deep" id="mtDeep">
     <h3 class="sub-h">더 깊이 본 산 일곱 곳</h3>
     <p class="sec-p">
@@ -1075,6 +1167,7 @@ p{margin:0}
   <div class="gp-grid" id="gpList"></div>
   <div class="gp-detail" id="gpDetail"></div>
   <p class="gp-note" id="gpNote"></p>
+  <p class="src-line" id="src-geoparks"></p>
   <p class="gp-note gp-note--sm">
     체크인 기록은 이 브라우저에만 저장되고 어디로도 전송되지 않습니다.
     시크릿 창이나 다른 기기에서는 보이지 않습니다.
@@ -1136,6 +1229,7 @@ p{margin:0}
   </div>
 
   <p class="gp-note" id="trNote"></p>
+  <p class="src-line" id="src-trails"></p>
 </section>
 
 <!-- ═══ 이야기 ═══ -->
@@ -1218,39 +1312,60 @@ p{margin:0}
   </div>
 </section>
 
+<!-- ═══ 자료 출처 ═══ -->
+<section class="page" id="page-sources" hidden>
+  <div class="sec-hd">
+    <p class="sec-k">10 — 자료 출처</p>
+    <h2 class="sec-h">이 내용은 어디서 왔나</h2>
+    <p class="sec-p">
+      지질 정보는 출처가 곧 신뢰도입니다. 어떤 기관의 무슨 자료를 썼고,
+      이 시안에서 <strong>어떻게 가공했는지</strong>까지 함께 적었습니다.
+    </p>
+  </div>
+  <div class="src-grid" id="srcList"></div>
+  <p class="src-note" id="srcNote"></p>
+</section>
+
 <!-- ═══ 만든 사람 ═══ -->
 <section class="page" id="page-about" hidden>
   <div class="sec-hd">
-    <p class="sec-k">10 — 만든 사람</p>
-    <h2 class="sec-h">아는 만큼 보입니다</h2>
+    <p class="sec-k">11 — 만든 사람</p>
+    <h2 class="sec-h">왜 이 페이지를 만드나</h2>
   </div>
 
   <article class="about">
     <p class="about-lead">
-      지구시스템과학이라는 전공을 스스로 택해서, 재미있게 즐겼습니다.
+      지구시스템과학이라는 전공을 스스로 골랐고, 재미있게 공부했습니다.
     </p>
     <p>
-      자연스레 에너지라는 곳에 관심이 생겨서 저류층의 모세관압(capillary pressure) 모델링으로
-      석사 학위를 받고 에너지 회사에 다니게 되었습니다. 또 다른 분야에 흥미를 느껴
-      경영대학원 석사를 받았고, 지금은 에너지나 지질이 아닌 다른 일을 하고 있습니다.
+      공부하다 보니 마음이 자연스레 에너지 쪽으로 옮겨갔습니다.
+      땅속 깊은 곳에 갇힌 것들이 어떻게 흐르는지가 궁금해서,
+      저류층의 모세관압(capillary pressure)을 모델링해 석사 학위를 받았고,
+      그렇게 에너지 회사에 들어갔습니다.
     </p>
     <p>
-      그래도 여전히 등산을 좋아하고, 새로운 곳에 가면 땅속 깊은 곳을 생각하게 됩니다.
+      일을 하다 보니 또 다른 분야가 눈에 들어왔습니다. 그래서 경영대학원에 진학해
+      한 번 더 석사를 마쳤고, 지금은 에너지도 지질도 아닌 일을 하고 있습니다.
+    </p>
+    <p>
+      그래도 산은 여전히 좋아합니다. 그리고 새로운 곳에 서면,
+      늘 발밑을 먼저 생각하게 됩니다.
     </p>
 
     <blockquote class="about-q">아는 만큼 보입니다</blockquote>
 
     <p>
-      요즘 우리는 자연을 보러 여행을 다닙니다. 우리가 즐겨 찾는 이탈리아의 돌로미티도
-      백운암(Dolomite)이라는 암석으로 이루어져 있고, 그 암석의 성질 때문에 날카롭게 잘린
-      산의 단면이 만들어집니다. 우리는 그 모양을 보러 갑니다.
+      요즘 우리는 자연을 보러 여행을 갑니다. 많이 찾는 이탈리아의 돌로미티도
+      백운암(Dolomite)이라는 암석으로 이루어져 있습니다. 그 암석이 유난히 단단하고
+      수직으로 잘 쪼개지기 때문에, 우리가 사진으로 담는 그 날카로운 봉우리가 만들어졌습니다.
+      우리는 사실 암석의 성질을 보러 간 것입니다.
     </p>
     <p>
-      우리 주변의 산들도, 우리가 살고 있는 도시도 마찬가지로 지구라는 땅 위에 있습니다.
-      아는 만큼 보입니다.
+      우리 동네 뒷산도, 우리가 사는 도시도 똑같이 지구라는 땅 위에 있습니다.
+      다만 아직 무엇을 봐야 할지 모를 뿐입니다. 아는 만큼 보입니다.
     </p>
     <p class="about-close">
-      그냥 지나치지 마시고, 함께 지식을 나누고 공유하고자 이 페이지를 만듭니다.
+      그냥 지나치지 마시라고, 알게 된 것을 나누고 싶어서 이 페이지를 만듭니다.
     </p>
 
     <div class="about-how">
@@ -1424,7 +1539,7 @@ window.GC = window.GC || {};
 GC.provinces = [
   /* ── 소규모·관입체·분지: 먼저 검사 ───────────────────────────── */
   {
-    id: 'hantan', name: '한탄강 용암대지', era: 'cz2', noFallback: true, hit: 1,
+    id: 'hantan', name: '한탄강 용암대지', era: 'cz2', noFallback: true, labelAt: 'zoom', hit: 1,
     birthMa: 0.5, ageText: '약 50만 년 전', ageNum: '50', ageUnit: '만 년',
     rocks: ['현무암', '주상절리'],
     headline: '강 위를 용암이 덮은 땅',
@@ -1433,7 +1548,7 @@ GC.provinces = [
     poly: [[126.92,38.14],[127.08,38.32],[127.40,38.28],[127.40,38.12],[127.20,38.04],[127.00,38.06]]
   },
   {
-    id: 'seoul-granite', name: '서울 화강암체', era: 'mz1', noFallback: true, hit: 1,
+    id: 'seoul-granite', name: '서울 화강암체', era: 'mz1', noFallback: true, labelAt: 'zoom', hit: 1,
     birthMa: 170, ageText: '약 1억 7천만 년 전', ageNum: '1.7', ageUnit: '억 년',
     rocks: ['흑운모 화강암'],
     headline: '도시 한복판에 드러난 마그마 방',
@@ -1442,7 +1557,7 @@ GC.provinces = [
     poly: [[126.92,37.73],[127.11,37.75],[127.14,37.62],[126.95,37.585],[126.88,37.645]]
   },
   {
-    id: 'seorak-granite', name: '설악 화강암체', era: 'mz2', shade: 1, noFallback: true, hit: 1,
+    id: 'seorak-granite', name: '설악 화강암체', era: 'mz2', shade: 1, noFallback: true, labelAt: 'zoom', hit: 1,
     birthMa: 87, ageText: '약 8,700만 ~ 5,000만 년 전', ageNum: '8,700', ageUnit: '만 년',
     rocks: ['화강암'],
     headline: '수직으로 쪼개진 화강암',
@@ -1451,7 +1566,7 @@ GC.provinces = [
     poly: [[128.18,38.28],[128.66,38.22],[128.64,37.90],[128.24,37.88],[128.12,38.06]]
   },
   {
-    id: 'pohang', name: '포항·장기분지', era: 'cz1', noFallback: true, hit: 1,
+    id: 'pohang', name: '포항·장기분지', era: 'cz1', noFallback: true, labelAt: 'zoom', hit: 1,
     birthMa: 17, ageText: '약 1,700만 년 전', ageNum: '1,700', ageUnit: '만 년',
     rocks: ['이암', '사암', '역암', '응회암'],
     headline: '동해가 열릴 때 내려앉은 자리',
@@ -1460,7 +1575,7 @@ GC.provinces = [
     poly: [[129.20,36.25],[129.47,36.30],[129.42,36.00],[129.33,35.88],[129.18,35.98]]
   },
   {
-    id: 'westcoast', name: '서해안 백악기 분지대', era: 'mz2', shade: -1, noFallback: true, hit: 2,
+    id: 'westcoast', name: '서해안 백악기 분지대', era: 'mz2', shade: -1, noFallback: true, labelAt: 'zoom', hit: 2,
     birthMa: 90, ageText: '약 9,000만 년 전', ageNum: '9,000', ageUnit: '만 년',
     rocks: ['유문암', '응회암', '역암'],
     headline: '화산재가 굳어 만든 해식절벽',
@@ -1469,7 +1584,7 @@ GC.provinces = [
     poly: [[126.40,35.78],[126.78,35.82],[126.82,35.45],[126.60,35.20],[126.38,35.25],[126.30,35.55]]
   },
   {
-    id: 'honam-volc', name: '호남 남서부 화산암대', era: 'mz2', shade: 1, hit: 2,
+    id: 'honam-volc', name: '호남 남서부 화산암대', mapName: '호남 화산암대', labelDx: 0.10, era: 'mz2', shade: 1, hit: 2,
     birthMa: 85, ageText: '약 8,700만 년 전', ageNum: '8,700', ageUnit: '만 년',
     rocks: ['응회암', '안산암', '유문암'],
     headline: '남도의 기둥 바위들',
@@ -1478,7 +1593,7 @@ GC.provinces = [
     poly: [[126.40,35.15],[127.10,35.25],[127.30,34.90],[126.90,34.50],[126.70,34.22],[126.15,34.30],[126.05,34.85]]
   },
   {
-    id: 'jeju', name: '제주 화산체', era: 'cz2', hit: 2,
+    id: 'jeju', name: '제주 화산체', labelDy: -0.22, era: 'cz2', hit: 2,
     birthMa: 1.8, ageText: '약 180만 년 전 ~ 수천 년 전', ageNum: '180', ageUnit: '만 년',
     rocks: ['현무암', '조면암', '화산쇄설암'],
     headline: '한반도에서 가장 젊은 땅',
@@ -1507,7 +1622,7 @@ GC.provinces = [
 
   /* ── 대규모 지질구 ─────────────────────────────────────────── */
   {
-    id: 'imjin', name: '임진강대', era: 'mz1', noFallback: true, hit: 5,
+    id: 'imjin', name: '임진강대', era: 'mz1', noFallback: true, labelAt: 'zoom', hit: 5,
     birthMa: 230, ageText: '약 2억 3천만 년 전', ageNum: '2.3', ageUnit: '억 년',
     rocks: ['편암', '편마암', '함류석 변성암'],
     headline: '대륙이 충돌한 자리로 지목되는 띠',
@@ -2482,6 +2597,75 @@ GC.expandPoly = function (poly, k) {
   });
 };
 
+/* 지질구 폴리곤은 꼭짓점이 적어 각져 보입니다. 그리기용으로만 곡선으로 부드럽게 만듭니다.
+   (판정은 원래 폴리곤을 그대로 쓰므로 경계 근처에서 몇백 m 차이가 날 수 있습니다) */
+GC.smoothPath = function (poly, tension) {
+  var t = tension == null ? 0.85 : tension;
+  var n = poly.length;
+  if (n < 3) return GC.pathOf(poly);
+  var P = poly.map(function (c) { return GC.project(c[0], c[1]); });
+  var d = 'M' + P[0][0].toFixed(1) + ' ' + P[0][1].toFixed(1);
+  for (var i = 0; i < n; i++) {
+    var p0 = P[(i - 1 + n) % n], p1 = P[i], p2 = P[(i + 1) % n], p3 = P[(i + 2) % n];
+    var c1 = [p1[0] + (p2[0] - p0[0]) / 6 * t, p1[1] + (p2[1] - p0[1]) / 6 * t];
+    var c2 = [p2[0] - (p3[0] - p1[0]) / 6 * t, p2[1] - (p3[1] - p1[1]) / 6 * t];
+    d += 'C' + c1[0].toFixed(1) + ' ' + c1[1].toFixed(1) + ',' +
+               c2[0].toFixed(1) + ' ' + c2[1].toFixed(1) + ',' +
+               p2[0].toFixed(1) + ' ' + p2[1].toFixed(1);
+  }
+  return d + 'Z';
+};
+
+/* 이 좌표가 실제 육지인가 (바탕지도 기준) */
+GC.onLand = function (lng, lat) {
+  if (!GC.base || !GC.base.sido) return true;
+  for (var i = 0; i < GC.base.sido.length; i++) {
+    var rs = GC.base.sido[i].rings;
+    for (var j = 0; j < rs.length; j++) if (GC.pointInPoly(lng, lat, rs[j])) return true;
+  }
+  return false;
+};
+
+/* 라벨 자리 — 폴리곤 안이면서 실제 육지인 점들의 평균. 바다 쪽으로 넓게 그려진
+   지질구도 이름이 땅 위에 놓입니다. 육지 비율은 라벨을 붙일지 판단하는 데 씁니다. */
+var lblCache = {};
+GC.labelPoint = function (poly, id) {
+  if (id && lblCache[id]) return lblCache[id];
+  var mnx = 1e9, mny = 1e9, mxx = -1e9, mxy = -1e9;
+  poly.forEach(function (c) {
+    mnx = Math.min(mnx, c[0]); mxx = Math.max(mxx, c[0]);
+    mny = Math.min(mny, c[1]); mxy = Math.max(mxy, c[1]);
+  });
+  var N = 26, inside = 0, land = 0, sx = 0, sy = 0;
+  for (var i = 0; i <= N; i++) {
+    for (var j = 0; j <= N; j++) {
+      var x = mnx + (mxx - mnx) * i / N, y = mny + (mxy - mny) * j / N;
+      if (!GC.pointInPoly(x, y, poly)) continue;
+      inside++;
+      if (!GC.onLand(x, y)) continue;
+      land++; sx += x; sy += y;
+    }
+  }
+  var res = land
+    ? { pt: [sx / land, sy / land], landRatio: land / inside }
+    : { pt: GC.centroid(poly), landRatio: 0 };
+  /* 평균점이 도형 밖(오목한 모양)이면 가장 가까운 육지 표본으로 */
+  if (!GC.pointInPoly(res.pt[0], res.pt[1], poly)) res.pt = GC.centroid(poly);
+  if (id) lblCache[id] = res;
+  return res;
+};
+
+/* 대략적인 면적 (지도 단위) — 라벨을 붙일지 판단하는 데만 씁니다 */
+GC.polyArea = function (poly) {
+  var s = 0;
+  for (var i = 0; i < poly.length; i++) {
+    var p = GC.project(poly[i][0], poly[i][1]);
+    var q = GC.project(poly[(i + 1) % poly.length][0], poly[(i + 1) % poly.length][1]);
+    s += p[0] * q[1] - q[0] * p[1];
+  }
+  return Math.abs(s / 2);
+};
+
 /* 이 기기에만 저장되는 기록 (체크인 도감). 저장이 막혀 있어도 페이지는 정상 동작합니다. */
 window.GC = window.GC || {};
 
@@ -2979,6 +3163,98 @@ GC.peakNote =
   '산림청 100대 명산과 각 지역의 대표 산을 중심으로 추렸습니다. 좌표는 정상부 기준 개략값이고, ' +
   '지질구와 대표 암석은 그 좌표를 지질구 경계에 넣어 자동으로 붙인 것이라 실제 정상부 암석과 다를 수 있습니다.';
 
+/* 자료 출처. 각 항목에 무엇을 가져왔는지와, 이 시안에서 어떻게 가공했는지를 적습니다. */
+window.GC = window.GC || {};
+
+GC.sources = [
+  {
+    id: 'kigam', tag: '지질',
+    org: '한국지질자원연구원 (KIGAM)',
+    name: '지질정보시스템',
+    url: 'https://mgeo.kigam.re.kr',
+    used: ['지질구 구분과 암석 분포', '지질 연대', '지질 용어'],
+    how: '1:25만급 지질도를 15개 폴리곤으로 크게 단순화해 다시 그렸습니다. ' +
+         '이 사이트의 지질 경계는 개략이며, 정밀한 정보는 원본 지질도를 확인해야 합니다.'
+  },
+  {
+    id: 'kostat', tag: '지도',
+    org: '통계청',
+    name: '2013 시·도 / 시·군·구 행정경계',
+    url: 'https://github.com/southkorea/southkorea-maps',
+    used: ['바탕지도의 해안선과 행정경계', '시·군·구 251곳의 중심 좌표'],
+    how: 'southkorea-maps(@e9t)가 가공해 공개한 통계청 경계 자료를 내려받아 ' +
+         'Douglas–Peucker로 단순화했습니다. 울릉·독도는 삽도로, 신안 먼바다 섬은 축척을 위해 생략했습니다.'
+  },
+  {
+    id: 'geopark', tag: '지질공원',
+    org: '환경부 국가지질공원사무국',
+    name: '국가지질공원 누리집',
+    url: 'https://www.koreageoparks.kr',
+    used: ['지질공원과 지질명소 목록', '인증 구분과 연도', '명소 설명의 기초'],
+    how: '전체 중 열두 곳만 골라 담았습니다. 인증 연도는 확실한 네 곳만 표기했고, ' +
+         '전체 목록과 최신 인증 현황은 누리집에서 확인해야 합니다.'
+  },
+  {
+    id: 'unesco', tag: '지질공원',
+    org: 'UNESCO',
+    name: 'UNESCO Global Geoparks',
+    url: 'https://www.unesco.org/en/iggp',
+    used: ['세계지질공원 등재 현황'],
+    how: '등재 목록은 갱신되므로, 표기한 구분은 시안 작성 시점 기준입니다.'
+  },
+  {
+    id: 'kma', tag: '지진',
+    org: '기상청',
+    name: '지진화산 정보 · 국내지진 목록',
+    url: 'https://www.weather.go.kr/w/eqk-vol/search/korea.do',
+    used: ['2016 경주지진(M5.8)과 2017 포항지진(M5.4)의 규모·진앙'],
+    how: '활성단층 선형(양산·울산 단층대)은 개략적으로 그린 것이며 정밀 단층 자료가 아닙니다.'
+  },
+  {
+    id: 'knps', tag: '탐방',
+    org: '국립공원공단',
+    name: '국립공원 탐방 정보',
+    url: 'https://www.knps.or.kr',
+    used: ['트레일의 거리·소요 시간·난이도', '탐방로 통제와 예약 안내'],
+    how: '고도 프로파일은 공개 정보를 바탕으로 한 개략값이고 실측 자료가 아닙니다. ' +
+         '실제 산행 계획에는 반드시 공단의 최신 정보를 확인하세요.'
+  },
+  {
+    id: 'forest', tag: '산',
+    org: '산림청',
+    name: '100대 명산',
+    url: 'https://www.forest.go.kr',
+    used: ['산 160곳의 선정 기준'],
+    how: '100대 명산에 지역별 대표 산을 더해 추렸습니다. 정상부 좌표는 개략값이며, ' +
+         '각 산의 지질구와 암석은 그 좌표를 지질구 경계에 넣어 자동으로 붙인 것입니다.'
+  },
+  {
+    id: 'ics', tag: '시대',
+    org: 'International Commission on Stratigraphy',
+    name: 'International Chronostratigraphic Chart',
+    url: 'https://stratigraphy.org/chart',
+    used: ['지질시대 구분', '시대별 색 체계의 기준'],
+    how: '국제 표준 시대색을 바탕으로 하되, 색약 구분과 화면 대비 기준을 통과하도록 ' +
+         '채도와 명도를 다시 조정했습니다.'
+  }
+];
+
+GC.sourceNote =
+  '이 사이트는 위 자료를 바탕으로 재구성한 개인 시안입니다. 어떤 기관의 공식 자료도 아니며, ' +
+  '학술·실무 목적이라면 반드시 원본을 확인하세요. 공개 데이터의 이용 조건(공공누리 유형)은 ' +
+  '정식 공개 전에 각 기관에 확인이 필요합니다.';
+
+/* 페이지별로 어떤 출처를 쓰는지 */
+GC.pageSources = {
+  map: ['kigam', 'kostat', 'kma', 'ics'],
+  mountains: ['forest', 'kigam', 'kostat'],
+  geoparks: ['geopark', 'unesco', 'kigam'],
+  trails: ['knps', 'kigam', 'geopark'],
+  footprint: ['kigam', 'kostat'],
+  rock: ['kigam'],
+  stories: ['kigam', 'ics']
+};
+
 /* 실제 행정경계 위에 지질구를 입힌 지도 + 타임 슬라이더 */
 window.GC = window.GC || {};
 
@@ -3057,7 +3333,7 @@ window.GC = window.GC || {};
     GC.provinces.forEach(function (p) {
       if (p.inset) return;
       var path = el('path', {
-        d: GC.pathOf(p.poly), class: 'prov', 'data-id': p.id,
+        d: GC.smoothPath(p.poly), class: 'prov', 'data-id': p.id,
         fill: GC.provFill(p), tabindex: '0', role: 'button'
       });
       var t = el('title'); t.textContent = p.name + ' · ' + p.ageText;
@@ -3065,6 +3341,23 @@ window.GC = window.GC || {};
       gProv.appendChild(path);
     });
     svg.appendChild(gProv);
+
+    /* 지질구 이름 — 범례를 오가지 않고도 무슨 색인지 바로 읽히게 */
+    var gL = el('g', { class: 'lyr-plbl' });
+    GC.provinces.forEach(function (p) {
+      if (p.inset) return;
+      var lp = GC.labelPoint(p.poly, p.id);
+      var big = p.labelAt !== 'zoom';
+      var q = GC.project(lp.pt[0] + (p.labelDx || 0), lp.pt[1] + (p.labelDy || 0));
+      var g = el('g', { class: 'plbl' + (big ? '' : ' plbl--sm'), 'data-lbl': p.id });
+      var t1 = el('text', { x: q[0], y: q[1], class: 'plbl-n' });
+      t1.textContent = p.mapName || p.name;
+      var t2 = el('text', { x: q[0], y: q[1], class: 'plbl-a' });
+      t2.textContent = p.ageNum + p.ageUnit + ' 전';
+      g.appendChild(t1); g.appendChild(t2);
+      gL.appendChild(g);
+    });
+    svg.appendChild(gL);
 
     var gSido = el('g', { class: 'lyr-sido' });
     GC.base.sido.forEach(function (s) {
@@ -3253,6 +3546,8 @@ window.GC = window.GC || {};
         n.classList.toggle('is-unborn', !born);
         n.classList.toggle('is-fresh', fresh);
       });
+      var lbl = GC._svg.querySelector('[data-lbl="' + p.id + '"]');
+      if (lbl) lbl.classList.toggle('is-unborn', !born);
       var row = document.querySelector('#mapLegend [data-id="' + p.id + '"]');
       if (row) {
         row.classList.toggle('is-unborn', !born);
@@ -3510,25 +3805,68 @@ window.GC = window.GC || {};
     });
 
     geoBtn.addEventListener('click', function () {
-      if (!navigator.geolocation) {
-        status.textContent = '이 브라우저는 위치 기능을 지원하지 않습니다. 지역을 직접 골라주세요.';
-        return;
-      }
       status.textContent = '위치를 확인하는 중…';
       geoBtn.disabled = true;
-      navigator.geolocation.getCurrentPosition(function (pos) {
+      locate(function () {
         geoBtn.disabled = false; status.textContent = '';
-        var lng = pos.coords.longitude, lat = pos.coords.latitude;
-        if (lng < 124 || lng > 132.5 || lat < 32.5 || lat > 39) {
-          status.textContent = '한국 밖에 계신 것 같습니다. 지역을 골라보세요.';
-          return;
-        }
-        GC.showFootprint('내 위치 ' + lat.toFixed(3) + '°N ' + lng.toFixed(3) + '°E', lng, lat);
         if (thenGo) GC.go('footprint');
-      }, function () {
-        geoBtn.disabled = false;
-        status.textContent = '위치를 가져오지 못했습니다. 지역을 직접 골라주세요.';
-      }, { timeout: 8000 });
+      }, function (m) { geoBtn.disabled = false; status.textContent = m; });
+    });
+  }
+
+  /* 위치 한 번 읽기 — 성공하면 발밑을 채웁니다 */
+  function locate(onDone, onFail) {
+    if (!navigator.geolocation) { if (onFail) onFail('이 브라우저는 위치 기능을 지원하지 않습니다.'); return; }
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      var lng = pos.coords.longitude, lat = pos.coords.latitude;
+      if (lng < 124 || lng > 132.5 || lat < 32.5 || lat > 39) {
+        if (onFail) onFail('한국 밖에 계신 것 같습니다. 지역을 골라보세요.');
+        return;
+      }
+      GC.showFootprint('내 위치 ' + lat.toFixed(3) + '°N ' + lng.toFixed(3) + '°E', lng, lat);
+      if (onDone) onDone();
+    }, function () {
+      if (onFail) onFail('위치를 가져오지 못했습니다. 지역을 직접 골라주세요.');
+    }, { timeout: 8000 });
+  }
+
+  function autoOn() { return GC.store.get('autoloc', null) === true; }
+
+  function initAuto() {
+    var ask = document.getElementById('hmAsk');
+    var decided = GC.store.get('autoloc', null);
+    var box = document.getElementById('fpAuto');
+    box.checked = decided === true;
+    box.addEventListener('change', function () {
+      GC.store.set('autoloc', box.checked);
+      if (box.checked) {
+        document.getElementById('fpStatus').textContent = '위치를 확인하는 중…';
+        locate(function () { document.getElementById('fpStatus').textContent = ''; },
+               function (m) { document.getElementById('fpStatus').textContent = m; });
+      }
+    });
+
+    if (decided === true) {
+      /* 이미 허용해 둔 경우: 조용히 채웁니다 */
+      locate(null, null);
+      return;
+    }
+    if (decided === false || !navigator.geolocation) return;
+
+    ask.hidden = false;
+    document.getElementById('hmAskYes').addEventListener('click', function () {
+      GC.store.set('autoloc', true);
+      box.checked = true;
+      ask.hidden = true;
+      document.getElementById('hmStatus').textContent = '위치를 확인하는 중…';
+      locate(function () {
+        document.getElementById('hmStatus').textContent = '';
+        GC.go('footprint');
+      }, function (m) { document.getElementById('hmStatus').textContent = m; });
+    });
+    document.getElementById('hmAskNo').addEventListener('click', function () {
+      GC.store.set('autoloc', false);
+      ask.hidden = true;
     });
   }
 
@@ -3547,6 +3885,8 @@ window.GC = window.GC || {};
     var seed = GC.regions.filter(function (x) { return x[0] === '서울 종로구'; })[0] || GC.regions[0];
     document.getElementById('fpRegion').value = seed[0];
     GC.showFootprint(seed[0], seed[1], seed[2]);
+
+    initAuto();
   };
 })();
 
@@ -4731,11 +5071,57 @@ window.GC = window.GC || {};
   };
 })();
 
+/* 자료 출처 — 전용 페이지와, 각 페이지 하단의 출처 줄 */
+window.GC = window.GC || {};
+
+(function () {
+  var esc = function (s) { return GC.esc(s); };
+  function byId(id) { return GC.sources.filter(function (s) { return s.id === id; })[0]; }
+
+  /* 페이지 하단에 "이 페이지가 쓴 자료" 한 줄 */
+  GC.mountSourceLine = function (page, host) {
+    var ids = GC.pageSources[page];
+    if (!ids || !host) return;
+    host.innerHTML =
+      '<span class="src-k">이 페이지가 쓴 자료</span>' +
+      ids.map(function (id) {
+        var s = byId(id);
+        return s ? '<a class="src-chip" href="' + s.url + '" target="_blank" rel="noopener">' +
+          esc(s.org) + '</a>' : '';
+      }).join('') +
+      '<button type="button" class="linkish src-more">자세히 →</button>';
+    host.querySelector('.src-more').addEventListener('click', function () { GC.go('sources'); });
+  };
+
+  GC.initSources = function () {
+    document.getElementById('srcList').innerHTML = GC.sources.map(function (s) {
+      return '<article class="src-card">' +
+        '<p class="src-tag">' + esc(s.tag) + '</p>' +
+        '<h3 class="src-org">' + esc(s.org) + '</h3>' +
+        '<p class="src-name">' + esc(s.name) + '</p>' +
+        '<div class="src-used"><h4>여기서 가져온 것</h4><ul>' +
+          s.used.map(function (u) { return '<li>' + esc(u) + '</li>'; }).join('') +
+        '</ul></div>' +
+        '<p class="src-how"><span>이 시안에서 어떻게 썼나</span>' + esc(s.how) + '</p>' +
+        '<a class="src-link" href="' + s.url + '" target="_blank" rel="noopener">' +
+          esc(s.url.replace(/^https?:\/\//, '')) + ' ↗</a>' +
+        '</article>';
+    }).join('');
+    document.getElementById('srcNote').textContent = GC.sourceNote;
+
+    /* 각 페이지의 출처 줄도 여기서 한 번에 채웁니다 */
+    Object.keys(GC.pageSources).forEach(function (page) {
+      GC.mountSourceLine(page, document.getElementById('src-' + page));
+    });
+  };
+})();
+
 /* 부팅 */
 window.GC = window.GC || {};
 
 (function () {
   function boot() {
+    GC.initSources();
     GC.initFootprint();
     GC.initRouter();
 
@@ -4768,7 +5154,7 @@ window.GC = window.GC || {};
 window.GC = window.GC || {};
 
 (function () {
-  var PAGES = ['home', 'footprint', 'map', 'mountains', 'geoparks', 'trails', 'stories', 'rock', 'visits', 'quiz', 'about'];
+  var PAGES = ['home', 'footprint', 'map', 'mountains', 'geoparks', 'trails', 'stories', 'rock', 'visits', 'quiz', 'sources', 'about'];
   var inited = {};
   var current = null;
 

@@ -76,7 +76,7 @@ window.GC = window.GC || {};
     GC.provinces.forEach(function (p) {
       if (p.inset) return;
       var path = el('path', {
-        d: GC.pathOf(p.poly), class: 'prov', 'data-id': p.id,
+        d: GC.smoothPath(p.poly), class: 'prov', 'data-id': p.id,
         fill: GC.provFill(p), tabindex: '0', role: 'button'
       });
       var t = el('title'); t.textContent = p.name + ' · ' + p.ageText;
@@ -84,6 +84,23 @@ window.GC = window.GC || {};
       gProv.appendChild(path);
     });
     svg.appendChild(gProv);
+
+    /* 지질구 이름 — 범례를 오가지 않고도 무슨 색인지 바로 읽히게 */
+    var gL = el('g', { class: 'lyr-plbl' });
+    GC.provinces.forEach(function (p) {
+      if (p.inset) return;
+      var lp = GC.labelPoint(p.poly, p.id);
+      var big = p.labelAt !== 'zoom';
+      var q = GC.project(lp.pt[0] + (p.labelDx || 0), lp.pt[1] + (p.labelDy || 0));
+      var g = el('g', { class: 'plbl' + (big ? '' : ' plbl--sm'), 'data-lbl': p.id });
+      var t1 = el('text', { x: q[0], y: q[1], class: 'plbl-n' });
+      t1.textContent = p.mapName || p.name;
+      var t2 = el('text', { x: q[0], y: q[1], class: 'plbl-a' });
+      t2.textContent = p.ageNum + p.ageUnit + ' 전';
+      g.appendChild(t1); g.appendChild(t2);
+      gL.appendChild(g);
+    });
+    svg.appendChild(gL);
 
     var gSido = el('g', { class: 'lyr-sido' });
     GC.base.sido.forEach(function (s) {
@@ -272,6 +289,8 @@ window.GC = window.GC || {};
         n.classList.toggle('is-unborn', !born);
         n.classList.toggle('is-fresh', fresh);
       });
+      var lbl = GC._svg.querySelector('[data-lbl="' + p.id + '"]');
+      if (lbl) lbl.classList.toggle('is-unborn', !born);
       var row = document.querySelector('#mapLegend [data-id="' + p.id + '"]');
       if (row) {
         row.classList.toggle('is-unborn', !born);

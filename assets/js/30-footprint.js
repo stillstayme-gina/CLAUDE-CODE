@@ -123,25 +123,68 @@ window.GC = window.GC || {};
     });
 
     geoBtn.addEventListener('click', function () {
-      if (!navigator.geolocation) {
-        status.textContent = '이 브라우저는 위치 기능을 지원하지 않습니다. 지역을 직접 골라주세요.';
-        return;
-      }
       status.textContent = '위치를 확인하는 중…';
       geoBtn.disabled = true;
-      navigator.geolocation.getCurrentPosition(function (pos) {
+      locate(function () {
         geoBtn.disabled = false; status.textContent = '';
-        var lng = pos.coords.longitude, lat = pos.coords.latitude;
-        if (lng < 124 || lng > 132.5 || lat < 32.5 || lat > 39) {
-          status.textContent = '한국 밖에 계신 것 같습니다. 지역을 골라보세요.';
-          return;
-        }
-        GC.showFootprint('내 위치 ' + lat.toFixed(3) + '°N ' + lng.toFixed(3) + '°E', lng, lat);
         if (thenGo) GC.go('footprint');
-      }, function () {
-        geoBtn.disabled = false;
-        status.textContent = '위치를 가져오지 못했습니다. 지역을 직접 골라주세요.';
-      }, { timeout: 8000 });
+      }, function (m) { geoBtn.disabled = false; status.textContent = m; });
+    });
+  }
+
+  /* 위치 한 번 읽기 — 성공하면 발밑을 채웁니다 */
+  function locate(onDone, onFail) {
+    if (!navigator.geolocation) { if (onFail) onFail('이 브라우저는 위치 기능을 지원하지 않습니다.'); return; }
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      var lng = pos.coords.longitude, lat = pos.coords.latitude;
+      if (lng < 124 || lng > 132.5 || lat < 32.5 || lat > 39) {
+        if (onFail) onFail('한국 밖에 계신 것 같습니다. 지역을 골라보세요.');
+        return;
+      }
+      GC.showFootprint('내 위치 ' + lat.toFixed(3) + '°N ' + lng.toFixed(3) + '°E', lng, lat);
+      if (onDone) onDone();
+    }, function () {
+      if (onFail) onFail('위치를 가져오지 못했습니다. 지역을 직접 골라주세요.');
+    }, { timeout: 8000 });
+  }
+
+  function autoOn() { return GC.store.get('autoloc', null) === true; }
+
+  function initAuto() {
+    var ask = document.getElementById('hmAsk');
+    var decided = GC.store.get('autoloc', null);
+    var box = document.getElementById('fpAuto');
+    box.checked = decided === true;
+    box.addEventListener('change', function () {
+      GC.store.set('autoloc', box.checked);
+      if (box.checked) {
+        document.getElementById('fpStatus').textContent = '위치를 확인하는 중…';
+        locate(function () { document.getElementById('fpStatus').textContent = ''; },
+               function (m) { document.getElementById('fpStatus').textContent = m; });
+      }
+    });
+
+    if (decided === true) {
+      /* 이미 허용해 둔 경우: 조용히 채웁니다 */
+      locate(null, null);
+      return;
+    }
+    if (decided === false || !navigator.geolocation) return;
+
+    ask.hidden = false;
+    document.getElementById('hmAskYes').addEventListener('click', function () {
+      GC.store.set('autoloc', true);
+      box.checked = true;
+      ask.hidden = true;
+      document.getElementById('hmStatus').textContent = '위치를 확인하는 중…';
+      locate(function () {
+        document.getElementById('hmStatus').textContent = '';
+        GC.go('footprint');
+      }, function (m) { document.getElementById('hmStatus').textContent = m; });
+    });
+    document.getElementById('hmAskNo').addEventListener('click', function () {
+      GC.store.set('autoloc', false);
+      ask.hidden = true;
     });
   }
 
@@ -160,5 +203,7 @@ window.GC = window.GC || {};
     var seed = GC.regions.filter(function (x) { return x[0] === '서울 종로구'; })[0] || GC.regions[0];
     document.getElementById('fpRegion').value = seed[0];
     GC.showFootprint(seed[0], seed[1], seed[2]);
+
+    initAuto();
   };
 })();

@@ -3,6 +3,7 @@ window.GC = window.GC || {};
 
 (function () {
   function boot() {
+    GC.initSources();
     GC.initFootprint();
     GC.initRouter();
 
