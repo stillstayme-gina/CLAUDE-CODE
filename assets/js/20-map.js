@@ -166,6 +166,13 @@ window.GC = window.GC || {};
     buildLegend();
     bindSlider();
     applyStop();
+
+    /* 지도는 해당 페이지를 처음 열 때 만들어지므로, 체크박스의 현재 상태를 반영합니다 */
+    ['siteToggle:lyr-site', 'faultToggle:lyr-fault'].forEach(function (pair) {
+      var bits = pair.split(':');
+      var box = document.getElementById(bits[0]);
+      GC.toggleLayer(bits[1], !!(box && box.checked));
+    });
   };
 
   function onPick(e) {

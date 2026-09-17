@@ -65,7 +65,12 @@ window.GC = window.GC || {};
     return { p: best, exact: false };
   };
 
+  /* 시대색은 CSS 토큰이 원본입니다 — 라이트/다크가 각각 따로 검증돼 있습니다 */
   GC.eraColor = function (key) {
+    if (typeof getComputedStyle === 'function') {
+      var v = getComputedStyle(document.documentElement).getPropertyValue('--e-' + key).trim();
+      if (v) return v;
+    }
     return (GC.eras[key] || {}).color || '#888';
   };
 })();

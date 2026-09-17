@@ -2,7 +2,7 @@
 window.GC = window.GC || {};
 
 (function () {
-  var PAGES = ['home', 'footprint', 'map', 'mountains', 'geoparks', 'stories', 'rock', 'quiz', 'about'];
+  var PAGES = ['home', 'footprint', 'map', 'mountains', 'geoparks', 'trails', 'stories', 'rock', 'quiz', 'about'];
   var inited = {};
   var current = null;
 
@@ -10,6 +10,7 @@ window.GC = window.GC || {};
     map: function () { GC.buildMap(); },
     mountains: function () { GC.initMountains(); },
     geoparks: function () { GC.initGeoparks(); },
+    trails: function () { GC.initTrails(); },
     stories: function () { GC.initStories(); },
     rock: function () { GC.initRockId(); },
     quiz: function () { GC.initQuiz(); }
@@ -37,6 +38,7 @@ window.GC = window.GC || {};
     if (route.arg) {
       if (route.page === 'mountains') GC.openMountain(route.arg, true);
       if (route.page === 'geoparks') GC.openPark(route.arg);
+      if (route.page === 'trails') GC.openTrail(route.arg);
       if (route.page === 'map') GC.selectProvince(route.arg);
     }
 

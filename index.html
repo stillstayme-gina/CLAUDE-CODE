@@ -21,6 +21,7 @@
     <a href="#/map" data-nav="map">지질도</a>
     <a href="#/mountains" data-nav="mountains">산</a>
     <a href="#/geoparks" data-nav="geoparks">지질공원</a>
+    <a href="#/trails" data-nav="trails">트레일</a>
     <a href="#/stories" data-nav="stories">이야기</a>
     <a href="#/rock" data-nav="rock">돌 이름</a>
     <a href="#/quiz" data-nav="quiz">퀴즈</a>
@@ -71,12 +72,16 @@
       <span class="hub-k">04</span><span class="hub-n">지질공원</span>
       <span class="hub-d">열두 곳, 마흔여섯 명소. 가서 체크인하고 도감 채우기</span>
     </a>
+    <a class="hub-c" href="#/trails" style="--ec:var(--e-pz2)">
+      <span class="hub-k">05</span><span class="hub-n">지질 트레일</span>
+      <span class="hub-d">이 코스 5km를 걸으면 18억 년을 지나갑니다</span>
+    </a>
     <a class="hub-c" href="#/stories" style="--ec:var(--e-mz1)">
-      <span class="hub-k">05</span><span class="hub-n">이야기</span>
+      <span class="hub-k">06</span><span class="hub-n">이야기</span>
       <span class="hub-d">동해가 열린 날, 공룡의 호수, 강을 덮은 용암</span>
     </a>
     <a class="hub-c" href="#/rock" style="--ec:var(--e-pc)">
-      <span class="hub-k">06</span><span class="hub-n">이 돌 이름이 뭐예요</span>
+      <span class="hub-k">07</span><span class="hub-n">이 돌 이름이 뭐예요</span>
       <span class="hub-d">산에서 주운 돌, 질문 두세 개로 이름 찾기</span>
     </a>
   </nav>
@@ -206,10 +211,67 @@
   </p>
 </section>
 
+<!-- ═══ 지질 트레일 ═══ -->
+<section class="page" id="page-trails" hidden>
+  <div class="sec-hd">
+    <p class="sec-k">05 — 트레일</p>
+    <h2 class="sec-h">이 코스를 걸으면 몇 년을 지나갈까</h2>
+    <p class="sec-p">
+      등산 앱은 거리와 고도를 알려줍니다. 여기서는 그 고도 프로파일 <strong>아래</strong>를 같이 봅니다.
+      발밑에 무엇이 있고, 어느 지점에서 다른 시대로 넘어가는지.
+    </p>
+  </div>
+
+  <div class="tr-grid" id="trGrid"></div>
+
+  <div class="tr-panel">
+    <div class="tr-top">
+      <div class="tr-head" id="trHead"></div>
+      <div class="tr-hero" id="trHero"></div>
+    </div>
+
+    <div class="tr-figure">
+      <div class="tr-figtop">
+        <div class="tr-legend" id="trLegend"></div>
+        <button type="button" class="btn btn-ghost" id="trToggle">표로 보기</button>
+      </div>
+      <div class="tr-chartbox" id="trChartBox">
+        <div class="tr-chart" id="trChart"></div>
+        <div class="tr-tip" id="trTip" role="status" hidden></div>
+      </div>
+      <div class="tr-tablebox" id="trTableBox" hidden></div>
+      <p class="tr-cap">
+        지표선 위쪽이 고도, 아래쪽이 지질 단면입니다. 커서를 올리면 그 지점에서 밟는 암석이 나옵니다.
+        지하 구조는 모식적으로 그렸습니다.
+      </p>
+    </div>
+
+    <p class="tr-punch" id="trPunch"></p>
+
+    <div class="tr-cols">
+      <div class="tr-col">
+        <h4 class="tr-sub">이 코스의 암석</h4>
+        <ul class="tr-units" id="trUnits"></ul>
+      </div>
+      <div class="tr-col">
+        <h4 class="tr-sub">지점별로 볼 것</h4>
+        <ol class="tr-points" id="trPoints"></ol>
+      </div>
+    </div>
+
+    <div class="tr-foot">
+      <p class="tr-access" id="trAccess"></p>
+      <button type="button" class="linkish" id="trLink"></button>
+    </div>
+  </div>
+
+  <p class="gp-note" id="trNote"></p>
+</section>
+
 <!-- ═══ 이야기 ═══ -->
 <section class="page" id="page-stories" hidden>
   <div class="sec-hd">
-    <p class="sec-k">05 — 이야기</p>
+    <p class="sec-k">06 — 이야기</p>
     <h2 class="sec-h">한반도를 만든 세 사건</h2>
     <p class="sec-p">지질 용어를 몰라도 읽히도록 썼습니다. 제목을 누르면 펼쳐집니다.</p>
   </div>
@@ -219,7 +281,7 @@
 <!-- ═══ 돌 이름 ═══ -->
 <section class="page" id="page-rock" hidden>
   <div class="sec-hd">
-    <p class="sec-k">06 — 암석</p>
+    <p class="sec-k">07 — 암석</p>
     <h2 class="sec-h">이 돌 이름이 뭐예요</h2>
     <p class="sec-p">
       등산 중에 가장 많이 나오는 질문입니다. 눈과 손으로 확인할 수 있는 것만 물어보고,
@@ -232,7 +294,7 @@
 <!-- ═══ 퀴즈 ═══ -->
 <section class="page" id="page-quiz" hidden>
   <div class="sec-hd">
-    <p class="sec-k">07 — 확인</p>
+    <p class="sec-k">08 — 확인</p>
     <h2 class="sec-h">널리 퍼진 열 가지 오해</h2>
     <p class="sec-p">O · X로 답해보세요. 틀려도 설명이 나옵니다.</p>
   </div>
@@ -254,7 +316,7 @@
 <!-- ═══ 만든 사람 ═══ -->
 <section class="page" id="page-about" hidden>
   <div class="sec-hd">
-    <p class="sec-k">08 — 만든 사람</p>
+    <p class="sec-k">09 — 만든 사람</p>
     <h2 class="sec-h">아는 만큼 보입니다</h2>
   </div>
 
@@ -346,12 +408,14 @@
 <script src="assets/js/09-data-rocks.js"></script>
 <script src="assets/js/10-geo.js"></script>
 <script src="assets/js/11-store.js"></script>
+<script src="assets/js/12-data-trails.js"></script>
 <script src="assets/js/20-map.js"></script>
 <script src="assets/js/30-footprint.js"></script>
 <script src="assets/js/35-geoparks.js"></script>
 <script src="assets/js/40-mountains.js"></script>
 <script src="assets/js/45-rockid.js"></script>
 <script src="assets/js/50-stories.js"></script>
+<script src="assets/js/55-trails.js"></script>
 <script src="assets/js/90-app.js"></script>
 <script src="assets/js/92-router.js"></script>
 </body>
