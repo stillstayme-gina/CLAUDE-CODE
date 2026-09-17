@@ -4,6 +4,7 @@ window.GC = window.GC || {};
 (function () {
   var SVGNS = 'http://www.w3.org/2000/svg';
   var state = { stop: GC.timeline.length - 1, sel: null, built: false };
+  var fullVB = null, curVB = null, pending = null, anim = null;
 
   function el(tag, attrs) {
     var n = document.createElementNS(SVGNS, tag);
@@ -41,10 +42,12 @@ window.GC = window.GC || {};
     state.built = true;
 
     var b = landBounds(), pad = 10, GUT = 6;
+    fullVB = [b.minX - pad, b.minY - pad,
+              (b.maxX - b.minX) + pad * 2 + GUT,
+              (b.maxY - b.minY) + pad * 2];
+    curVB = fullVB.slice();
     var svg = el('svg', {
-      viewBox: [b.minX - pad, b.minY - pad,
-                (b.maxX - b.minX) + pad * 2 + GUT,
-                (b.maxY - b.minY) + pad * 2].join(' '),
+      viewBox: fullVB.join(' '),
       class: 'kmap', role: 'img',
       'aria-label': '실제 행정경계 위에 지질구를 표시한 남한 지질도'
     });
@@ -146,9 +149,16 @@ window.GC = window.GC || {};
 
     var gPin = el('g', { class: 'lyr-pin' });
     gPin.setAttribute('hidden', '');
-    gPin.appendChild(el('circle', { r: 8, class: 'pin-ring' }));
-    gPin.appendChild(el('circle', { r: 3, class: 'pin-dot' }));
+    gPin.appendChild(el('line', { class: 'fx-cross', x1: -16, x2: -6, y1: 0, y2: 0 }));
+    gPin.appendChild(el('line', { class: 'fx-cross', x1: 6, x2: 16, y1: 0, y2: 0 }));
+    gPin.appendChild(el('line', { class: 'fx-cross', x1: 0, x2: 0, y1: -16, y2: -6 }));
+    gPin.appendChild(el('line', { class: 'fx-cross', x1: 0, x2: 0, y1: 6, y2: 16 }));
+    gPin.appendChild(el('circle', { r: 9, class: 'pin-ring' }));
+    gPin.appendChild(el('circle', { r: 3.4, class: 'fx-dot' }));
+    var fxL = el('text', { class: 'fx-lbl' });
+    gPin.appendChild(fxL);
     svg.appendChild(gPin);
+    GC._fxLbl = fxL;
 
     /* 동해 삽도 — 울릉도와 독도 */
     var ix = b.maxX - 64, iy = b.minY + 2;   // 북동쪽 바다 여백에 삽도를 얹습니다
@@ -178,9 +188,13 @@ window.GC = window.GC || {};
       if (e.key === 'Enter' || e.key === ' ') { onPick(e); e.preventDefault(); }
     });
 
+    var reset = document.getElementById('mapReset');
+    if (reset) reset.addEventListener('click', function () { GC.resetMapView(); });
+
     buildLegend();
     bindSlider();
     applyStop();
+    GC.applyMapFocus();
 
     /* 지도는 해당 페이지를 처음 열 때 만들어지므로, 체크박스의 현재 상태를 반영합니다 */
     ['siteToggle:lyr-site', 'faultToggle:lyr-fault', 'peakToggle:lyr-peak'].forEach(function (pair) {
@@ -297,11 +311,92 @@ window.GC = window.GC || {};
     out.hidden = false;
   };
 
+  /* 확대해도 마커와 글자가 커지지 않도록 현재 배율만큼 되돌립니다 */
+  function rescale() {
+    if (!GC._svg || !fullVB) return;
+    var k = curVB[2] / fullVB[2];
+    GC._svg.style.setProperty('--mk', k);
+    /* 확대 중에는 동해 삽도를 숨깁니다 (지도 좌표에 놓여 있어 같이 커집니다) */
+    GC._svg.classList.toggle('is-zoomed', k < 0.92);
+  }
+
+  function setVB(vb) {
+    curVB = vb.slice();
+    GC._svg.setAttribute('viewBox', vb.join(' '));
+    rescale();
+  }
+
+  function animateVB(to, done) {
+    if (anim) cancelAnimationFrame(anim);
+    var from = curVB.slice();
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) { setVB(to); if (done) done(); return; }
+    var t0 = performance.now(), D = 520;
+    (function step(t) {
+      var e = Math.min(1, (t - t0) / D);
+      var u = 1 - Math.pow(1 - e, 3);
+      setVB(from.map(function (v, i) { return v + (to[i] - v) * u; }));
+      if (e < 1) anim = requestAnimationFrame(step);
+      else { anim = null; if (done) done(); }
+    })(t0);
+  }
+
+  /* 한 지점을 화면 가운데에 두고 확대합니다 */
+  function zoomTo(lng, lat, widthUnits) {
+    var c = GC.project(lng, lat);
+    var w = widthUnits, h = w * (fullVB[3] / fullVB[2]);
+    var vb = [c[0] - w / 2, c[1] - h / 2, w, h];
+    /* 지도 밖으로 나가지 않게 가둡니다 */
+    vb[0] = Math.max(fullVB[0], Math.min(fullVB[0] + fullVB[2] - w, vb[0]));
+    vb[1] = Math.max(fullVB[1], Math.min(fullVB[1] + fullVB[3] - h, vb[1]));
+    animateVB(vb);
+  }
+
   GC.setPin = function (lng, lat) {
     if (!GC._gPin) return;
     var c = GC.project(lng, lat);
     GC._gPin.setAttribute('transform', 'translate(' + c[0] + ' ' + c[1] + ')');
     GC._gPin.removeAttribute('hidden');
+  };
+
+  /* {name, sub, note, lng, lat, provId} — 지도로 이동해 그 지점을 확대하고 이름을 붙입니다 */
+  GC.focusOnMap = function (f) {
+    pending = f;
+    GC.go('map', f.provId || null);
+    if (state.built) GC.applyMapFocus();
+  };
+
+  GC.applyMapFocus = function () {
+    if (!pending || !GC._svg) return;
+    var f = pending;
+    pending = null;
+    GC.setPin(f.lng, f.lat);
+    GC._fxLbl.textContent = f.name || '';
+    zoomTo(f.lng, f.lat, fullVB[2] * 0.34);
+
+    var bar = document.getElementById('mapFocus');
+    if (bar) {
+      document.getElementById('mapFocusN').textContent = f.name || '';
+      document.getElementById('mapFocusS').textContent = f.sub || '';
+      document.getElementById('mapFocusD').textContent = f.note || '';
+      bar.hidden = false;
+    }
+    if (f.provId) GC.selectProvince(f.provId);
+  };
+
+  GC.resetMapView = function () {
+    if (!GC._svg || !fullVB) return;
+    animateVB(fullVB.slice());
+    GC._gPin.setAttribute('hidden', '');
+    var bar = document.getElementById('mapFocus');
+    if (bar) bar.hidden = true;
+    Array.prototype.forEach.call(GC._svg.querySelectorAll('.prov.is-sel'), function (n) {
+      n.classList.remove('is-sel');
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('#mapLegend .lg-row.is-sel'), function (n) {
+      n.classList.remove('is-sel');
+    });
+    state.sel = null;
   };
 
   GC.toggleLayer = function (cls, on) {

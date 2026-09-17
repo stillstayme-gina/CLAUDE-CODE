@@ -103,6 +103,7 @@ window.GC = window.GC || {};
           '<div class="site-act">' +
             '<button type="button" class="btn ' + (done ? 'btn-ghost' : 'btn-line') + ' js-check" data-site="' + s.id + '">' +
               (done ? '기록 취소' : '체크인') + '</button>' +
+            '<button type="button" class="btn btn-ghost js-where" data-site="' + s.id + '">위치 보기</button>' +
             '<p class="site-msg" role="status"></p>' +
           '</div>' +
         '</li>';
@@ -110,6 +111,16 @@ window.GC = window.GC || {};
 
     Array.prototype.forEach.call(out.querySelectorAll('.js-check'), function (btn) {
       btn.addEventListener('click', function () { checkIn(g, btn.getAttribute('data-site'), btn); });
+    });
+    Array.prototype.forEach.call(out.querySelectorAll('.js-where'), function (btn) {
+      btn.addEventListener('click', function () {
+        var site = g.sites.filter(function (x) { return x.id === btn.getAttribute('data-site'); })[0];
+        if (!site) return;
+        GC.focusOnMap({
+          name: site.name, lng: site.at[0], lat: site.at[1], provId: g.prov,
+          sub: g.name + ' 지질공원', note: site.hook
+        });
+      });
     });
     Array.prototype.forEach.call(document.querySelectorAll('.gp-card'), function (b) {
       b.classList.toggle('is-sel', b.getAttribute('data-id') === id);

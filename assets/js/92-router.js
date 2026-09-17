@@ -42,6 +42,9 @@ window.GC = window.GC || {};
       if (route.page === 'trails') GC.openTrail(route.arg);
       if (route.page === 'map') GC.selectProvince(route.arg);
     }
+    if (route.page === 'map' && GC.applyMapFocus) {
+      GC.applyMapFocus();
+    }
 
     document.documentElement.setAttribute('data-page', route.page);
     if (current !== null) window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });

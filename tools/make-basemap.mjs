@@ -56,7 +56,8 @@ for (const f of prov.features) {
   const rs = rings(f)
     .filter(r => {
       const lng = r.reduce((s, p) => s + p[0], 0) / r.length;
-      if (lng > 130) { dropped++; return false; }   // 울릉·독도
+      // 울릉·독도는 삽도로, 신안 먼바다 섬(가거도·흑산도 등)은 지도 폭을 크게 낭비해 생략
+      if (lng > 130 || lng < 125.8) { dropped++; return false; }
       if (area(r) < MIN_AREA) { dropped++; return false; }
       return true;
     })
@@ -108,7 +109,7 @@ for (const f of muni.features) {
   const shape = rs
     .filter(r => {
       const lng = r.reduce((s2, q) => s2 + q[0], 0) / r.length;
-      return lng < 130 && area(r) >= MIN_AREA;
+      return lng < 130 && lng > 125.8 && area(r) >= MIN_AREA;
     })
     .map(r => {
       const sr = simplify(r, 0.014);

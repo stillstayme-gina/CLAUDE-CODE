@@ -187,31 +187,29 @@ p{margin:0}
 .kmap{display:block; width:100%; max-width:100%; height:auto}
 
 .prov{
-  stroke:var(--bg); stroke-width:.7; cursor:pointer;
+  stroke:var(--bg); stroke-width:calc(.7 * var(--mk)); cursor:pointer;
   transition:opacity .45s ease,filter .25s;
 }
 .prov:hover{filter:brightness(1.15)}
 .prov.is-unborn{opacity:.08}
 .prov.is-fresh{animation:fresh 1.1s ease-out}
 @keyframes fresh{from{filter:brightness(2)}to{filter:none}}
-.prov.is-sel{stroke:var(--text); stroke-width:1.8}
+.prov.is-sel{stroke:var(--text); stroke-width:calc(1.8 * var(--mk))}
 .prov-inset.is-unborn .prov,.prov-inset.is-unborn .inset-lbl{opacity:.12}
 .prov-inset{cursor:pointer}
 .lyr-prov{fill-opacity:.92}
 
 .lyr-fault{opacity:0; pointer-events:none; transition:opacity .3s}
 .lyr-fault.is-on{opacity:1}
-.fault{fill:none; stroke:var(--e-volc); stroke-width:1.6; stroke-dasharray:5 3}
+.fault{fill:none; stroke:var(--e-volc); stroke-width:calc(1.6 * var(--mk)); stroke-dasharray:5 3}
 .quake-halo{fill:var(--e-volc); fill-opacity:.22}
 .quake-dot{fill:var(--e-volc)}
 
-.mt-glyph{fill:var(--text); fill-opacity:.8; stroke:var(--bg); stroke-width:.7}
+.mt-glyph{fill:var(--text); fill-opacity:.8; stroke:var(--bg); stroke-width:calc(.7 * var(--mk))}
 .mt{cursor:pointer}
 .mt:hover .mt-glyph{fill:var(--accent); fill-opacity:1}
 
-.pin-ring{fill:none; stroke:var(--accent); stroke-width:1.6; animation:pulse 2.2s ease-out infinite}
-.pin-dot{fill:var(--accent)}
-@keyframes pulse{0%{r:5;opacity:1}100%{r:13;opacity:0}}
+
 
 .inset-box{fill:none; stroke:var(--line); stroke-width:.7; stroke-dasharray:3 2}
 .inset-cap{fill:var(--text-3); font:400 7px var(--f-mono); letter-spacing:.1em}
@@ -409,13 +407,13 @@ p{margin:0}
 .under{stroke:none; cursor:pointer; transition:opacity .45s ease,filter .25s}
 .under.is-unborn{opacity:.08}
 .under.is-fresh{animation:fresh 1.1s ease-out}
-.sido{fill:none; stroke:var(--bg); stroke-width:.55; opacity:.55; pointer-events:none}
-.coast{fill:none; stroke:var(--text-3); stroke-width:.6; opacity:.7; pointer-events:none}
+.sido{fill:none; stroke:var(--bg); stroke-width:calc(.55 * var(--mk)); opacity:.55; pointer-events:none}
+.coast{fill:none; stroke:var(--text-3); stroke-width:calc(.6 * var(--mk)); opacity:.7; pointer-events:none}
 .lyr-site{transition:opacity .25s}
 .lyr-site:not(.is-on){opacity:0; pointer-events:none}
 .site{cursor:pointer}
-.site-dot{fill:var(--accent); stroke:var(--bg); stroke-width:.7}
-.site:hover .site-dot{r:3.4}
+.site-dot{fill:var(--accent); stroke:var(--bg); stroke-width:calc(.7 * var(--mk)); r:calc(2.3 * var(--mk))}
+.site:hover .site-dot{r:calc(3.4 * var(--mk))}
 
 .tl-paleo{
   margin-top:14px; padding:12px 14px; border-radius:2px; background:var(--surface-2);
@@ -719,8 +717,8 @@ p{margin:0}
 .pk-acts .btn{width:100%}
 .pk-caveat{padding:14px 22px 18px; font-size:12.3px; line-height:1.7; color:var(--text-3)}
 .peak{cursor:pointer}
-.peak-dot{fill:var(--text); fill-opacity:.55; stroke:var(--bg); stroke-width:.5}
-.peak:hover .peak-dot{fill:var(--accent); fill-opacity:1; r:3}
+.peak-dot{fill:var(--text); fill-opacity:.55; stroke:var(--bg); stroke-width:calc(.5 * var(--mk)); r:calc(1.7 * var(--mk))}
+.peak:hover .peak-dot{fill:var(--accent); fill-opacity:1; r:calc(3 * var(--mk))}
 .lyr-peak{transition:opacity .25s}
 .lyr-peak:not(.is-on){opacity:0; pointer-events:none}
 .mt-deep{margin-top:56px; padding-top:34px; border-top:1px solid var(--line-soft)}
@@ -799,3 +797,39 @@ p{margin:0}
 .fp-visit{margin-top:14px; padding:16px 20px; border-radius:3px; background:var(--surface-2); border:1px solid var(--line-soft)}
 .fp-visit-n{margin-top:10px; font-size:12.6px; line-height:1.7; color:var(--text-3); max-width:58ch}
 .rk-fallback{margin-bottom:14px; padding:12px 15px; border-radius:2px; background:var(--surface-2); border-left:3px solid var(--accent); font-size:13.4px; line-height:1.7; color:var(--text-2); max-width:62ch}
+
+/* ── 지도 초점 (한 지점을 확대해 보여줄 때) ───────────── */
+.map-focus{
+  display:flex; flex-wrap:wrap; gap:12px 18px; align-items:center; justify-content:space-between;
+  margin-bottom:14px; padding:15px 18px; border-radius:3px;
+  background:var(--surface); border:1px solid var(--line-soft); border-left:4px solid var(--accent);
+  box-shadow:var(--sh);
+}
+.mf-txt{min-width:0}
+.mf-n{font-family:var(--f-disp); font-size:19px; font-weight:600; letter-spacing:-.01em}
+.mf-s{margin-top:3px; font:500 12px/1 var(--f-mono); color:var(--accent)}
+.mf-d{margin-top:7px; font-size:13.4px; line-height:1.6; color:var(--text-2); max-width:58ch}
+
+/* --mk = 현재 확대 배율. 확대해도 마커와 글자 크기가 그대로 보이게 합니다 */
+.kmap{--mk:1}
+.lyr-pin{pointer-events:none}
+.pin-ring{
+  fill:none; stroke:var(--accent); stroke-width:calc(1.8 * var(--mk));
+  r:calc(9 * var(--mk)); animation:fxpulse 2s ease-out infinite;
+}
+.fx-dot{fill:var(--accent); r:calc(3.4 * var(--mk)); stroke:var(--bg); stroke-width:calc(1 * var(--mk))}
+.fx-cross{
+  stroke:var(--accent); stroke-width:calc(1.4 * var(--mk)); opacity:.8;
+  transform:scale(var(--mk)); transform-origin:0 0;
+}
+.fx-lbl{
+  fill:var(--text); font-family:var(--f-body); font-weight:700; text-anchor:middle;
+  font-size:calc(11px * var(--mk)); transform:translateY(calc(-15px * var(--mk)));
+  paint-order:stroke; stroke:var(--bg); stroke-width:calc(3.5px * var(--mk)); stroke-linejoin:round;
+}
+.kmap.is-zoomed .lyr-inset{display:none}
+@keyframes fxpulse{
+  0%{r:calc(7 * var(--mk)); opacity:1}
+  100%{r:calc(20 * var(--mk)); opacity:0}
+}
+@media (prefers-reduced-motion:reduce){ .pin-ring{animation:none; opacity:.9} }

@@ -85,8 +85,11 @@ window.GC = window.GC || {};
       document.getElementById('mtDeep').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
     document.getElementById('pkMap').addEventListener('click', function () {
-      GC.go('map', p.prov.id);
-      setTimeout(function () { GC.setPin(p.lng, p.lat); }, 60);
+      GC.focusOnMap({
+        name: p.name, lng: p.lng, lat: p.lat, provId: p.prov.id,
+        sub: p.h.toLocaleString() + 'm · ' + p.sido,
+        note: p.prov.name + ' · ' + p.prov.ageText
+      });
     });
     render();
     out.scrollIntoView({ behavior: 'smooth', block: 'nearest' });

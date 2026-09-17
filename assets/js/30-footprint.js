@@ -84,8 +84,11 @@ window.GC = window.GC || {};
       } catch (err) { btn.textContent = '복사할 수 없습니다'; }
     });
     document.getElementById('fpMap').addEventListener('click', function () {
-      GC.go('map', p.id);
-      setTimeout(function () { GC.setPin(lng, lat); }, 60);
+      GC.focusOnMap({
+        name: placeName, lng: lng, lat: lat, provId: p.id,
+        sub: '내가 조회한 위치',
+        note: p.name + ' · ' + p.ageText
+      });
     });
 
     if (GC.offerVisit) GC.offerVisit(placeName, p);
