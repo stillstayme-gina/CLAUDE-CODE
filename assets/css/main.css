@@ -936,7 +936,3 @@ p{margin:0}
 .sd-body{padding:24px 26px 6px; display:grid; gap:15px; max-width:68ch}
 .sd-body p{font-size:15px; line-height:1.9; color:var(--text-2)}
 .story-detail .story-go{margin:0 26px 24px; padding-top:18px}
-.about-facts{display:grid; gap:1px; margin:6px 0 4px; background:var(--line-soft); border:1px solid var(--line-soft); border-radius:3px; overflow:hidden}
-.about-facts > div{display:grid; grid-template-columns:62px 1fr; gap:14px; padding:13px 16px; background:var(--surface); align-items:baseline}
-.about-facts dt{font:600 11px/1.5 var(--f-mono); letter-spacing:.08em; color:var(--text-3)}
-.about-facts dd{margin:0; font-size:14.4px; line-height:1.7; color:var(--text)}

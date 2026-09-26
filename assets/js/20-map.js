@@ -385,19 +385,36 @@ window.GC = window.GC || {};
     if (state.built) GC.applyMapFocus();
   };
 
+  /* 울릉·독도처럼 본토 지도 밖에 있는 지점인가 */
+  function offMap(lng, lat) {
+    var c = GC.project(lng, lat);
+    return c[0] < fullVB[0] || c[0] > fullVB[0] + fullVB[2] ||
+           c[1] < fullVB[1] || c[1] > fullVB[1] + fullVB[3];
+  }
+
   GC.applyMapFocus = function () {
     if (!pending || !GC._svg) return;
     var f = pending;
     pending = null;
-    GC.setPin(f.lng, f.lat);
-    GC._fxLbl.textContent = f.name || '';
-    zoomTo(f.lng, f.lat, fullVB[2] * 0.34);
+    var off = offMap(f.lng, f.lat);
+
+    if (off) {
+      /* 본토 지도에 없는 자리입니다. 확대하면 빈 바다만 보이므로 삽도를 가리킵니다 */
+      GC._gPin.setAttribute('hidden', '');
+      animateVB(fullVB.slice());
+    } else {
+      GC.setPin(f.lng, f.lat);
+      GC._fxLbl.textContent = f.name || '';
+      zoomTo(f.lng, f.lat, fullVB[2] * 0.34);
+    }
 
     var bar = document.getElementById('mapFocus');
     if (bar) {
       document.getElementById('mapFocusN').textContent = f.name || '';
       document.getElementById('mapFocusS').textContent = f.sub || '';
-      document.getElementById('mapFocusD').textContent = f.note || '';
+      document.getElementById('mapFocusD').textContent = off
+        ? '이 자리는 본토 지도 밖입니다. 지도 오른쪽 위 동해 삽도에서 확인하세요.'
+        : (f.note || '');
       bar.hidden = false;
     }
     if (f.provId) GC.selectProvince(f.provId);
