@@ -3,6 +3,8 @@ window.GC = window.GC || {};
 GC.stories = [
   {
     id: 'eastsea',
+    key: '일본이 떨어져 나갔다',
+    keySub: '그 자리에 동해가 생겼습니다',
     kicker: '2,300만 ~ 1,500만 년 전',
     title: '동해가 열리던 날',
     era: 'cz1',
@@ -22,6 +24,8 @@ GC.stories = [
   },
   {
     id: 'dinosaur',
+    key: '한반도는 공룡의 땅이었다',
+    keySub: '경상도 전체가 거대한 호수였습니다',
     kicker: '1억 2천만 ~ 6,600만 년 전',
     title: '공룡의 나라였다',
     era: 'mz2',
@@ -41,6 +45,8 @@ GC.stories = [
   },
   {
     id: 'hantan',
+    key: '강 위를 용암이 덮었다',
+    keySub: '강은 50만 년에 걸쳐 제 길을 되찾았습니다',
     kicker: '50만 ~ 10만 년 전',
     title: '강 위를 덮은 용암',
     era: 'cz2',
@@ -61,6 +67,8 @@ GC.stories = [
   }  ,
   {
     id: 'granite-city',
+    key: '경복궁 돌과 북한산 바위는 한 몸',
+    keySub: '서울이 바위산에 둘러싸인 이유',
     kicker: '1억 7천만 년 전',
     title: '서울은 왜 바위산에 둘러싸여 있나',
     era: 'mz1',
@@ -81,6 +89,8 @@ GC.stories = [
   },
   {
     id: 'limestone-life',
+    key: '5억 년 전 바다가 시멘트가 되다',
+    keySub: '적도의 산호가 아파트로',
     kicker: '5억 년 전',
     title: '적도의 바다가 시멘트가 되기까지',
     era: 'pz1',
@@ -102,6 +112,8 @@ GC.stories = [
   },
   {
     id: 'jeju-birth',
+    key: '제주도가 곧 한라산이다',
+    keySub: '수백 번의 분출이 쌓인 결과',
     kicker: '180만 년 전 ~ 수천 년 전',
     title: '제주는 어떻게 섬이 되었나',
     era: 'cz2',
@@ -122,6 +134,8 @@ GC.stories = [
   },
   {
     id: 'yellow-sea',
+    key: '걸어서 건너던 서해',
+    keySub: '섬들은 원래 산봉우리였습니다',
     kicker: '1만 8천 년 전',
     title: '걸어서 건너던 서해',
     era: 'cz2',
@@ -142,6 +156,8 @@ GC.stories = [
   },
   {
     id: 'faults-now',
+    key: '안전지대라는 말은 틀렸다',
+    keySub: '양산단층은 아직 살아 있습니다',
     kicker: '지금',
     title: '한반도는 지진 안전지대가 아니다',
     era: 'volc',

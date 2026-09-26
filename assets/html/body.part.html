@@ -39,6 +39,7 @@
       </div>
     </div>
     <p class="fp-status" id="hmStatus" role="status"></p>
+    <div class="fp-newtab" id="hmNewTab" hidden></div>
     <div class="fp-ask" id="hmAsk" hidden>
       <p class="fp-ask-q">내 위치를 써서 발밑을 바로 보여드릴까요?</p>
       <p class="fp-ask-s">허용하면 다음부터는 들어오자마자 그 자리의 땅 나이가 보입니다.
@@ -109,6 +110,7 @@
     </div>
   </div>
   <p class="fp-status" id="fpStatus" role="status"></p>
+  <div class="fp-newtab" id="fpNewTab" hidden></div>
   <div class="fp-card" id="fpCard"></div>
   <p class="src-line" id="src-footprint"></p>
 </section>
@@ -322,9 +324,11 @@
   <div class="sec-hd">
     <p class="sec-k">06 — 이야기</p>
     <h2 class="sec-h">한반도를 만든 세 사건</h2>
-    <p class="sec-p">지질 용어를 몰라도 읽히도록 썼습니다. 제목을 누르면 펼쳐집니다.</p>
+    <p class="sec-p">지질 용어를 몰라도 읽히도록 썼습니다. 관심 가는 것을 눌러보세요.</p>
   </div>
-  <div class="story-list" id="storyList"></div>
+  <div class="story-grid" id="storyList"></div>
+  <div class="story-detail" id="storyDetail"></div>
+  <p class="src-line" id="src-stories"></p>
 </section>
 
 <!-- ═══ 돌 이름 ═══ -->
@@ -371,34 +375,26 @@
 
   <article class="about">
     <p class="about-lead">
-      지구시스템과학이라는 전공을 스스로 골랐고, 재미있게 공부했습니다.
+      땅속을 궁금해하다가, 에너지로, 다시 경영으로 옮겨 왔습니다.
+      지금은 둘 다 아닌 일을 하지만 주말이면 여전히 산에 있습니다.
     </p>
-    <p>
-      공부하다 보니 마음이 자연스레 에너지 쪽으로 옮겨갔습니다.
-      땅속 깊은 곳에 갇힌 것들이 어떻게 흐르는지가 궁금해서,
-      저류층의 모세관압(capillary pressure)을 모델링해 석사 학위를 받았고,
-      그렇게 에너지 회사에 들어갔습니다.
-    </p>
-    <p>
-      일을 하다 보니 또 다른 분야가 눈에 들어왔습니다. 그래서 경영대학원에 진학해
-      한 번 더 석사를 마쳤고, 지금은 에너지도 지질도 아닌 일을 하고 있습니다.
-    </p>
-    <p>
-      그래도 산은 여전히 좋아합니다. 그리고 새로운 곳에 서면,
-      늘 발밑을 먼저 생각하게 됩니다.
-    </p>
+
+    <dl class="about-facts">
+      <div><dt>전공</dt><dd>지구시스템과학 — 스스로 골랐고, 재미있게 공부했습니다</dd></div>
+      <div><dt>석사</dt><dd>저류층의 모세관압 모델링 — 땅속에 갇힌 것들이 어떻게 흐르는지</dd></div>
+      <div><dt>그 뒤</dt><dd>에너지 회사, 그리고 경영대학원</dd></div>
+      <div><dt>지금</dt><dd>에너지도 지질도 아닌 일. 그래도 새로운 곳에 서면 발밑을 먼저 생각합니다</dd></div>
+    </dl>
 
     <blockquote class="about-q">아는 만큼 보입니다</blockquote>
 
     <p>
-      요즘 우리는 자연을 보러 여행을 갑니다. 많이 찾는 이탈리아의 돌로미티도
-      백운암(Dolomite)이라는 암석으로 이루어져 있습니다. 그 암석이 유난히 단단하고
-      수직으로 잘 쪼개지기 때문에, 우리가 사진으로 담는 그 날카로운 봉우리가 만들어졌습니다.
-      우리는 사실 암석의 성질을 보러 간 것입니다.
+      이탈리아 돌로미티의 그 날카로운 봉우리는 백운암(Dolomite)이라는 암석이
+      유난히 단단하고 수직으로 잘 쪼개지기 때문에 생깁니다.
+      우리는 사실 암석의 성질을 보러 거기까지 간 것입니다.
     </p>
     <p>
-      우리 동네 뒷산도, 우리가 사는 도시도 똑같이 지구라는 땅 위에 있습니다.
-      다만 아직 무엇을 봐야 할지 모를 뿐입니다. 아는 만큼 보입니다.
+      동네 뒷산도 같은 원리로 지금의 모양이 되었습니다. 다만 무엇을 봐야 할지 모를 뿐입니다.
     </p>
     <p class="about-close">
       그냥 지나치지 마시라고, 알게 된 것을 나누고 싶어서 이 페이지를 만듭니다.
@@ -407,10 +403,10 @@
     <div class="about-how">
       <h3>이렇게 즐겨주세요</h3>
       <ol>
-        <li><b>가기 전에</b> — 가려는 산이나 지질공원을 찾아 &lsquo;이것만은 보고 오세요&rsquo;를 읽어두세요. 딱 한 가지만 기억해도 충분합니다.</li>
-        <li><b>현장에서</b> — 바위에 가까이 가서 알갱이를 보세요. 이름이 궁금하면 <a href="#/rock">이 돌 이름이 뭐예요</a>를 켜고 질문에 답해보세요.</li>
-        <li><b>다녀와서</b> — <a href="#/geoparks">지질공원</a>에서 체크인해 도감을 채우세요. 같은 시대의 명소들이 모이기 시작하면 한반도의 시간이 보입니다.</li>
-        <li><b>누군가와</b> — 옆 사람에게 한 문장만 말해주세요. &ldquo;이 바위는 땅속 5km에서 만들어진 거래.&rdquo; 그거면 됩니다.</li>
+        <li><b>가기 전에</b> — 가려는 산이나 지질공원의 &lsquo;이것만은 보고 오세요&rsquo;를 하나만 읽어두세요.</li>
+        <li><b>현장에서</b> — 바위에 가까이 가서 알갱이를 보세요. 궁금하면 <a href="#/rock">사진을 찍어 물어보세요</a>.</li>
+        <li><b>다녀와서</b> — <a href="#/geoparks">지질공원</a>에서 체크인해 도감을 채우세요.</li>
+        <li><b>누군가와</b> — 옆 사람에게 한 문장만. &ldquo;이 바위는 땅속 5km에서 만들어진 거래.&rdquo;</li>
       </ol>
     </div>
   </article>

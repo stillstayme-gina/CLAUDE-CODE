@@ -313,20 +313,6 @@ p{margin:0}
   .cmp-k{grid-area:k} .cmp-b:nth-of-type(1){grid-area:a} .cmp-b:nth-of-type(2){grid-area:b} .cmp-go{grid-area:g} }
 
 /* ── 이야기 ───────────────────────────────────────────── */
-.story-list{display:flex; flex-direction:column; gap:10px}
-.story{background:var(--surface); border:1px solid var(--line-soft); border-left:4px solid var(--ec); border-radius:3px; overflow:hidden}
-.story-hd{
-  display:grid; gap:7px; width:100%; text-align:left; cursor:pointer; position:relative;
-  padding:20px 52px 20px 22px; background:none; border:0; color:var(--text);
-}
-.story-hd:hover{background:var(--surface-2)}
-.story-kick{font:500 11px/1 var(--f-mono); letter-spacing:.1em; color:var(--text-3); font-variant-numeric:tabular-nums}
-.story-t{font-family:var(--f-disp); font-size:clamp(1.15rem,3.6vw,1.45rem); font-weight:600; letter-spacing:-.01em}
-.story-lead{font-size:14.5px; color:var(--text-2); line-height:1.75; max-width:56ch}
-.story-more{position:absolute; top:24px; right:22px; width:13px; height:13px; border-right:2px solid var(--text-3); border-bottom:2px solid var(--text-3); transform:rotate(45deg); transition:.25s}
-.story-hd[aria-expanded="true"] .story-more{transform:rotate(-135deg); border-color:var(--accent)}
-.story-bd{padding:4px 22px 24px; display:grid; gap:15px; max-width:66ch}
-.story-bd p{font-size:15px; color:var(--text-2); line-height:1.85}
 .story-punch{font-family:var(--f-disp)!important; font-size:16.5px!important; color:var(--text)!important; padding:16px 18px; background:var(--surface-2); border-radius:2px; line-height:1.7!important}
 .story-go{padding-top:16px; border-top:1px solid var(--line-soft)}
 .story-go h5{font:600 11px/1 var(--f-mono); letter-spacing:.1em; color:var(--accent); margin-bottom:12px}
@@ -923,6 +909,41 @@ p{margin:0}
 .tr-units h5 b{font-weight:600; color:var(--text-2)}
 .tr-plain{font-size:13.2px!important; color:var(--text-3)!important; margin-bottom:7px}
 .tr-foot{align-items:center}
+.fp-newtab{margin:4px 0 12px}
+.switch input:disabled + .switch-ui{opacity:.4}
+.switch input:disabled ~ span{opacity:.55}
+
+/* ── 이야기: 키워드 카드 → 상세 ───────────────────────── */
+.story-grid{display:grid; gap:8px; grid-template-columns:repeat(auto-fill,minmax(232px,1fr))}
+.st-card{
+  display:grid; gap:7px; grid-template-rows:auto auto 1fr auto; text-align:left; cursor:pointer;
+  padding:18px 18px 18px; border-radius:3px; color:var(--text);
+  background:var(--surface); border:1px solid var(--line-soft); border-top:3px solid var(--ec);
+  transition:.18s;
+}
+.st-card:hover{transform:translateY(-2px); box-shadow:var(--sh)}
+.st-card.is-sel{background:var(--surface-2); box-shadow:var(--sh)}
+.st-kick{font:500 11px/1 var(--f-mono); letter-spacing:.06em; color:var(--text-3); font-variant-numeric:tabular-nums}
+.st-key{font-family:var(--f-disp); font-size:17.5px; font-weight:600; line-height:1.4; letter-spacing:-.01em}
+.st-sub{font-size:13px; line-height:1.6; color:var(--text-2)}
+.st-go{font:600 11.5px/1 var(--f-mono); color:var(--accent)}
+
+.story-detail{
+  margin-top:22px; background:var(--surface); border:1px solid var(--line-soft);
+  border-radius:3px; box-shadow:var(--sh); overflow:hidden;
+}
+.sd-head{padding:26px 26px 22px; background:var(--surface-2); border-bottom:1px solid var(--line-soft); border-left:4px solid var(--ec)}
+.sd-kick{font:500 11.5px/1 var(--f-mono); letter-spacing:.1em; color:var(--text-3); margin-bottom:12px; font-variant-numeric:tabular-nums}
+.sd-key{font-size:clamp(1.45rem,4.6vw,2rem); letter-spacing:-.02em; margin-bottom:8px}
+.sd-title{font:500 13px/1 var(--f-mono); color:var(--accent); margin-bottom:14px}
+.sd-lead{font-size:15.4px; line-height:1.85; color:var(--text-2); max-width:56ch}
+.sd-body{padding:24px 26px 6px; display:grid; gap:15px; max-width:68ch}
+.sd-body p{font-size:15px; line-height:1.9; color:var(--text-2)}
+.story-detail .story-go{margin:0 26px 24px; padding-top:18px}
+.about-facts{display:grid; gap:1px; margin:6px 0 4px; background:var(--line-soft); border:1px solid var(--line-soft); border-radius:3px; overflow:hidden}
+.about-facts > div{display:grid; grid-template-columns:62px 1fr; gap:14px; padding:13px 16px; background:var(--surface); align-items:baseline}
+.about-facts dt{font:600 11px/1.5 var(--f-mono); letter-spacing:.08em; color:var(--text-3)}
+.about-facts dd{margin:0; font-size:14.4px; line-height:1.7; color:var(--text)}
 </style>
 <header class="topbar">
   <a class="brand" href="#/" data-nav="home">
@@ -965,6 +986,7 @@ p{margin:0}
       </div>
     </div>
     <p class="fp-status" id="hmStatus" role="status"></p>
+    <div class="fp-newtab" id="hmNewTab" hidden></div>
     <div class="fp-ask" id="hmAsk" hidden>
       <p class="fp-ask-q">내 위치를 써서 발밑을 바로 보여드릴까요?</p>
       <p class="fp-ask-s">허용하면 다음부터는 들어오자마자 그 자리의 땅 나이가 보입니다.
@@ -1035,6 +1057,7 @@ p{margin:0}
     </div>
   </div>
   <p class="fp-status" id="fpStatus" role="status"></p>
+  <div class="fp-newtab" id="fpNewTab" hidden></div>
   <div class="fp-card" id="fpCard"></div>
   <p class="src-line" id="src-footprint"></p>
 </section>
@@ -1248,9 +1271,11 @@ p{margin:0}
   <div class="sec-hd">
     <p class="sec-k">06 — 이야기</p>
     <h2 class="sec-h">한반도를 만든 세 사건</h2>
-    <p class="sec-p">지질 용어를 몰라도 읽히도록 썼습니다. 제목을 누르면 펼쳐집니다.</p>
+    <p class="sec-p">지질 용어를 몰라도 읽히도록 썼습니다. 관심 가는 것을 눌러보세요.</p>
   </div>
-  <div class="story-list" id="storyList"></div>
+  <div class="story-grid" id="storyList"></div>
+  <div class="story-detail" id="storyDetail"></div>
+  <p class="src-line" id="src-stories"></p>
 </section>
 
 <!-- ═══ 돌 이름 ═══ -->
@@ -1297,34 +1322,26 @@ p{margin:0}
 
   <article class="about">
     <p class="about-lead">
-      지구시스템과학이라는 전공을 스스로 골랐고, 재미있게 공부했습니다.
+      땅속을 궁금해하다가, 에너지로, 다시 경영으로 옮겨 왔습니다.
+      지금은 둘 다 아닌 일을 하지만 주말이면 여전히 산에 있습니다.
     </p>
-    <p>
-      공부하다 보니 마음이 자연스레 에너지 쪽으로 옮겨갔습니다.
-      땅속 깊은 곳에 갇힌 것들이 어떻게 흐르는지가 궁금해서,
-      저류층의 모세관압(capillary pressure)을 모델링해 석사 학위를 받았고,
-      그렇게 에너지 회사에 들어갔습니다.
-    </p>
-    <p>
-      일을 하다 보니 또 다른 분야가 눈에 들어왔습니다. 그래서 경영대학원에 진학해
-      한 번 더 석사를 마쳤고, 지금은 에너지도 지질도 아닌 일을 하고 있습니다.
-    </p>
-    <p>
-      그래도 산은 여전히 좋아합니다. 그리고 새로운 곳에 서면,
-      늘 발밑을 먼저 생각하게 됩니다.
-    </p>
+
+    <dl class="about-facts">
+      <div><dt>전공</dt><dd>지구시스템과학 — 스스로 골랐고, 재미있게 공부했습니다</dd></div>
+      <div><dt>석사</dt><dd>저류층의 모세관압 모델링 — 땅속에 갇힌 것들이 어떻게 흐르는지</dd></div>
+      <div><dt>그 뒤</dt><dd>에너지 회사, 그리고 경영대학원</dd></div>
+      <div><dt>지금</dt><dd>에너지도 지질도 아닌 일. 그래도 새로운 곳에 서면 발밑을 먼저 생각합니다</dd></div>
+    </dl>
 
     <blockquote class="about-q">아는 만큼 보입니다</blockquote>
 
     <p>
-      요즘 우리는 자연을 보러 여행을 갑니다. 많이 찾는 이탈리아의 돌로미티도
-      백운암(Dolomite)이라는 암석으로 이루어져 있습니다. 그 암석이 유난히 단단하고
-      수직으로 잘 쪼개지기 때문에, 우리가 사진으로 담는 그 날카로운 봉우리가 만들어졌습니다.
-      우리는 사실 암석의 성질을 보러 간 것입니다.
+      이탈리아 돌로미티의 그 날카로운 봉우리는 백운암(Dolomite)이라는 암석이
+      유난히 단단하고 수직으로 잘 쪼개지기 때문에 생깁니다.
+      우리는 사실 암석의 성질을 보러 거기까지 간 것입니다.
     </p>
     <p>
-      우리 동네 뒷산도, 우리가 사는 도시도 똑같이 지구라는 땅 위에 있습니다.
-      다만 아직 무엇을 봐야 할지 모를 뿐입니다. 아는 만큼 보입니다.
+      동네 뒷산도 같은 원리로 지금의 모양이 되었습니다. 다만 무엇을 봐야 할지 모를 뿐입니다.
     </p>
     <p class="about-close">
       그냥 지나치지 마시라고, 알게 된 것을 나누고 싶어서 이 페이지를 만듭니다.
@@ -1333,10 +1350,10 @@ p{margin:0}
     <div class="about-how">
       <h3>이렇게 즐겨주세요</h3>
       <ol>
-        <li><b>가기 전에</b> — 가려는 산이나 지질공원을 찾아 &lsquo;이것만은 보고 오세요&rsquo;를 읽어두세요. 딱 한 가지만 기억해도 충분합니다.</li>
-        <li><b>현장에서</b> — 바위에 가까이 가서 알갱이를 보세요. 이름이 궁금하면 <a href="#/rock">이 돌 이름이 뭐예요</a>를 켜고 질문에 답해보세요.</li>
-        <li><b>다녀와서</b> — <a href="#/geoparks">지질공원</a>에서 체크인해 도감을 채우세요. 같은 시대의 명소들이 모이기 시작하면 한반도의 시간이 보입니다.</li>
-        <li><b>누군가와</b> — 옆 사람에게 한 문장만 말해주세요. &ldquo;이 바위는 땅속 5km에서 만들어진 거래.&rdquo; 그거면 됩니다.</li>
+        <li><b>가기 전에</b> — 가려는 산이나 지질공원의 &lsquo;이것만은 보고 오세요&rsquo;를 하나만 읽어두세요.</li>
+        <li><b>현장에서</b> — 바위에 가까이 가서 알갱이를 보세요. 궁금하면 <a href="#/rock">사진을 찍어 물어보세요</a>.</li>
+        <li><b>다녀와서</b> — <a href="#/geoparks">지질공원</a>에서 체크인해 도감을 채우세요.</li>
+        <li><b>누군가와</b> — 옆 사람에게 한 문장만. &ldquo;이 바위는 땅속 5km에서 만들어진 거래.&rdquo;</li>
       </ol>
     </div>
   </article>
@@ -1759,6 +1776,8 @@ window.GC = window.GC || {};
 GC.stories = [
   {
     id: 'eastsea',
+    key: '일본이 떨어져 나갔다',
+    keySub: '그 자리에 동해가 생겼습니다',
     kicker: '2,300만 ~ 1,500만 년 전',
     title: '동해가 열리던 날',
     era: 'cz1',
@@ -1778,6 +1797,8 @@ GC.stories = [
   },
   {
     id: 'dinosaur',
+    key: '한반도는 공룡의 땅이었다',
+    keySub: '경상도 전체가 거대한 호수였습니다',
     kicker: '1억 2천만 ~ 6,600만 년 전',
     title: '공룡의 나라였다',
     era: 'mz2',
@@ -1797,6 +1818,8 @@ GC.stories = [
   },
   {
     id: 'hantan',
+    key: '강 위를 용암이 덮었다',
+    keySub: '강은 50만 년에 걸쳐 제 길을 되찾았습니다',
     kicker: '50만 ~ 10만 년 전',
     title: '강 위를 덮은 용암',
     era: 'cz2',
@@ -1817,6 +1840,8 @@ GC.stories = [
   }  ,
   {
     id: 'granite-city',
+    key: '경복궁 돌과 북한산 바위는 한 몸',
+    keySub: '서울이 바위산에 둘러싸인 이유',
     kicker: '1억 7천만 년 전',
     title: '서울은 왜 바위산에 둘러싸여 있나',
     era: 'mz1',
@@ -1837,6 +1862,8 @@ GC.stories = [
   },
   {
     id: 'limestone-life',
+    key: '5억 년 전 바다가 시멘트가 되다',
+    keySub: '적도의 산호가 아파트로',
     kicker: '5억 년 전',
     title: '적도의 바다가 시멘트가 되기까지',
     era: 'pz1',
@@ -1858,6 +1885,8 @@ GC.stories = [
   },
   {
     id: 'jeju-birth',
+    key: '제주도가 곧 한라산이다',
+    keySub: '수백 번의 분출이 쌓인 결과',
     kicker: '180만 년 전 ~ 수천 년 전',
     title: '제주는 어떻게 섬이 되었나',
     era: 'cz2',
@@ -1878,6 +1907,8 @@ GC.stories = [
   },
   {
     id: 'yellow-sea',
+    key: '걸어서 건너던 서해',
+    keySub: '섬들은 원래 산봉우리였습니다',
     kicker: '1만 8천 년 전',
     title: '걸어서 건너던 서해',
     era: 'cz2',
@@ -1898,6 +1929,8 @@ GC.stories = [
   },
   {
     id: 'faults-now',
+    key: '안전지대라는 말은 틀렸다',
+    keySub: '양산단층은 아직 살아 있습니다',
     kicker: '지금',
     title: '한반도는 지진 안전지대가 아니다',
     era: 'volc',
@@ -3320,6 +3353,70 @@ GC.pageSources = {
   stories: ['kigam', 'ics']
 };
 
+/* 위치 확인 — 발행본은 교차 출처 iframe 안에서 돌기 때문에, 브라우저가 권한 정책으로
+   위치를 아예 차단합니다(오류 code 1). 이 경우 navigator.permissions 는 여전히
+   'granted' 를 돌려주므로 믿을 수 없고, document.featurePolicy 로 미리 확인해야 합니다. */
+window.GC = window.GC || {};
+
+GC.geo = (function () {
+  function inFrame() {
+    try { return window.self !== window.top; } catch (e) { return true; }
+  }
+
+  /* 'ok' | 'blocked' | 'unsupported' */
+  function status() {
+    if (!navigator.geolocation) return 'unsupported';
+    try {
+      if (document.featurePolicy && document.featurePolicy.allowsFeature &&
+          !document.featurePolicy.allowsFeature('geolocation')) return 'blocked';
+    } catch (e) { /* 알 수 없으면 일단 시도해 봅니다 */ }
+    return 'ok';
+  }
+
+  var MSG = {
+    blocked: '이 미리보기 창에서는 브라우저가 위치 기능을 막습니다. ' +
+             '새 탭에서 열면 위치를 쓸 수 있고, 그냥 아래에서 지역을 골라도 됩니다.',
+    unsupported: '이 브라우저는 위치 기능을 지원하지 않습니다. 아래에서 지역을 골라주세요.',
+    denied: '위치 권한이 거부되었습니다. 주소창 옆 자물쇠 아이콘에서 위치를 허용하거나, ' +
+            '아래에서 지역을 골라주세요.',
+    unavailable: '지금은 위치를 확인할 수 없습니다. 아래에서 지역을 골라주세요.',
+    timeout: '위치 확인이 오래 걸립니다. 다시 시도하거나 아래에서 지역을 골라주세요.',
+    outside: '한국 밖에 계신 것 같습니다. 아래에서 지역을 골라보세요.'
+  };
+
+  /* 위치를 한 번 읽습니다. onOk(lng, lat) / onErr(메시지, 종류) */
+  function get(onOk, onErr) {
+    var st = status();
+    if (st !== 'ok') { if (onErr) onErr(MSG[st], st); return; }
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      var lng = pos.coords.longitude, lat = pos.coords.latitude;
+      if (lng < 124 || lng > 132.5 || lat < 32.5 || lat > 39) {
+        if (onErr) onErr(MSG.outside, 'outside');
+        return;
+      }
+      if (onOk) onOk(lng, lat, pos.coords.accuracy);
+    }, function (e) {
+      var kind = e && e.code === 1 ? 'denied' : e && e.code === 3 ? 'timeout' : 'unavailable';
+      /* 프레임 안에서의 code 1 은 대개 사용자가 거부한 게 아니라 정책 차단입니다 */
+      if (kind === 'denied' && inFrame() && /policy|disabled/i.test(e.message || '')) kind = 'blocked';
+      if (onErr) onErr(MSG[kind], kind);
+    }, { timeout: 10000, maximumAge: 60000, enableHighAccuracy: false });
+  }
+
+  /* 차단된 경우 새 탭에서 열기 버튼을 붙입니다 */
+  function openHint(el) {
+    if (!el) return;
+    el.innerHTML = '<button type="button" class="btn btn-line js-newtab">새 탭에서 열기</button>';
+    el.hidden = false;
+    el.querySelector('.js-newtab').addEventListener('click', function () {
+      try { window.open(location.href, '_blank', 'noopener'); }
+      catch (e) { /* 팝업이 막히면 아무 일도 하지 않습니다 */ }
+    });
+  }
+
+  return { status: status, get: get, inFrame: inFrame, openHint: openHint, MSG: MSG };
+})();
+
 /* 실제 행정경계 위에 지질구를 입힌 지도 + 타임 슬라이더 */
 window.GC = window.GC || {};
 
@@ -3873,48 +3970,58 @@ window.GC = window.GC || {};
       locate(function () {
         geoBtn.disabled = false; status.textContent = '';
         if (thenGo) GC.go('footprint');
-      }, function (m) { geoBtn.disabled = false; status.textContent = m; });
+      }, function (m, kind) {
+        geoBtn.disabled = false;
+        status.textContent = m;
+        if (kind === 'blocked') GC.geo.openHint(document.getElementById(prefix + 'NewTab'));
+      });
     });
   }
 
   /* 위치 한 번 읽기 — 성공하면 발밑을 채웁니다 */
   function locate(onDone, onFail) {
-    if (!navigator.geolocation) { if (onFail) onFail('이 브라우저는 위치 기능을 지원하지 않습니다.'); return; }
-    navigator.geolocation.getCurrentPosition(function (pos) {
-      var lng = pos.coords.longitude, lat = pos.coords.latitude;
-      if (lng < 124 || lng > 132.5 || lat < 32.5 || lat > 39) {
-        if (onFail) onFail('한국 밖에 계신 것 같습니다. 지역을 골라보세요.');
-        return;
-      }
+    GC.geo.get(function (lng, lat) {
       GC.showFootprint('내 위치 ' + lat.toFixed(3) + '°N ' + lng.toFixed(3) + '°E', lng, lat);
       if (onDone) onDone();
-    }, function () {
-      if (onFail) onFail('위치를 가져오지 못했습니다. 지역을 직접 골라주세요.');
-    }, { timeout: 8000 });
+    }, function (msg, kind) {
+      if (onFail) onFail(msg, kind);
+    });
   }
 
   function autoOn() { return GC.store.get('autoloc', null) === true; }
 
   function initAuto() {
     var ask = document.getElementById('hmAsk');
-    var decided = GC.store.get('autoloc', null);
     var box = document.getElementById('fpAuto');
+    var fpStatus = document.getElementById('fpStatus');
+    var st = GC.geo.status();
+
+    /* 쓸 수 없는 환경이면 자동 사용을 꺼두고, 왜 안 되는지 먼저 알려줍니다 */
+    if (st !== 'ok') {
+      box.checked = false;
+      box.disabled = true;
+      fpStatus.textContent = GC.geo.MSG[st];
+      if (st === 'blocked') GC.geo.openHint(document.getElementById('fpNewTab'));
+      document.getElementById('hmStatus').textContent = GC.geo.MSG[st];
+      if (st === 'blocked') GC.geo.openHint(document.getElementById('hmNewTab'));
+      return;
+    }
+
+    var decided = GC.store.get('autoloc', null);
     box.checked = decided === true;
     box.addEventListener('change', function () {
       GC.store.set('autoloc', box.checked);
-      if (box.checked) {
-        document.getElementById('fpStatus').textContent = '위치를 확인하는 중…';
-        locate(function () { document.getElementById('fpStatus').textContent = ''; },
-               function (m) { document.getElementById('fpStatus').textContent = m; });
-      }
+      if (!box.checked) return;
+      fpStatus.textContent = '위치를 확인하는 중…';
+      locate(function () { fpStatus.textContent = ''; },
+             function (m) { fpStatus.textContent = m; });
     });
 
     if (decided === true) {
-      /* 이미 허용해 둔 경우: 조용히 채웁니다 */
-      locate(null, null);
+      locate(null, function (m) { document.getElementById('hmStatus').textContent = m; });
       return;
     }
-    if (decided === false || !navigator.geolocation) return;
+    if (decided === false) return;
 
     ask.hidden = false;
     document.getElementById('hmAskYes').addEventListener('click', function () {
@@ -4318,16 +4425,21 @@ window.GC = window.GC || {};
       document.getElementById('pkNearNote').hidden = true;
       render();
     });
+    var nearNote = document.getElementById('pkNearNote');
     document.getElementById('pkNear').addEventListener('click', function (e) {
       var btn = e.currentTarget;
-      if (!navigator.geolocation) return;
       btn.disabled = true;
-      navigator.geolocation.getCurrentPosition(function (pos) {
+      nearNote.hidden = false;
+      nearNote.textContent = '위치를 확인하는 중…';
+      GC.geo.get(function (lng, lat) {
         btn.disabled = false;
-        near = [pos.coords.longitude, pos.coords.latitude];
-        document.getElementById('pkNearNote').hidden = false;
+        near = [lng, lat];
+        nearNote.textContent = '내 위치에서 가까운 순으로 정렬했습니다.';
         render();
-      }, function () { btn.disabled = false; }, { timeout: 8000 });
+      }, function (m) {
+        btn.disabled = false;
+        nearNote.textContent = m;
+      });
     });
     document.getElementById('pkNote').textContent = GC.peakNote;
     render();
@@ -4576,50 +4688,66 @@ window.GC = window.GC || {};
     });
   }
 
-  GC.initStories = function () {
-    var host = document.getElementById('storyList');
-    GC.stories.forEach(function (s, i) {
-      var art = document.createElement('article');
-      art.className = 'story';
-      art.style.setProperty('--ec', GC.eraColor(s.era));
-      art.innerHTML =
-        '<button type="button" class="story-hd" aria-expanded="' + (i === 0) + '">' +
-          '<span class="story-kick">' + esc(s.kicker) + '</span>' +
-          '<span class="story-t">' + esc(s.title) + '</span>' +
-          '<span class="story-lead">' + esc(s.lead) + '</span>' +
-          '<span class="story-more" aria-hidden="true"></span>' +
-        '</button>' +
-        '<div class="story-bd"' + (i === 0 ? '' : ' hidden') + '>' +
-          s.body.map(function (b) { return '<p>' + esc(b) + '</p>'; }).join('') +
-          '<p class="story-punch">' + esc(s.punch) + '</p>' +
-          '<div class="story-go"><h5>가 볼 곳</h5><ul>' +
-            (s.places || []).map(function (pl, j) {
-              return '<li><button type="button" class="place" data-i="' + i + '" data-j="' + j + '">' +
-                '<span class="place-n">' + esc(pl.n) + '</span>' +
-                '<span class="place-w">' + esc(pl.w) + '</span>' +
-                '<span class="place-go">지도에서 보기 →</span></button></li>';
-            }).join('') + '</ul></div>' +
-        '</div>';
-      Array.prototype.forEach.call(art.querySelectorAll('.place'), function (b) {
-        b.addEventListener('click', function () {
-          var st = GC.stories[+b.getAttribute('data-i')];
-          var pl = st.places[+b.getAttribute('data-j')];
-          var f = GC.findProvince(pl.at[0], pl.at[1]);
-          GC.focusOnMap({
-            name: pl.n, lng: pl.at[0], lat: pl.at[1], provId: f.p.id,
-            sub: st.title, note: pl.w
-          });
+  var cur = null;
+
+  function open(i, quiet) {
+    var st = GC.stories[i];
+    if (!st) return;
+    cur = i;
+    var out = document.getElementById('storyDetail');
+    out.innerHTML =
+      '<div class="sd-head" style="--ec:' + GC.eraColor(st.era) + '">' +
+        '<p class="sd-kick">' + esc(st.kicker) + '</p>' +
+        '<h3 class="sd-key">' + esc(st.key) + '</h3>' +
+        '<p class="sd-title">' + esc(st.title) + '</p>' +
+        '<p class="sd-lead">' + esc(st.lead) + '</p>' +
+      '</div>' +
+      '<div class="sd-body">' +
+        st.body.map(function (t) { return '<p>' + esc(t) + '</p>'; }).join('') +
+        '<p class="story-punch">' + esc(st.punch) + '</p>' +
+      '</div>' +
+      '<div class="story-go"><h5>가 볼 곳</h5><ul>' +
+        (st.places || []).map(function (pl, j) {
+          return '<li><button type="button" class="place" data-j="' + j + '">' +
+            '<span class="place-n">' + esc(pl.n) + '</span>' +
+            '<span class="place-w">' + esc(pl.w) + '</span>' +
+            '<span class="place-go">지도에서 보기 →</span></button></li>';
+        }).join('') + '</ul></div>';
+
+    Array.prototype.forEach.call(out.querySelectorAll('.place'), function (b2) {
+      b2.addEventListener('click', function () {
+        var pl = st.places[+b2.getAttribute('data-j')];
+        var f = GC.findProvince(pl.at[0], pl.at[1]);
+        GC.focusOnMap({
+          name: pl.n, lng: pl.at[0], lat: pl.at[1], provId: f.p.id,
+          sub: st.title, note: pl.w
         });
       });
-      var btn = art.querySelector('.story-hd'), bd = art.querySelector('.story-bd');
-      btn.addEventListener('click', function () {
-        var open = bd.hidden;
-        bd.hidden = !open;
-        btn.setAttribute('aria-expanded', String(open));
-      });
-      host.appendChild(art);
     });
+    Array.prototype.forEach.call(document.querySelectorAll('.st-card'), function (c) {
+      c.classList.toggle('is-sel', +c.getAttribute('data-i') === i);
+    });
+    if (!quiet) out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  GC.initStories = function () {
+    var host = document.getElementById('storyList');
+    host.innerHTML = GC.stories.map(function (st, i) {
+      return '<button type="button" class="st-card" data-i="' + i + '" ' +
+        'style="--ec:' + GC.eraColor(st.era) + '">' +
+        '<span class="st-kick">' + esc(st.kicker) + '</span>' +
+        '<span class="st-key">' + esc(st.key) + '</span>' +
+        '<span class="st-sub">' + esc(st.keySub) + '</span>' +
+        '<span class="st-go">읽기 →</span>' +
+        '</button>';
+    }).join('');
+    Array.prototype.forEach.call(host.querySelectorAll('.st-card'), function (c) {
+      c.addEventListener('click', function () { open(+c.getAttribute('data-i')); });
+    });
+    open(0, true);
   };
+
+  GC.openStory = function (i) { open(i); };
 })();
 
 /* 지질 트레일 — 고도 프로파일 + 지질 단면도 */

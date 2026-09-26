@@ -126,48 +126,58 @@ window.GC = window.GC || {};
       locate(function () {
         geoBtn.disabled = false; status.textContent = '';
         if (thenGo) GC.go('footprint');
-      }, function (m) { geoBtn.disabled = false; status.textContent = m; });
+      }, function (m, kind) {
+        geoBtn.disabled = false;
+        status.textContent = m;
+        if (kind === 'blocked') GC.geo.openHint(document.getElementById(prefix + 'NewTab'));
+      });
     });
   }
 
   /* 위치 한 번 읽기 — 성공하면 발밑을 채웁니다 */
   function locate(onDone, onFail) {
-    if (!navigator.geolocation) { if (onFail) onFail('이 브라우저는 위치 기능을 지원하지 않습니다.'); return; }
-    navigator.geolocation.getCurrentPosition(function (pos) {
-      var lng = pos.coords.longitude, lat = pos.coords.latitude;
-      if (lng < 124 || lng > 132.5 || lat < 32.5 || lat > 39) {
-        if (onFail) onFail('한국 밖에 계신 것 같습니다. 지역을 골라보세요.');
-        return;
-      }
+    GC.geo.get(function (lng, lat) {
       GC.showFootprint('내 위치 ' + lat.toFixed(3) + '°N ' + lng.toFixed(3) + '°E', lng, lat);
       if (onDone) onDone();
-    }, function () {
-      if (onFail) onFail('위치를 가져오지 못했습니다. 지역을 직접 골라주세요.');
-    }, { timeout: 8000 });
+    }, function (msg, kind) {
+      if (onFail) onFail(msg, kind);
+    });
   }
 
   function autoOn() { return GC.store.get('autoloc', null) === true; }
 
   function initAuto() {
     var ask = document.getElementById('hmAsk');
-    var decided = GC.store.get('autoloc', null);
     var box = document.getElementById('fpAuto');
+    var fpStatus = document.getElementById('fpStatus');
+    var st = GC.geo.status();
+
+    /* 쓸 수 없는 환경이면 자동 사용을 꺼두고, 왜 안 되는지 먼저 알려줍니다 */
+    if (st !== 'ok') {
+      box.checked = false;
+      box.disabled = true;
+      fpStatus.textContent = GC.geo.MSG[st];
+      if (st === 'blocked') GC.geo.openHint(document.getElementById('fpNewTab'));
+      document.getElementById('hmStatus').textContent = GC.geo.MSG[st];
+      if (st === 'blocked') GC.geo.openHint(document.getElementById('hmNewTab'));
+      return;
+    }
+
+    var decided = GC.store.get('autoloc', null);
     box.checked = decided === true;
     box.addEventListener('change', function () {
       GC.store.set('autoloc', box.checked);
-      if (box.checked) {
-        document.getElementById('fpStatus').textContent = '위치를 확인하는 중…';
-        locate(function () { document.getElementById('fpStatus').textContent = ''; },
-               function (m) { document.getElementById('fpStatus').textContent = m; });
-      }
+      if (!box.checked) return;
+      fpStatus.textContent = '위치를 확인하는 중…';
+      locate(function () { fpStatus.textContent = ''; },
+             function (m) { fpStatus.textContent = m; });
     });
 
     if (decided === true) {
-      /* 이미 허용해 둔 경우: 조용히 채웁니다 */
-      locate(null, null);
+      locate(null, function (m) { document.getElementById('hmStatus').textContent = m; });
       return;
     }
-    if (decided === false || !navigator.geolocation) return;
+    if (decided === false) return;
 
     ask.hidden = false;
     document.getElementById('hmAskYes').addEventListener('click', function () {

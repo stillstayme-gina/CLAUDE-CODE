@@ -116,16 +116,21 @@ window.GC = window.GC || {};
       document.getElementById('pkNearNote').hidden = true;
       render();
     });
+    var nearNote = document.getElementById('pkNearNote');
     document.getElementById('pkNear').addEventListener('click', function (e) {
       var btn = e.currentTarget;
-      if (!navigator.geolocation) return;
       btn.disabled = true;
-      navigator.geolocation.getCurrentPosition(function (pos) {
+      nearNote.hidden = false;
+      nearNote.textContent = '위치를 확인하는 중…';
+      GC.geo.get(function (lng, lat) {
         btn.disabled = false;
-        near = [pos.coords.longitude, pos.coords.latitude];
-        document.getElementById('pkNearNote').hidden = false;
+        near = [lng, lat];
+        nearNote.textContent = '내 위치에서 가까운 순으로 정렬했습니다.';
         render();
-      }, function () { btn.disabled = false; }, { timeout: 8000 });
+      }, function (m) {
+        btn.disabled = false;
+        nearNote.textContent = m;
+      });
     });
     document.getElementById('pkNote').textContent = GC.peakNote;
     render();

@@ -309,20 +309,6 @@ p{margin:0}
   .cmp-k{grid-area:k} .cmp-b:nth-of-type(1){grid-area:a} .cmp-b:nth-of-type(2){grid-area:b} .cmp-go{grid-area:g} }
 
 /* ── 이야기 ───────────────────────────────────────────── */
-.story-list{display:flex; flex-direction:column; gap:10px}
-.story{background:var(--surface); border:1px solid var(--line-soft); border-left:4px solid var(--ec); border-radius:3px; overflow:hidden}
-.story-hd{
-  display:grid; gap:7px; width:100%; text-align:left; cursor:pointer; position:relative;
-  padding:20px 52px 20px 22px; background:none; border:0; color:var(--text);
-}
-.story-hd:hover{background:var(--surface-2)}
-.story-kick{font:500 11px/1 var(--f-mono); letter-spacing:.1em; color:var(--text-3); font-variant-numeric:tabular-nums}
-.story-t{font-family:var(--f-disp); font-size:clamp(1.15rem,3.6vw,1.45rem); font-weight:600; letter-spacing:-.01em}
-.story-lead{font-size:14.5px; color:var(--text-2); line-height:1.75; max-width:56ch}
-.story-more{position:absolute; top:24px; right:22px; width:13px; height:13px; border-right:2px solid var(--text-3); border-bottom:2px solid var(--text-3); transform:rotate(45deg); transition:.25s}
-.story-hd[aria-expanded="true"] .story-more{transform:rotate(-135deg); border-color:var(--accent)}
-.story-bd{padding:4px 22px 24px; display:grid; gap:15px; max-width:66ch}
-.story-bd p{font-size:15px; color:var(--text-2); line-height:1.85}
 .story-punch{font-family:var(--f-disp)!important; font-size:16.5px!important; color:var(--text)!important; padding:16px 18px; background:var(--surface-2); border-radius:2px; line-height:1.7!important}
 .story-go{padding-top:16px; border-top:1px solid var(--line-soft)}
 .story-go h5{font:600 11px/1 var(--f-mono); letter-spacing:.1em; color:var(--accent); margin-bottom:12px}
@@ -919,3 +905,38 @@ p{margin:0}
 .tr-units h5 b{font-weight:600; color:var(--text-2)}
 .tr-plain{font-size:13.2px!important; color:var(--text-3)!important; margin-bottom:7px}
 .tr-foot{align-items:center}
+.fp-newtab{margin:4px 0 12px}
+.switch input:disabled + .switch-ui{opacity:.4}
+.switch input:disabled ~ span{opacity:.55}
+
+/* ── 이야기: 키워드 카드 → 상세 ───────────────────────── */
+.story-grid{display:grid; gap:8px; grid-template-columns:repeat(auto-fill,minmax(232px,1fr))}
+.st-card{
+  display:grid; gap:7px; grid-template-rows:auto auto 1fr auto; text-align:left; cursor:pointer;
+  padding:18px 18px 18px; border-radius:3px; color:var(--text);
+  background:var(--surface); border:1px solid var(--line-soft); border-top:3px solid var(--ec);
+  transition:.18s;
+}
+.st-card:hover{transform:translateY(-2px); box-shadow:var(--sh)}
+.st-card.is-sel{background:var(--surface-2); box-shadow:var(--sh)}
+.st-kick{font:500 11px/1 var(--f-mono); letter-spacing:.06em; color:var(--text-3); font-variant-numeric:tabular-nums}
+.st-key{font-family:var(--f-disp); font-size:17.5px; font-weight:600; line-height:1.4; letter-spacing:-.01em}
+.st-sub{font-size:13px; line-height:1.6; color:var(--text-2)}
+.st-go{font:600 11.5px/1 var(--f-mono); color:var(--accent)}
+
+.story-detail{
+  margin-top:22px; background:var(--surface); border:1px solid var(--line-soft);
+  border-radius:3px; box-shadow:var(--sh); overflow:hidden;
+}
+.sd-head{padding:26px 26px 22px; background:var(--surface-2); border-bottom:1px solid var(--line-soft); border-left:4px solid var(--ec)}
+.sd-kick{font:500 11.5px/1 var(--f-mono); letter-spacing:.1em; color:var(--text-3); margin-bottom:12px; font-variant-numeric:tabular-nums}
+.sd-key{font-size:clamp(1.45rem,4.6vw,2rem); letter-spacing:-.02em; margin-bottom:8px}
+.sd-title{font:500 13px/1 var(--f-mono); color:var(--accent); margin-bottom:14px}
+.sd-lead{font-size:15.4px; line-height:1.85; color:var(--text-2); max-width:56ch}
+.sd-body{padding:24px 26px 6px; display:grid; gap:15px; max-width:68ch}
+.sd-body p{font-size:15px; line-height:1.9; color:var(--text-2)}
+.story-detail .story-go{margin:0 26px 24px; padding-top:18px}
+.about-facts{display:grid; gap:1px; margin:6px 0 4px; background:var(--line-soft); border:1px solid var(--line-soft); border-radius:3px; overflow:hidden}
+.about-facts > div{display:grid; grid-template-columns:62px 1fr; gap:14px; padding:13px 16px; background:var(--surface); align-items:baseline}
+.about-facts dt{font:600 11px/1.5 var(--f-mono); letter-spacing:.08em; color:var(--text-3)}
+.about-facts dd{margin:0; font-size:14.4px; line-height:1.7; color:var(--text)}
