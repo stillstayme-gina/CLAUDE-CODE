@@ -11,8 +11,6 @@
     <a href="#/trails" data-nav="trails">트레일</a>
     <a href="#/stories" data-nav="stories">이야기</a>
     <a href="#/rock" data-nav="rock">돌 이름</a>
-    <a href="#/visits" data-nav="visits">방문 지도</a>
-    <a href="#/quiz" data-nav="quiz">퀴즈</a>
     <a href="#/sources" data-nav="sources">자료 출처</a>
     <a href="#/about" data-nav="about">만든 사람</a>
   </nav>
@@ -85,8 +83,7 @@
   </nav>
 
   <p class="home-foot">
-    <a href="#/visits">방문 지도</a> ·
-    <a href="#/quiz">널리 퍼진 오해 열 가지 풀어보기</a> ·
+    <a href="#/sources">자료 출처</a> ·
     <a href="#/about">이 페이지를 만든 사람</a>
   </p>
 </section>
@@ -113,7 +110,6 @@
   </div>
   <p class="fp-status" id="fpStatus" role="status"></p>
   <div class="fp-card" id="fpCard"></div>
-  <div class="fp-visit" id="fpVisit" hidden></div>
   <p class="src-line" id="src-footprint"></p>
 </section>
 
@@ -312,6 +308,7 @@
 
     <div class="tr-foot">
       <p class="tr-access" id="trAccess"></p>
+      <button type="button" class="btn btn-line" id="trWhere">지도에서 위치 보기</button>
       <button type="button" class="linkish" id="trLink"></button>
     </div>
   </div>
@@ -351,59 +348,10 @@
   <div class="rk" id="rkQuizPane" hidden><div id="rkQuiz"></div></div>
 </section>
 
-<!-- ═══ 방문 지도 ═══ -->
-<section class="page" id="page-visits" hidden>
-  <div class="sec-hd">
-    <p class="sec-k">08 — 방문 지도</p>
-    <h2 class="sec-h">어느 땅에서 보고 있나</h2>
-    <p class="sec-p">
-      이 페이지를 본 사람들이 어느 지역, 어느 지질구에 있었는지 모아서 보여줍니다.
-      <strong>직접 누른 경우에만</strong> 기록되고, 저장하는 것은 <strong>시·도와 지질구 두 가지뿐</strong>입니다.
-    </p>
-  </div>
-  <div id="vzBody"></div>
-  <div class="vz-policy">
-    <h4>무엇을 저장하고 무엇을 저장하지 않나</h4>
-    <ul>
-      <li><b>저장합니다</b> — 시·도 이름(예: 강원), 지질구 이름(예: 태백산분지), 날짜(일 단위).</li>
-      <li><b>저장하지 않습니다</b> — 정확한 좌표, 시·군·구, 시각, 기기 정보, 누구인지 알 수 있는 어떤 값도.</li>
-      <li>기록은 개별로 보이지 않고 <b>합계로만</b> 표시됩니다.</li>
-      <li>&lsquo;방문 지도에 남기기&rsquo;를 누르지 않으면 아무것도 저장되지 않습니다. 위치 조회만으로는 기록되지 않습니다.</li>
-    </ul>
-    <p class="vz-law">
-      한국에서 개인의 정확한 위치정보를 모아 보관하는 일은 위치정보법과 개인정보보호법의 규율을 받습니다.
-      이 시안이 시·도 단위 합계만 남기는 이유입니다. 더 자세한 분석이 필요하면 이용약관과 동의 절차,
-      보관 기간을 먼저 갖춘 뒤에 설계하는 것이 맞습니다.
-    </p>
-  </div>
-</section>
-
-<!-- ═══ 퀴즈 ═══ -->
-<section class="page" id="page-quiz" hidden>
-  <div class="sec-hd">
-    <p class="sec-k">09 — 확인</p>
-    <h2 class="sec-h">널리 퍼진 열 가지 오해</h2>
-    <p class="sec-p">O · X로 답해보세요. 틀려도 설명이 나옵니다.</p>
-  </div>
-  <div class="qz">
-    <div class="qz-bar">
-      <span id="qzProg" class="qz-prog"></span>
-      <span id="qzScore" class="qz-score"></span>
-    </div>
-    <p class="qz-q" id="qzQ"></p>
-    <div class="qz-btns">
-      <button type="button" class="qz-b" id="qzO">O</button>
-      <button type="button" class="qz-b" id="qzX">X</button>
-    </div>
-    <p class="qz-why" id="qzWhy" hidden></p>
-    <button type="button" class="btn btn-solid qz-next" id="qzNext" hidden></button>
-  </div>
-</section>
-
 <!-- ═══ 자료 출처 ═══ -->
 <section class="page" id="page-sources" hidden>
   <div class="sec-hd">
-    <p class="sec-k">10 — 자료 출처</p>
+    <p class="sec-k">08 — 자료 출처</p>
     <h2 class="sec-h">이 내용은 어디서 왔나</h2>
     <p class="sec-p">
       지질 정보는 출처가 곧 신뢰도입니다. 어떤 기관의 무슨 자료를 썼고,
@@ -417,7 +365,7 @@
 <!-- ═══ 만든 사람 ═══ -->
 <section class="page" id="page-about" hidden>
   <div class="sec-hd">
-    <p class="sec-k">11 — 만든 사람</p>
+    <p class="sec-k">09 — 만든 사람</p>
     <h2 class="sec-h">왜 이 페이지를 만드나</h2>
   </div>
 

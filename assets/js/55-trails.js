@@ -135,8 +135,9 @@ window.GC = window.GC || {};
         if (h > 26 && (!best || score > best.s)) best = { x: x, s: score, mid: (Y(hi) + Y(Math.max(lo, floor))) / 2 };
       }
       if (!best) return;
+      var dupKind = t.units.filter(function (v) { return v.kind === u.kind; }).length > 1;
       var tx = el('text', { x: X(best.x), y: best.mid + 4, class: 'u-lbl' });
-      tx.textContent = u.rock.replace(/\s*\(.*\)/, '');
+      tx.textContent = dupKind ? u.rock : u.kind;
       gl.appendChild(tx);
     });
     svg.appendChild(gl);
@@ -182,8 +183,8 @@ window.GC = window.GC || {};
       cross.querySelector('.cross-d').setAttribute('cx', X(km));
       cross.querySelector('.cross-d').setAttribute('cy', Y(e));
       tip.innerHTML = '<b>' + km.toFixed(1) + 'km · ' + Math.round(e) + 'm</b>' +
-        '<span class="tip-r"><i style="background:' + unitFill(u) + '"></i>' + esc(u.rock) + '</span>' +
-        '<span class="tip-a">' + esc(u.age) + '</span>';
+        '<span class="tip-r"><i style="background:' + unitFill(u) + '"></i>' + esc(u.kind) + '</span>' +
+        '<span class="tip-a">' + esc(u.rock) + ' · ' + esc(u.age) + '</span>';
       tip.hidden = false;
       var left = (X(km) / W) * r.width;
       tip.style.left = Math.max(4, Math.min(r.width - 170, left - 80)) + 'px';
@@ -209,7 +210,7 @@ window.GC = window.GC || {};
         var prev = i === 0 ? '지표' : (typeof t.units[i - 1].base === 'number' ? t.units[i - 1].base + 'm' : '경계');
         var b = u.base < -900 ? '그 아래 전부' : (typeof u.base === 'number' ? u.base + 'm 까지' : '경계까지');
         return '<tr><td>' + prev + ' ~ ' + b + '</td><td><i class="sw" style="background:' + unitFill(u) + '"></i>' +
-          esc(u.rock) + '</td><td>' + esc(u.age) + '</td></tr>';
+          esc(u.kind) + ' (' + esc(u.rock) + ')</td><td>' + esc(u.age) + '</td></tr>';
       }).join('') + '</tbody></table>';
   }
 
@@ -236,14 +237,17 @@ window.GC = window.GC || {};
     document.getElementById('trLegend').innerHTML = t.units.length > 1
       ? t.units.map(function (u) {
           return '<span class="tr-lg"><i style="background:' + unitFill(u) + '"></i>' +
-            esc(u.rock) + '<em>' + esc(u.age) + '</em></span>';
+            esc(u.kind) + ' <b>(' + esc(u.rock) + ')</b><em>' + esc(u.age) + '</em></span>';
         }).join('')
       : '<span class="tr-lg tr-lg--one"><i style="background:' + unitFill(t.units[0]) + '"></i>' +
-        esc(t.units[0].rock) + '<em>' + esc(t.units[0].age) + '</em></span>';
+        esc(t.units[0].kind) + ' <b>(' + esc(t.units[0].rock) + ')</b><em>' +
+        esc(t.units[0].age) + '</em></span>';
 
     document.getElementById('trUnits').innerHTML = t.units.map(function (u) {
-      return '<li><h5><i style="background:' + unitFill(u) + '"></i>' + esc(u.rock) +
-        '<span>' + esc(u.age) + '</span></h5><p>' + esc(u.note) + '</p></li>';
+      return '<li><h5><i style="background:' + unitFill(u) + '"></i>' + esc(u.kind) +
+        ' <b>(' + esc(u.rock) + ')</b><span>' + esc(u.age) + '</span></h5>' +
+        '<p class="tr-plain">' + esc(u.plain) + '</p>' +
+        '<p>' + esc(u.note) + '</p></li>';
     }).join('');
 
     document.getElementById('trPoints').innerHTML = t.points.map(function (p, i) {
@@ -253,6 +257,16 @@ window.GC = window.GC || {};
 
     document.getElementById('trPunch').textContent = t.punch;
     document.getElementById('trAccess').textContent = t.access;
+    var wh = document.getElementById('trWhere');
+    wh.onclick = function () {
+      var f = GC.findProvince(t.at[0], t.at[1]);
+      GC.focusOnMap({
+        name: t.name, lng: t.at[0], lat: t.at[1], provId: f.p.id,
+        sub: t.where, note: t.distKm + 'km · ' + t.level + ' · ' + t.units.map(function (u) {
+          return u.kind + '(' + u.rock + ')';
+        }).join(' → ')
+      });
+    };
     var lk = document.getElementById('trLink');
     lk.textContent = (t.link.page === 'mountains' ? '이 산의 탄생 이야기' : '이 지질공원 명소 보기') + ' →';
     lk.onclick = function () { GC.go(t.link.page, t.link.id); };

@@ -328,8 +328,18 @@ p{margin:0}
 .story-bd{padding:4px 22px 24px; display:grid; gap:15px; max-width:66ch}
 .story-bd p{font-size:15px; color:var(--text-2); line-height:1.85}
 .story-punch{font-family:var(--f-disp)!important; font-size:16.5px!important; color:var(--text)!important; padding:16px 18px; background:var(--surface-2); border-radius:2px; line-height:1.7!important}
-.story-go{font-size:13.5px!important; color:var(--text-3)!important; padding-top:4px; border-top:1px solid var(--line-soft)}
-.story-go span{display:block; font:600 11px/1 var(--f-mono); letter-spacing:.1em; color:var(--accent); margin-bottom:7px}
+.story-go{padding-top:16px; border-top:1px solid var(--line-soft)}
+.story-go h5{font:600 11px/1 var(--f-mono); letter-spacing:.1em; color:var(--accent); margin-bottom:12px}
+.story-go ul{list-style:none; margin:0; padding:0; display:grid; gap:7px}
+.place{
+  display:grid; gap:5px; width:100%; text-align:left; cursor:pointer;
+  padding:13px 15px; border-radius:2px; color:var(--text);
+  background:var(--surface-2); border:1px solid var(--line-soft); transition:.16s;
+}
+.place:hover{border-color:var(--accent); transform:translateX(3px)}
+.place-n{font-family:var(--f-disp); font-size:15px; font-weight:600}
+.place-w{font-size:13.2px; line-height:1.65; color:var(--text-2)}
+.place-go{font:600 11.5px/1 var(--f-mono); color:var(--accent)}
 
 /* ── 지진 ─────────────────────────────────────────────── */
 .quake-list{list-style:none; margin:0 0 18px; padding:0; display:grid; gap:10px}
@@ -909,6 +919,10 @@ p{margin:0}
 .fp-ask-s{font-size:13.4px; line-height:1.7; color:var(--text-2); margin-bottom:15px}
 .fp-ask-b{display:flex; flex-wrap:wrap; gap:8px}
 .fp-auto{margin-bottom:16px; font-size:13.8px}
+.tr-lg b{font-weight:600; color:var(--text-2)}
+.tr-units h5 b{font-weight:600; color:var(--text-2)}
+.tr-plain{font-size:13.2px!important; color:var(--text-3)!important; margin-bottom:7px}
+.tr-foot{align-items:center}
 </style>
 <header class="topbar">
   <a class="brand" href="#/" data-nav="home">
@@ -923,8 +937,6 @@ p{margin:0}
     <a href="#/trails" data-nav="trails">트레일</a>
     <a href="#/stories" data-nav="stories">이야기</a>
     <a href="#/rock" data-nav="rock">돌 이름</a>
-    <a href="#/visits" data-nav="visits">방문 지도</a>
-    <a href="#/quiz" data-nav="quiz">퀴즈</a>
     <a href="#/sources" data-nav="sources">자료 출처</a>
     <a href="#/about" data-nav="about">만든 사람</a>
   </nav>
@@ -997,8 +1009,7 @@ p{margin:0}
   </nav>
 
   <p class="home-foot">
-    <a href="#/visits">방문 지도</a> ·
-    <a href="#/quiz">널리 퍼진 오해 열 가지 풀어보기</a> ·
+    <a href="#/sources">자료 출처</a> ·
     <a href="#/about">이 페이지를 만든 사람</a>
   </p>
 </section>
@@ -1025,7 +1036,6 @@ p{margin:0}
   </div>
   <p class="fp-status" id="fpStatus" role="status"></p>
   <div class="fp-card" id="fpCard"></div>
-  <div class="fp-visit" id="fpVisit" hidden></div>
   <p class="src-line" id="src-footprint"></p>
 </section>
 
@@ -1224,6 +1234,7 @@ p{margin:0}
 
     <div class="tr-foot">
       <p class="tr-access" id="trAccess"></p>
+      <button type="button" class="btn btn-line" id="trWhere">지도에서 위치 보기</button>
       <button type="button" class="linkish" id="trLink"></button>
     </div>
   </div>
@@ -1263,59 +1274,10 @@ p{margin:0}
   <div class="rk" id="rkQuizPane" hidden><div id="rkQuiz"></div></div>
 </section>
 
-<!-- ═══ 방문 지도 ═══ -->
-<section class="page" id="page-visits" hidden>
-  <div class="sec-hd">
-    <p class="sec-k">08 — 방문 지도</p>
-    <h2 class="sec-h">어느 땅에서 보고 있나</h2>
-    <p class="sec-p">
-      이 페이지를 본 사람들이 어느 지역, 어느 지질구에 있었는지 모아서 보여줍니다.
-      <strong>직접 누른 경우에만</strong> 기록되고, 저장하는 것은 <strong>시·도와 지질구 두 가지뿐</strong>입니다.
-    </p>
-  </div>
-  <div id="vzBody"></div>
-  <div class="vz-policy">
-    <h4>무엇을 저장하고 무엇을 저장하지 않나</h4>
-    <ul>
-      <li><b>저장합니다</b> — 시·도 이름(예: 강원), 지질구 이름(예: 태백산분지), 날짜(일 단위).</li>
-      <li><b>저장하지 않습니다</b> — 정확한 좌표, 시·군·구, 시각, 기기 정보, 누구인지 알 수 있는 어떤 값도.</li>
-      <li>기록은 개별로 보이지 않고 <b>합계로만</b> 표시됩니다.</li>
-      <li>&lsquo;방문 지도에 남기기&rsquo;를 누르지 않으면 아무것도 저장되지 않습니다. 위치 조회만으로는 기록되지 않습니다.</li>
-    </ul>
-    <p class="vz-law">
-      한국에서 개인의 정확한 위치정보를 모아 보관하는 일은 위치정보법과 개인정보보호법의 규율을 받습니다.
-      이 시안이 시·도 단위 합계만 남기는 이유입니다. 더 자세한 분석이 필요하면 이용약관과 동의 절차,
-      보관 기간을 먼저 갖춘 뒤에 설계하는 것이 맞습니다.
-    </p>
-  </div>
-</section>
-
-<!-- ═══ 퀴즈 ═══ -->
-<section class="page" id="page-quiz" hidden>
-  <div class="sec-hd">
-    <p class="sec-k">09 — 확인</p>
-    <h2 class="sec-h">널리 퍼진 열 가지 오해</h2>
-    <p class="sec-p">O · X로 답해보세요. 틀려도 설명이 나옵니다.</p>
-  </div>
-  <div class="qz">
-    <div class="qz-bar">
-      <span id="qzProg" class="qz-prog"></span>
-      <span id="qzScore" class="qz-score"></span>
-    </div>
-    <p class="qz-q" id="qzQ"></p>
-    <div class="qz-btns">
-      <button type="button" class="qz-b" id="qzO">O</button>
-      <button type="button" class="qz-b" id="qzX">X</button>
-    </div>
-    <p class="qz-why" id="qzWhy" hidden></p>
-    <button type="button" class="btn btn-solid qz-next" id="qzNext" hidden></button>
-  </div>
-</section>
-
 <!-- ═══ 자료 출처 ═══ -->
 <section class="page" id="page-sources" hidden>
   <div class="sec-hd">
-    <p class="sec-k">10 — 자료 출처</p>
+    <p class="sec-k">08 — 자료 출처</p>
     <h2 class="sec-h">이 내용은 어디서 왔나</h2>
     <p class="sec-p">
       지질 정보는 출처가 곧 신뢰도입니다. 어떤 기관의 무슨 자료를 썼고,
@@ -1329,7 +1291,7 @@ p{margin:0}
 <!-- ═══ 만든 사람 ═══ -->
 <section class="page" id="page-about" hidden>
   <div class="sec-hd">
-    <p class="sec-k">11 — 만든 사람</p>
+    <p class="sec-k">09 — 만든 사람</p>
     <h2 class="sec-h">왜 이 페이지를 만드나</h2>
   </div>
 
@@ -1808,7 +1770,11 @@ GC.stories = [
       '그래서 태백산맥은 동해에 바짝 붙어 서 있고, 동해로 흐르는 하천은 짧고 급합니다. 반대로 서쪽으로 흐르는 강은 길고 완만해서, 실어온 흙을 넓게 펼쳐 놓습니다. 서해의 갯벌은 그렇게 만들어졌습니다.'
     ],
     punch: '동해안에서 해가 뜨는 것을 절벽 위에서 보고, 서해안에서 해가 지는 것을 갯벌 위에서 보는 일. 그 차이는 1,500만 년 전에 결정되었습니다.',
-    go: '포항 두호동 화석산지 · 구룡포 해안 · 강원 정동진 해안단구'
+    places: [
+      { n: '포항 두호동 화석산지', at: [129.375, 36.060], w: '손으로 쪼개면 1,500만 년 전 나뭇잎과 조개가 나옵니다.' },
+      { n: '구룡포 해안', at: [129.553, 35.990], w: '동해가 벌어질 때 주저앉은 자리의 퇴적층이 절벽으로 드러나 있습니다.' },
+      { n: '정동진 해안단구', at: [129.034, 37.691], w: '바다가 깎은 평평한 면이 지금은 산 위에 있습니다. 그만큼 땅이 들렸다는 뜻입니다.' }
+    ]
   },
   {
     id: 'dinosaur',
@@ -1823,7 +1789,11 @@ GC.stories = [
       '한편 분지 아래에서는 마그마가 계속 올라오고 있었습니다. 백악기 말이 되면 화산이 터지고 화강암이 관입하면서, 호수의 시대는 불의 시대로 넘어갑니다.'
     ],
     punch: '한반도에 공룡이 살았느냐는 질문은 틀렸습니다. 한반도는 공룡의 주 무대 중 하나였습니다.',
-    go: '고성 상족암군립공원 · 해남 우항리 공룡화석지 · 화순 서유리 공룡화석지'
+    places: [
+      { n: '고성 상족암', at: [128.248, 34.943], w: '수천 개의 발자국이 층층이 남아 있습니다. 썰물 때 가야 보입니다.' },
+      { n: '해남 우항리', at: [126.462, 34.618], w: '공룡·익룡·새 발자국이 한자리에 있습니다. 세계적으로 드문 조합입니다.' },
+      { n: '화순 서유리', at: [126.976, 35.021], w: '한 줄로 이어지는 보행렬에서 보폭과 속도를 읽을 수 있습니다.' }
+    ]
   },
   {
     id: 'hantan',
@@ -1838,33 +1808,114 @@ GC.stories = [
       '그래서 한탄강에서는 평범한 들판을 걷다가 갑자기 발밑이 꺼지듯 협곡이 나타납니다. 절벽에는 용암이 식으며 갈라진 검은 육각기둥이 층층이 드러나 있습니다.'
     ],
     punch: '한반도 한가운데에서, 강과 용암이 같은 골짜기를 놓고 50만 년째 다투고 있습니다.',
-    go: '철원 고석정·직탕폭포 · 연천 재인폭포 · 포천 비둘기낭폭포 (한탄강 유네스코 세계지질공원)'
+    places: [
+      { n: '철원 고석정', at: [127.303, 38.199], w: '검은 현무암 협곡 한가운데 밝은 기반암 바위가 솟아 있습니다.' },
+      { n: '철원 직탕폭포', at: [127.256, 38.219], w: '강 전체를 가로지르는 일직선 폭포. 용암대지의 평평한 윗면입니다.' },
+      { n: '연천 재인폭포', at: [127.100, 38.050], w: '현무암 절벽을 수직으로 떨어집니다. 양쪽 벽의 육각기둥을 보세요.' },
+      { n: '포천 비둘기낭폭포', at: [127.215, 38.062], w: '용암층이 무너져 생긴 동굴 모양 폭포입니다.' }
+    ]
+  }  ,
+  {
+    id: 'granite-city',
+    kicker: '1억 7천만 년 전',
+    title: '서울은 왜 바위산에 둘러싸여 있나',
+    era: 'mz1',
+    lead: '북한산, 도봉산, 관악산, 수락산. 천만 명이 사는 도시가 사방으로 흰 바위 봉우리에 둘러싸여 있습니다. ' +
+          '세계의 대도시 중 이런 곳은 흔치 않습니다.',
+    body: [
+      '쥐라기, 태평양판이 한반도 아래로 밀려들면서 지하에서 거대한 마그마가 만들어졌습니다. 이 마그마는 지표까지 올라오지 못하고 지하 수 km에서 멈춰 아주 천천히 식었습니다.',
+      '천천히 식으면 결정이 굵게 자랍니다. 그래서 화강암은 알갱이가 눈에 보입니다. 흰 장석, 투명한 석영, 반짝이는 검은 흑운모. 이 세 가지가 섞여 있으면 화강암입니다.',
+      '그 뒤 1억 년 넘게 위를 덮고 있던 암석이 깎여 나갔습니다. 마그마 방의 천장이 드러난 것입니다. 누르던 무게가 사라지자 화강암은 팽창하며 지표와 나란하게 쪼개졌고(판상절리), 양파 껍질처럼 한 겹씩 떨어져 나가며 둥글어졌습니다.',
+      '조선이 이곳에 도읍을 정한 이유도 여기 있습니다. 사방이 산으로 막힌 분지, 그 산이 단단한 화강암이라 무너지지 않고, 성을 쌓을 돌을 멀리서 옮겨올 필요도 없었습니다.'
+    ],
+    punch: '경복궁의 돌과 북한산의 바위는 같은 마그마에서 나왔습니다.',
+    places: [
+      { n: '북한산 백운대', at: [126.988, 37.659], w: '정상 바위에 코를 대면 쌀알만 한 장석과 반짝이는 흑운모가 보입니다.' },
+      { n: '도봉산 선인봉', at: [127.015, 37.699], w: '수직으로 갈라진 절벽. 같은 화강암도 절리 방향에 따라 모양이 달라집니다.' },
+      { n: '인왕산', at: [126.960, 37.580], w: '도심에서 가장 가까운 화강암 노두입니다. 지하철로 갈 수 있습니다.' }
+    ]
+  },
+  {
+    id: 'limestone-life',
+    kicker: '5억 년 전',
+    title: '적도의 바다가 시멘트가 되기까지',
+    era: 'pz1',
+    lead: '강원 남부와 충북 단양의 석회암은 5억 년 전 적도 근처 얕은 바다에서 쌓였습니다. ' +
+          '그 바다가 지금 우리가 사는 아파트가 되었습니다.',
+    body: [
+      '5억 년 전 한반도가 될 땅덩어리는 적도 부근에 있었습니다. 따뜻하고 얕은 바다에서 조개껍데기와 산호, 미생물의 탄산칼슘이 끝없이 가라앉아 두꺼운 석회질 갯벌을 만들었습니다.',
+      '석회암은 약한 산성 빗물에 녹습니다. 수십만 년 동안 녹고 무너지기를 반복한 결과가 동굴입니다. 고수동굴, 성류굴, 화암동굴이 전부 그렇게 생겼습니다.',
+      '지표에서는 녹은 자리가 움푹 팬 웅덩이가 되고, 유독 단단한 덩어리만 남아 봉우리가 됩니다. 도담삼봉이 강 한가운데 세 개만 서 있는 이유입니다.',
+      '그리고 석회암은 구워서 시멘트가 됩니다. 한국 시멘트 산업이 강원 남부에 몰려 있는 것은 우연이 아닙니다. 5억 년 전 바다가 그 자리에 있었기 때문입니다.'
+    ],
+    punch: '도시를 짓는 재료가 5억 년 전 바다 밑바닥이라는 것. 이것이 지질학이 생활에 닿는 가장 직접적인 방식입니다.',
+    places: [
+      { n: '단양 고수동굴', at: [128.371, 36.990], w: '커튼처럼 얇게 늘어진 종유석. 천장을 따라 물이 흘러내린 자리입니다.' },
+      { n: '단양 도담삼봉', at: [128.344, 37.019], w: '주변은 다 녹아 없어지고 단단한 세 덩어리만 남았습니다.' },
+      { n: '태백 구문소', at: [128.996, 37.110], w: '강이 석회암 산을 뚫고 지나갑니다. 5억 년 전 조류 덩어리 무늬를 찾아보세요.' },
+      { n: '울진 성류굴', at: [129.372, 36.983], w: '동해안에 석회암 동굴이 있다는 사실 자체가 단서입니다.' }
+    ]
+  },
+  {
+    id: 'jeju-birth',
+    kicker: '180만 년 전 ~ 수천 년 전',
+    title: '제주는 어떻게 섬이 되었나',
+    era: 'cz2',
+    lead: '제주도는 화산 하나가 아닙니다. 수백 번의 분출이 180만 년에 걸쳐 쌓인 결과입니다.',
+    body: [
+      '시작은 얕은 바다 밑이었습니다. 마그마가 바닷물과 만나면 물이 순식간에 수증기로 바뀌며 격렬하게 폭발합니다. 이것이 수성 분출이고, 그 화산재가 고리 모양으로 쌓여 성산일출봉 같은 지형을 만들었습니다.',
+      '분출구가 물 위로 올라오면 폭발이 멎습니다. 이제 묽은 현무암질 용암이 조용히 멀리 흘러나갑니다. 수십 km를 흘러 쌓이면서 경사가 완만한 방패 모양이 되었습니다. 제주를 걸어보면 대부분 구간이 완만한 이유입니다.',
+      '마지막에 마그마의 성질이 바뀌었습니다. 끈적한 조면암은 멀리 흐르지 못하고 정상부에 뭉쳐 돔을 만들었습니다. 그것이 백록담이고, 성판악 코스에서 정상 가까이 갑자기 가팔라지는 이유입니다.',
+      '그러는 사이 옆구리에서도 계속 터졌습니다. 360개가 넘는 오름이 각각 독립된 작은 화산입니다. 가장 최근 분출은 수천 년 전으로 봅니다.'
+    ],
+    punch: '한라산은 제주도에 있는 산이 아닙니다. 제주도가 곧 한라산입니다.',
+    places: [
+      { n: '성산일출봉', at: [126.942, 33.458], w: '비스듬히 기울어진 얇은 층. 물과 만난 마그마가 뿜어낸 화산재입니다.' },
+      { n: '수월봉', at: [126.155, 33.294], w: '화산 폭발이 만든 지층을 절벽에서 옆으로 볼 수 있습니다.' },
+      { n: '만장굴', at: [126.771, 33.528], w: '겉만 굳고 속이 빠져나간 용암 터널입니다.' },
+      { n: '백록담', at: [126.533, 33.362], w: '분화구 벽이 아래쪽 검은 현무암과 달리 밝은 회색입니다. 조면암입니다.' }
+    ]
+  },
+  {
+    id: 'yellow-sea',
+    kicker: '1만 8천 년 전',
+    title: '걸어서 건너던 서해',
+    era: 'cz2',
+    lead: '마지막 빙하기가 절정이던 무렵, 해수면은 지금보다 120m 낮았습니다. ' +
+          '서해는 바다가 아니라 넓은 들판이었습니다.',
+    body: [
+      '빙하기에는 물이 대륙의 얼음으로 갇힙니다. 그만큼 바다가 줄어듭니다. 1만 8천 년 전 해수면은 지금보다 약 120m 낮았고, 평균 수심이 50m도 안 되는 서해는 통째로 드러나 있었습니다.',
+      '그때 한반도와 중국은 이어진 땅이었습니다. 지금 서해 바닥에서 매머드와 사슴의 뼈가 올라오는 이유입니다. 사람도 짐승도 걸어서 오갔습니다.',
+      '1만 년 전부터 얼음이 녹으며 바닷물이 밀려들었습니다. 평야가 잠기고, 가장 낮은 골짜기가 바다가 되었습니다. 해안선이 복잡하고 섬이 많은 것은 원래 산이었던 곳의 꼭대기만 남았기 때문입니다.',
+      '그리고 얕고 조수 간만의 차가 큰 이 바다에 강들이 흙을 실어 나르며 갯벌을 만들었습니다. 지금도 쌓이고 있습니다. 서해 갯벌은 지구에서 가장 어린 지층 중 하나입니다.'
+    ],
+    punch: '서해에 섬이 많은 이유는, 그것들이 원래 산봉우리였기 때문입니다.',
+    places: [
+      { n: '고창 갯벌', at: [126.560, 35.480], w: '썰물 때 드러난 잔물결 자국. 똑같은 무늬가 1억 년 전 사암에도 있습니다.' },
+      { n: '강화 갯벌', at: [126.430, 37.630], w: '한강이 실어온 흙이 쌓이는 현장입니다.' },
+      { n: '태안 신두리 해안사구', at: [126.180, 36.820], w: '바람이 모래를 쌓아 만든 언덕. 사막과 같은 원리입니다.' }
+    ]
+  },
+  {
+    id: 'faults-now',
+    kicker: '지금',
+    title: '한반도는 지진 안전지대가 아니다',
+    era: 'volc',
+    lead: '2016년 경주에서 규모 5.8, 2017년 포항에서 규모 5.4. ' +
+          '계기 관측 이래 가장 큰 지진 두 개가 10년 사이에 일어났습니다.',
+    body: [
+      '한반도는 판의 경계에 있지 않습니다. 일본처럼 판이 부딪치는 자리가 아니라 판 안쪽입니다. 그래서 지진이 드물고, 오랫동안 안전지대라는 말이 통용됐습니다.',
+      '하지만 판 안쪽이라고 응력이 없는 것은 아닙니다. 태평양판이 일본 아래로 밀려들며 생긴 힘과, 동해가 열릴 때 생긴 구조가 지금도 한반도 동남부를 누르고 있습니다.',
+      '그 힘이 풀리는 곳이 양산단층대입니다. 부산에서 경주를 지나 영덕까지 북동 방향으로 이어지는 긴 단층으로, 예전에는 활동을 멈춘 것으로 봤지만 최근 조사에서 제4기에도 움직인 흔적이 확인되고 있습니다.',
+      '2016년 경주 지진은 이 단층대와 연관된 것으로 봅니다. 2017년 포항 지진은 규모는 작았지만 얕은 곳에서 일어나 피해가 더 컸고, 지열발전과의 관련성이 조사된 사례입니다.'
+    ],
+    punch: '드물다는 것과 없다는 것은 다릅니다. 우리가 사는 땅은 지금도 조금씩 움직이고 있습니다.',
+    places: [
+      { n: '2016 경주지진 진앙', at: [129.19, 35.77], w: '규모 5.8. 계기 관측 이래 한반도 최대입니다.' },
+      { n: '2017 포항지진 진앙', at: [129.37, 36.11], w: '규모 5.4. 얕은 곳에서 일어나 피해가 가장 컸습니다.' },
+      { n: '양산단층대 (경주 구간)', at: [129.22, 35.86], w: '지도에서 활성단층 레이어를 켜면 단층선이 보입니다.' }
+    ]
   }
-];
-
-window.GC = window.GC || {};
-
-GC.quiz = [
-  { q: '한반도는 지진 안전지대다.', a: false,
-    why: '2016년 경주에서 규모 5.8, 2017년 포항에서 규모 5.4 지진이 났습니다. 경주 지진은 계기 관측 이래 한반도 최대 규모입니다. 동남부에는 양산단층대를 비롯한 활성단층이 분포합니다.' },
-  { q: '백두산은 이미 활동이 끝난 화산이다.', a: false,
-    why: '946년에 지난 2천 년간 지구에서 가장 큰 축에 드는 분화를 일으켰고, 2002~2005년에는 화산성 지진과 지표 변형이 관측됐습니다. 활화산으로 분류합니다.' },
-  { q: '독도는 울릉도보다 나이가 많다.', a: true,
-    why: '독도는 약 460만~250만 년 전, 울릉도는 약 250만 년 전부터 만들어졌습니다. 독도가 200만 년쯤 형이고, 그만큼 더 오래 파도에 깎여 작아졌습니다.' },
-  { q: '한반도에 공룡이 살았다.', a: true,
-    why: '경남 고성, 전남 해남·화순 등지에 수천 개의 공룡 발자국이 남아 있습니다. 밀집도로 보면 세계적인 수준의 화석 산지입니다.' },
-  { q: '제주도는 화산이 한 번 크게 터져서 만들어졌다.', a: false,
-    why: '약 180만 년에 걸쳐 수백 번의 분출이 쌓여 만들어졌습니다. 360개가 넘는 오름이 각각 별개의 분화구이고, 가장 최근 분출은 수천 년 전으로 봅니다.' },
-  { q: '설악산과 북한산은 같은 종류의 암석으로 되어 있다.', a: true,
-    why: '둘 다 화강암입니다. 모양이 다른 것은 암석 종류가 아니라 절리 방향과 융기 속도의 차이 때문입니다. 설악은 수직 절리가 발달하고 융기가 빨랐습니다.' },
-  { q: '한국에서 나는 석회암은 대부분 바다에서 만들어졌다.', a: true,
-    why: '강원 남부와 충북 단양의 조선누층군 석회암은 약 5억 년 전 적도 부근의 얕고 따뜻한 바다에서 쌓였습니다. 그 바다가 지금의 시멘트 원료입니다.' },
-  { q: '한강 이북은 남한에서 가장 오래된 땅이다.', a: false,
-    why: '경기육괴와 영남육괴 모두 약 19억 년 전으로 나이가 비슷합니다. 지리산 일대의 영남육괴도 똑같이 오래된 땅입니다.' },
-  { q: '주상절리는 용암에서만 생긴다.', a: false,
-    why: '뜨거운 화산재가 쌓여 굳은 응회암에서도 생깁니다. 무등산 입석대가 그 예입니다. 핵심은 물질 종류가 아니라 "뜨거운 덩어리가 식으며 수축한다"는 조건입니다.' },
-  { q: '동해는 태평양의 일부로, 아주 오래된 바다다.', a: false,
-    why: '약 2,300만 년 전 일본 열도가 대륙에서 떨어져 나가며 생긴 어린 바다입니다. 확장은 1,500만 년 전쯤 멈췄습니다.' }
 ];
 
 /* 실제 행정경계 바탕지도 — 통계청 2013 시도/시군구 경계를 단순화한 것입니다.
@@ -2706,6 +2757,7 @@ window.GC = window.GC || {};
 GC.trails = [
   {
     id: 'hantan-jusangjeolli',
+    at: [127.270, 38.210],
     name: '한탄강 주상절리길',
     where: '강원 철원 · 드르니 ~ 순담',
     link: { page: 'geoparks', id: 'hantan' },
@@ -2719,9 +2771,9 @@ GC.trails = [
     profile: [[0,195],[0.3,198],[0.6,192],[0.9,188],[1.2,190],[1.5,196],[1.8,200],
               [2.1,194],[2.4,186],[2.7,190],[3.0,198],[3.3,204],[3.6,200]],
     units: [
-      { rock: '현무암', era: 'cz2', age: '약 50만 년', base: 168,
+      { kind: '화산암', rock: '현무암', plain: '용암이 지표로 흘러나와 빠르게 식은 돌. 검고 구멍이 숭숭 뚫려 있습니다.', era: 'cz2', age: '약 50만 년', base: 168,
         note: '북쪽 오리산에서 흘러온 용암이 옛 한탄강 골짜기를 메운 것입니다. 수직으로 갈라진 육각기둥이 절벽 위쪽에 보입니다.' },
-      { rock: '기반암 (편마암 · 화강암)', era: 'pc', age: '약 19억 년', base: -999,
+      { kind: '기반암', rock: '편마암·화강암', plain: '용암이 덮기 전부터 이 자리에 있던 아주 오래된 땅입니다.', era: 'pc', age: '약 19억 년', base: -999,
         note: '용암이 덮기 전부터 있던 땅입니다. 절벽 아래쪽, 강물이 닿는 높이에서 드러납니다.' }
     ],
     points: [
@@ -2732,6 +2784,7 @@ GC.trails = [
   },
   {
     id: 'seorak-osaek',
+    at: [128.465, 38.119],
     name: '설악산 오색 ~ 대청봉',
     where: '강원 양양 · 남설악',
     link: { page: 'mountains', id: 'seoraksan' },
@@ -2745,9 +2798,9 @@ GC.trails = [
     profile: [[0,450],[0.5,560],[1.0,700],[1.5,850],[2.0,980],[2.5,1120],
               [3.0,1260],[3.5,1390],[4.0,1500],[4.5,1620],[5.0,1708]],
     units: [
-      { rock: '화강암', era: 'mz2', age: '약 8,700만 년', base: 900,
+      { kind: '화성암', rock: '화강암', plain: '땅속 깊은 곳에서 아주 천천히 식어 알갱이가 눈에 보이는 돌.', era: 'mz2', age: '약 8,700만 년', base: 900,
         note: '지하에서 천천히 식어 알갱이가 굵습니다. 수직 절리가 촘촘해 물과 얼음이 파고들며 바위를 세로로 뜯어냅니다.' },
-      { rock: '편마암 · 변성암', era: 'pc', age: '약 19억 년', base: -999,
+      { kind: '변성암', rock: '편마암', plain: '깊은 땅속에서 눌리고 구워져 다시 만들어진 돌. 검고 흰 줄무늬가 있습니다.', era: 'pc', age: '약 19억 년', base: -999,
         note: '화강암이 뚫고 들어오기 전부터 있던 땅입니다. 검고 흰 줄무늬가 한 방향으로 늘어서 있습니다.' }
     ],
     points: [
@@ -2759,6 +2812,7 @@ GC.trails = [
   },
   {
     id: 'taebaek-gumunso',
+    at: [128.996, 37.110],
     name: '태백 구문소 ~ 장성',
     where: '강원 태백 · 황지천',
     link: { page: 'geoparks', id: 'gangwon-paleo' },
@@ -2772,9 +2826,9 @@ GC.trails = [
     profile: [[0,620],[0.5,640],[1.0,665],[1.5,690],[2.0,700],
               [2.5,720],[3.0,735],[3.5,750],[4.0,760]],
     units: [
-      { rock: '사암 · 셰일 · 무연탄 (평안누층군)', era: 'pz2', age: '약 3억 년', base: 692,
+      { kind: '퇴적암', rock: '사암·셰일·석탄', plain: '모래와 진흙, 쓰러진 나무가 켜켜이 쌓여 굳은 돌.', era: 'pz2', age: '약 3억 년', base: 692,
         note: '쓰러진 식물이 켜켜이 묻혀 석탄이 되었습니다. 검은 띠가 보이면 그것이 3억 년 전의 숲입니다.' },
-      { rock: '석회암 (조선누층군)', era: 'pz1', age: '약 5억 년', base: -999,
+      { kind: '퇴적암', rock: '석회암', plain: '얕고 따뜻한 바다에서 조개와 산호가 쌓여 굳은 돌. 빗물에 녹습니다.', era: 'pz1', age: '약 5억 년', base: -999,
         note: '적도 근처 얕고 따뜻한 바다의 석회질 갯벌입니다. 동전으로 긁으면 자국이 납니다.' }
     ],
     points: [
@@ -2785,6 +2839,7 @@ GC.trails = [
   },
   {
     id: 'mudeung-seoseokdae',
+    at: [126.996, 35.128],
     name: '무등산 증심사 ~ 서석대',
     where: '광주 · 무등산국립공원',
     link: { page: 'geoparks', id: 'mudeung' },
@@ -2798,9 +2853,9 @@ GC.trails = [
     profile: [[0,200],[0.5,290],[1.0,400],[1.5,520],[2.0,640],
               [2.5,760],[3.0,860],[3.5,950],[4.0,1030],[4.5,1100]],
     units: [
-      { rock: '주상절리 안산암 (용암)', era: 'mz2', shade: 1, age: '약 8,700만 년', base: 940,
+      { kind: '화산암', rock: '안산암', plain: '두껍게 쌓인 용암이 식으며 수축해 육각기둥으로 갈라진 것. 입석대·서석대가 이것입니다.', era: 'mz2', shade: 1, age: '약 8,700만 년', base: 940,
         note: '두껍게 쌓인 용암이 식으며 수축해 육각기둥으로 갈라졌습니다. 입석대와 서석대가 이것입니다.' },
-      { rock: '응회암 · 화산쇄설암', era: 'mz2', age: '약 8,800만 년', base: -999,
+      { kind: '화산암', rock: '응회암', plain: '화산재가 쌓여 굳은 돌. 용암이 아니라 재입니다.', era: 'mz2', age: '약 8,800만 년', base: -999,
         note: '먼저 터진 폭발이 남긴 화산재입니다. 납작하게 눌린 검은 렌즈 얼룩이 보이면 확정입니다.' }
     ],
     points: [
@@ -2811,6 +2866,7 @@ GC.trails = [
   },
   {
     id: 'juwang-yongyeon',
+    at: [129.185, 36.398],
     name: '주왕산 대전사 ~ 용연폭포',
     where: '경북 청송 · 주왕산국립공원',
     link: { page: 'geoparks', id: 'cheongsong' },
@@ -2824,9 +2880,9 @@ GC.trails = [
     profile: [[0,220],[0.4,230],[0.8,240],[1.2,248],[1.6,255],
               [2.0,265],[2.4,275],[2.8,288],[3.4,300]],
     units: [
-      { rock: '용결응회암', era: 'mz2', shade: 1, age: '약 7,000만 년', base: 150,
+      { kind: '화산암', rock: '용결응회암', plain: '뜨거운 화산재가 눌어붙어 아주 단단해진 돌.', era: 'mz2', shade: 1, age: '약 7,000만 년', base: 150,
         note: '눌린 화산재가 자체 열로 눌어붙어 아주 단단해졌습니다. 수평 층리가 거의 없어 옆으로 깎이지 않습니다.' },
-      { rock: '하부 퇴적암 · 안산암', era: 'mz2', age: '약 7,500만 년', base: -999,
+      { kind: '퇴적암', rock: '사암·이암', plain: '칼데라가 무너지기 전 이 자리에 쌓여 있던 지층입니다.', era: 'mz2', age: '약 7,500만 년', base: -999,
         note: '칼데라가 무너지기 전 이 자리에 있던 지층입니다.' }
     ],
     points: [
@@ -2837,6 +2893,7 @@ GC.trails = [
   },
   {
     id: 'bukhan-baegundae',
+    at: [126.988, 37.659],
     name: '북한산성입구 ~ 백운대',
     where: '서울 · 경기 고양',
     link: { page: 'mountains', id: 'bukhansan' },
@@ -2850,7 +2907,7 @@ GC.trails = [
     profile: [[0,100],[0.5,170],[1.0,260],[1.5,350],[2.0,450],
               [2.5,560],[3.0,660],[3.5,760],[4.0,836]],
     units: [
-      { rock: '흑운모 화강암 (대보화강암)', era: 'mz1', age: '약 1억 7천만 년', base: -999,
+      { kind: '화성암', rock: '화강암', plain: '땅속 깊은 곳에서 아주 천천히 식어 알갱이가 눈에 보이는 돌.', era: 'mz1', age: '약 1억 7천만 년', base: -999,
         note: '쥐라기에 지하 수 km에서 굳은 마그마 덩어리입니다. 위를 덮고 있던 암석이 1억 년 넘게 깎여 나가 속살이 드러났습니다.' }
     ],
     points: [
@@ -2861,6 +2918,7 @@ GC.trails = [
   }  ,
   {
     id: 'jiri-jungsanri',
+    at: [127.731, 35.337],
     name: '지리산 중산리 ~ 천왕봉',
     where: '경남 산청 · 지리산국립공원',
     link: { page: 'mountains', id: 'jirisan' },
@@ -2874,7 +2932,7 @@ GC.trails = [
     profile: [[0,600],[0.6,720],[1.2,860],[1.8,1010],[2.4,1180],[3.0,1360],
               [3.6,1530],[4.2,1680],[4.8,1810],[5.4,1915]],
     units: [
-      { rock: '편마암 (영남육괴)', era: 'pc', age: '약 19억 년', base: -999,
+      { kind: '변성암', rock: '편마암', plain: '깊은 땅속에서 눌리고 구워져 다시 만들어진 돌. 검고 흰 줄무늬가 있습니다.', era: 'pc', age: '약 19억 년', base: -999,
         note: '한 방향으로 늘어선 검고 흰 줄무늬가 특징입니다. 화강암처럼 특정 방향으로 쉽게 쪼개지지 않아 절벽이 잘 생기지 않고, 능선이 두툼해집니다.' }
     ],
     points: [
@@ -2885,6 +2943,7 @@ GC.trails = [
   },
   {
     id: 'halla-seongpanak',
+    at: [126.533, 33.362],
     name: '한라산 성판악 ~ 백록담',
     where: '제주 · 한라산국립공원',
     link: { page: 'geoparks', id: 'jeju' },
@@ -2898,9 +2957,9 @@ GC.trails = [
     profile: [[0,750],[1.2,830],[2.4,930],[3.6,1040],[4.8,1160],[6.0,1300],
               [7.2,1470],[8.0,1620],[8.8,1780],[9.6,1947]],
     units: [
-      { rock: '조면암 (정상 돔)', era: 'cz2', shade: 1, age: '약 2만 5천 년', base: 1650,
+      { kind: '화산암', rock: '조면암', plain: '끈적해서 멀리 흐르지 못하고 분출구 위에 뭉친 용암.', era: 'cz2', shade: 1, age: '약 2만 5천 년', base: 1650,
         note: '끈적해서 멀리 흐르지 못하고 분출구 위에 뭉쳤습니다. 그래서 정상부만 급경사가 됩니다.' },
-      { rock: '현무암 · 조면현무암', era: 'cz2', age: '약 180만 ~ 수천 년', base: -999,
+      { kind: '화산암', rock: '현무암', plain: '묽은 용암이 멀리 흘러 쌓인 돌. 검고 구멍이 많습니다.', era: 'cz2', age: '약 180만 ~ 수천 년', base: -999,
         note: '묽은 용암이 수십 km를 흘러 완만한 방패 모양을 만들었습니다. 검고 구멍이 숭숭 뚫려 있습니다.' }
     ],
     points: [
@@ -2911,6 +2970,7 @@ GC.trails = [
   },
   {
     id: 'songni-munjangdae',
+    at: [127.827, 36.552],
     name: '속리산 법주사 ~ 문장대',
     where: '충북 보은 · 속리산국립공원',
     link: { page: 'mountains', id: 'bukhansan' },
@@ -2924,9 +2984,9 @@ GC.trails = [
     profile: [[0,300],[0.8,360],[1.6,440],[2.4,540],[3.2,660],[4.0,790],
               [4.8,920],[5.8,1054]],
     units: [
-      { rock: '화강암', era: 'mz2', age: '약 8,000만 년', base: 640,
+      { kind: '화성암', rock: '화강암', plain: '땅속 깊은 곳에서 아주 천천히 식어 알갱이가 눈에 보이는 돌.', era: 'mz2', age: '약 8,000만 년', base: 640,
         note: '알갱이가 굵고 흰빛이 돕니다. 절리를 따라 침식돼 문장대·입석대 같은 기암이 만들어졌습니다.' },
-      { rock: '변성암 (옥천대)', era: 'pc', age: '약 7억 년 (논쟁 중)', base: -999,
+      { kind: '변성암', rock: '천매암·편암', plain: '얇게 벗겨지는 반질반질한 돌. 눌린 흔적이 남아 있습니다.', era: 'pc', age: '약 7억 년 (논쟁 중)', base: -999,
         note: '얇게 벗겨지는 반질반질한 암석입니다. 이 지층의 나이는 100년 가까이 결론이 나지 않았습니다.' }
     ],
     points: [
@@ -2937,6 +2997,7 @@ GC.trails = [
   },
   {
     id: 'wolchul-cheonhwang',
+    at: [126.706, 34.767],
     name: '월출산 천황사 ~ 천황봉',
     where: '전남 영암 · 월출산국립공원',
     link: { page: 'mountains', id: 'bukhansan' },
@@ -2950,9 +3011,9 @@ GC.trails = [
     profile: [[0,100],[0.4,180],[0.8,280],[1.2,390],[1.6,480],[2.0,570],
               [2.4,650],[2.8,730],[3.4,809]],
     units: [
-      { rock: '화강암', era: 'mz2', age: '약 8,500만 년', base: 260,
+      { kind: '화성암', rock: '화강암', plain: '땅속 깊은 곳에서 아주 천천히 식어 알갱이가 눈에 보이는 돌.', era: 'mz2', age: '약 8,500만 년', base: 260,
         note: '수직·수평 절리가 잘 발달해 구름다리 일대의 기암괴석을 만들었습니다.' },
-      { rock: '편마암 · 변성암', era: 'pc', age: '약 19억 년', base: -999,
+      { kind: '변성암', rock: '편마암', plain: '깊은 땅속에서 눌리고 구워져 다시 만들어진 돌. 검고 흰 줄무늬가 있습니다.', era: 'pc', age: '약 19억 년', base: -999,
         note: '화강암이 관입하기 전부터 있던 땅입니다. 주변 들판 아래에 넓게 깔려 있습니다.' }
     ],
     points: [
@@ -2963,6 +3024,7 @@ GC.trails = [
   },
   {
     id: 'naejang-ridge',
+    at: [126.889, 35.481],
     name: '내장산 서래봉 ~ 신선봉',
     where: '전북 정읍 · 내장산국립공원',
     link: { page: 'geoparks', id: 'jeonbuk' },
@@ -2976,7 +3038,7 @@ GC.trails = [
     profile: [[0,150],[0.6,420],[1.2,560],[1.8,620],[2.4,580],[3.0,650],
               [3.6,700],[4.2,730],[5.0,763]],
     units: [
-      { rock: '응회암 · 유문암', era: 'mz2', age: '약 8,000만 년', base: -999,
+      { kind: '화산암', rock: '응회암·유문암', plain: '화산재와 끈적한 용암이 두껍게 쌓여 굳은 돌.', era: 'mz2', age: '약 8,000만 년', base: -999,
         note: '백악기 화산 활동이 남긴 화산재와 용암이 두껍게 쌓여 굳었습니다. 능선 전체가 한 덩어리입니다.' }
     ],
     points: [
@@ -2987,6 +3049,7 @@ GC.trails = [
   },
   {
     id: 'palgong-birobong',
+    at: [128.695, 36.005],
     name: '팔공산 동화사 ~ 비로봉',
     where: '대구 · 팔공산',
     link: { page: 'mountains', id: 'bukhansan' },
@@ -3000,7 +3063,7 @@ GC.trails = [
     profile: [[0,300],[0.7,400],[1.4,520],[2.1,650],[2.8,790],[3.5,910],
               [4.2,1020],[4.9,1120],[5.5,1193]],
     units: [
-      { rock: '화강암 (불국사 화강암)', era: 'mz2', age: '약 6,500만 년', base: -999,
+      { kind: '화성암', rock: '화강암', plain: '땅속 깊은 곳에서 아주 천천히 식어 알갱이가 눈에 보이는 돌.', era: 'mz2', age: '약 6,500만 년', base: -999,
         note: '백악기 말에 관입한 화강암입니다. 경주 남산의 불상들도 같은 시기의 화강암에 새겨졌습니다.' }
     ],
     points: [
@@ -3011,6 +3074,7 @@ GC.trails = [
   },
   {
     id: 'geumjeong-godang',
+    at: [129.059, 35.271],
     name: '금정산 범어사 ~ 고당봉',
     where: '부산 · 금정산',
     link: { page: 'geoparks', id: 'busan' },
@@ -3024,9 +3088,9 @@ GC.trails = [
     profile: [[0,200],[0.5,290],[1.0,390],[1.5,480],[2.0,560],[2.5,640],
               [3.0,700],[3.5,755],[4.0,801]],
     units: [
-      { rock: '화강암', era: 'mz2', age: '약 7,000만 년', base: 430,
+      { kind: '화성암', rock: '화강암', plain: '땅속 깊은 곳에서 아주 천천히 식어 알갱이가 눈에 보이는 돌.', era: 'mz2', age: '약 7,000만 년', base: 430,
         note: '금정산 능선과 고당봉을 이룹니다. 절리를 따라 깎여 바위 봉우리와 금샘 같은 웅덩이가 생겼습니다.' },
-      { rock: '안산암 · 응회암', era: 'mz2', shade: 1, age: '약 8,000만 년', base: -999,
+      { kind: '화산암', rock: '안산암·응회암', plain: '화산이 뿜어낸 재와 용암이 굳은 돌.', era: 'mz2', shade: 1, age: '약 8,000만 년', base: -999,
         note: '화강암이 관입하기 전 경상분지에서 터진 화산의 산물입니다. 산 아래쪽 계곡에서 볼 수 있습니다.' }
     ],
     points: [
@@ -3037,6 +3101,7 @@ GC.trails = [
   },
   {
     id: 'danyang-dodam',
+    at: [128.344, 37.019],
     name: '단양 도담삼봉 ~ 석문',
     where: '충북 단양 · 남한강',
     link: { page: 'geoparks', id: 'danyang' },
@@ -3049,7 +3114,7 @@ GC.trails = [
     access: '단양역에서 도보 또는 버스. 계단이 많지만 거리가 짧습니다.',
     profile: [[0,130],[0.2,140],[0.4,175],[0.6,210],[0.8,235],[1.0,248],[1.2,250]],
     units: [
-      { rock: '석회암 (조선누층군)', era: 'pz1', age: '약 5억 년', base: -999,
+      { kind: '퇴적암', rock: '석회암', plain: '얕고 따뜻한 바다에서 조개와 산호가 쌓여 굳은 돌. 빗물에 녹습니다.', era: 'pz1', age: '약 5억 년', base: -999,
         note: '적도 부근 얕고 따뜻한 바다에 쌓인 석회질 갯벌입니다. 약산성 빗물에 녹아 동굴과 돌문, 그리고 강 속의 봉우리를 만들었습니다.' }
     ],
     points: [
@@ -3772,8 +3837,6 @@ window.GC = window.GC || {};
         note: p.name + ' · ' + p.ageText
       });
     });
-
-    if (GC.offerVisit) GC.offerVisit(placeName, p);
   };
 
   /* 홈과 발밑 페이지가 같은 동작을 공유합니다 */
@@ -4529,8 +4592,25 @@ window.GC = window.GC || {};
         '<div class="story-bd"' + (i === 0 ? '' : ' hidden') + '>' +
           s.body.map(function (b) { return '<p>' + esc(b) + '</p>'; }).join('') +
           '<p class="story-punch">' + esc(s.punch) + '</p>' +
-          '<p class="story-go"><span>가 볼 곳</span>' + esc(s.go) + '</p>' +
+          '<div class="story-go"><h5>가 볼 곳</h5><ul>' +
+            (s.places || []).map(function (pl, j) {
+              return '<li><button type="button" class="place" data-i="' + i + '" data-j="' + j + '">' +
+                '<span class="place-n">' + esc(pl.n) + '</span>' +
+                '<span class="place-w">' + esc(pl.w) + '</span>' +
+                '<span class="place-go">지도에서 보기 →</span></button></li>';
+            }).join('') + '</ul></div>' +
         '</div>';
+      Array.prototype.forEach.call(art.querySelectorAll('.place'), function (b) {
+        b.addEventListener('click', function () {
+          var st = GC.stories[+b.getAttribute('data-i')];
+          var pl = st.places[+b.getAttribute('data-j')];
+          var f = GC.findProvince(pl.at[0], pl.at[1]);
+          GC.focusOnMap({
+            name: pl.n, lng: pl.at[0], lat: pl.at[1], provId: f.p.id,
+            sub: st.title, note: pl.w
+          });
+        });
+      });
       var btn = art.querySelector('.story-hd'), bd = art.querySelector('.story-bd');
       btn.addEventListener('click', function () {
         var open = bd.hidden;
@@ -4539,67 +4619,6 @@ window.GC = window.GC || {};
       });
       host.appendChild(art);
     });
-  };
-
-  GC.initQuiz = function () {
-    var i = 0, score = 0, answered = false;
-    var qEl = document.getElementById('qzQ'), wEl = document.getElementById('qzWhy');
-    var oBtn = document.getElementById('qzO'), xBtn = document.getElementById('qzX');
-    var nBtn = document.getElementById('qzNext'), pEl = document.getElementById('qzProg');
-    var sEl = document.getElementById('qzScore');
-
-    function render() {
-      var q = GC.quiz[i];
-      qEl.textContent = q.q;
-      wEl.hidden = true;
-      wEl.className = 'qz-why';
-      nBtn.hidden = true;
-      answered = false;
-      oBtn.disabled = xBtn.disabled = false;
-      oBtn.classList.remove('is-right', 'is-wrong');
-      xBtn.classList.remove('is-right', 'is-wrong');
-      pEl.textContent = (i + 1) + ' / ' + GC.quiz.length;
-      sEl.textContent = score + '점';
-    }
-
-    function answer(v) {
-      if (answered) return;
-      answered = true;
-      var q = GC.quiz[i];
-      var ok = v === q.a;
-      if (ok) score++;
-      oBtn.disabled = xBtn.disabled = true;
-      (q.a ? oBtn : xBtn).classList.add('is-right');
-      if (!ok) (v ? oBtn : xBtn).classList.add('is-wrong');
-      wEl.innerHTML = '<strong>' + (ok ? '맞습니다.' : '아닙니다.') + '</strong> ' + esc(q.why);
-      wEl.className = 'qz-why ' + (ok ? 'ok' : 'no');
-      wEl.hidden = false;
-      sEl.textContent = score + '점';
-      nBtn.hidden = false;
-      nBtn.textContent = i === GC.quiz.length - 1 ? '결과 보기' : '다음 문제';
-    }
-
-    oBtn.addEventListener('click', function () { answer(true); });
-    xBtn.addEventListener('click', function () { answer(false); });
-    nBtn.addEventListener('click', function () {
-      if (i === GC.quiz.length - 1) {
-        qEl.textContent = GC.quiz.length + '문제 중 ' + score + '문제를 맞혔습니다.';
-        wEl.innerHTML = score >= 8
-          ? '<strong>전공자 수준입니다.</strong> 이제 현장에서 확인할 차례입니다.'
-          : score >= 5
-            ? '<strong>절반은 넘겼습니다.</strong> 틀린 문제의 설명을 다시 읽어보세요.'
-            : '<strong>대부분이 여기서 시작합니다.</strong> 위의 지도와 이야기를 먼저 보고 다시 도전해보세요.';
-        wEl.className = 'qz-why ok';
-        wEl.hidden = false;
-        oBtn.disabled = xBtn.disabled = true;
-        nBtn.textContent = '다시 풀기';
-        nBtn.onclick = function () { i = 0; score = 0; nBtn.onclick = null; render(); };
-        return;
-      }
-      i++; render();
-    });
-
-    render();
   };
 })();
 
@@ -4740,8 +4759,9 @@ window.GC = window.GC || {};
         if (h > 26 && (!best || score > best.s)) best = { x: x, s: score, mid: (Y(hi) + Y(Math.max(lo, floor))) / 2 };
       }
       if (!best) return;
+      var dupKind = t.units.filter(function (v) { return v.kind === u.kind; }).length > 1;
       var tx = el('text', { x: X(best.x), y: best.mid + 4, class: 'u-lbl' });
-      tx.textContent = u.rock.replace(/\s*\(.*\)/, '');
+      tx.textContent = dupKind ? u.rock : u.kind;
       gl.appendChild(tx);
     });
     svg.appendChild(gl);
@@ -4787,8 +4807,8 @@ window.GC = window.GC || {};
       cross.querySelector('.cross-d').setAttribute('cx', X(km));
       cross.querySelector('.cross-d').setAttribute('cy', Y(e));
       tip.innerHTML = '<b>' + km.toFixed(1) + 'km · ' + Math.round(e) + 'm</b>' +
-        '<span class="tip-r"><i style="background:' + unitFill(u) + '"></i>' + esc(u.rock) + '</span>' +
-        '<span class="tip-a">' + esc(u.age) + '</span>';
+        '<span class="tip-r"><i style="background:' + unitFill(u) + '"></i>' + esc(u.kind) + '</span>' +
+        '<span class="tip-a">' + esc(u.rock) + ' · ' + esc(u.age) + '</span>';
       tip.hidden = false;
       var left = (X(km) / W) * r.width;
       tip.style.left = Math.max(4, Math.min(r.width - 170, left - 80)) + 'px';
@@ -4814,7 +4834,7 @@ window.GC = window.GC || {};
         var prev = i === 0 ? '지표' : (typeof t.units[i - 1].base === 'number' ? t.units[i - 1].base + 'm' : '경계');
         var b = u.base < -900 ? '그 아래 전부' : (typeof u.base === 'number' ? u.base + 'm 까지' : '경계까지');
         return '<tr><td>' + prev + ' ~ ' + b + '</td><td><i class="sw" style="background:' + unitFill(u) + '"></i>' +
-          esc(u.rock) + '</td><td>' + esc(u.age) + '</td></tr>';
+          esc(u.kind) + ' (' + esc(u.rock) + ')</td><td>' + esc(u.age) + '</td></tr>';
       }).join('') + '</tbody></table>';
   }
 
@@ -4841,14 +4861,17 @@ window.GC = window.GC || {};
     document.getElementById('trLegend').innerHTML = t.units.length > 1
       ? t.units.map(function (u) {
           return '<span class="tr-lg"><i style="background:' + unitFill(u) + '"></i>' +
-            esc(u.rock) + '<em>' + esc(u.age) + '</em></span>';
+            esc(u.kind) + ' <b>(' + esc(u.rock) + ')</b><em>' + esc(u.age) + '</em></span>';
         }).join('')
       : '<span class="tr-lg tr-lg--one"><i style="background:' + unitFill(t.units[0]) + '"></i>' +
-        esc(t.units[0].rock) + '<em>' + esc(t.units[0].age) + '</em></span>';
+        esc(t.units[0].kind) + ' <b>(' + esc(t.units[0].rock) + ')</b><em>' +
+        esc(t.units[0].age) + '</em></span>';
 
     document.getElementById('trUnits').innerHTML = t.units.map(function (u) {
-      return '<li><h5><i style="background:' + unitFill(u) + '"></i>' + esc(u.rock) +
-        '<span>' + esc(u.age) + '</span></h5><p>' + esc(u.note) + '</p></li>';
+      return '<li><h5><i style="background:' + unitFill(u) + '"></i>' + esc(u.kind) +
+        ' <b>(' + esc(u.rock) + ')</b><span>' + esc(u.age) + '</span></h5>' +
+        '<p class="tr-plain">' + esc(u.plain) + '</p>' +
+        '<p>' + esc(u.note) + '</p></li>';
     }).join('');
 
     document.getElementById('trPoints').innerHTML = t.points.map(function (p, i) {
@@ -4858,6 +4881,16 @@ window.GC = window.GC || {};
 
     document.getElementById('trPunch').textContent = t.punch;
     document.getElementById('trAccess').textContent = t.access;
+    var wh = document.getElementById('trWhere');
+    wh.onclick = function () {
+      var f = GC.findProvince(t.at[0], t.at[1]);
+      GC.focusOnMap({
+        name: t.name, lng: t.at[0], lat: t.at[1], provId: f.p.id,
+        sub: t.where, note: t.distKm + 'km · ' + t.level + ' · ' + t.units.map(function (u) {
+          return u.kind + '(' + u.rock + ')';
+        }).join(' → ')
+      });
+    };
     var lk = document.getElementById('trLink');
     lk.textContent = (t.link.page === 'mountains' ? '이 산의 탄생 이야기' : '이 지질공원 명소 보기') + ' →';
     lk.onclick = function () { GC.go(t.link.page, t.link.id); };
@@ -4902,173 +4935,6 @@ window.GC = window.GC || {};
   };
 
   GC.openTrail = function (id) { open(id); };
-})();
-
-/* 방문 지도 — 동의한 방문자의 "시·도 + 지질구"만 익명으로 기록해 집계합니다.
-   좌표·시각·식별자는 저장하지 않습니다. */
-window.GC = window.GC || {};
-
-(function () {
-  var SVGNS = 'http://www.w3.org/2000/svg';
-  var esc = function (s) { return GC.esc(s); };
-  var dbRef = null, rows = null, pending = null;
-
-  function el(t, a) { var n = document.createElementNS(SVGNS, t); for (var k in a) n.setAttribute(k, a[k]); return n; }
-  function db() {
-    if (dbRef) return dbRef;
-    dbRef = (window.claude && claude.use) ? claude.use('db') : Promise.resolve(null);
-    return dbRef;
-  }
-
-  /* 발밑 조회가 끝나면 기록 제안을 띄웁니다 (기본 꺼짐, 누를 때만 저장) */
-  GC.offerVisit = function (placeName, prov) {
-    var sido = (placeName.match(/^(서울|부산|대구|인천|광주|대전|울산|세종|경기|강원|충북|충남|전북|전남|경북|경남|제주)/) || [])[1];
-    var box = document.getElementById('fpVisit');
-    if (!box) return;
-    if (!sido) { box.hidden = true; return; }
-    pending = { sido: sido, prov: prov.id, provName: prov.name };
-    box.hidden = false;
-    box.innerHTML =
-      '<button type="button" class="btn btn-line" id="fpVisitGo">이 지역을 방문 지도에 남기기</button>' +
-      '<p class="fp-visit-n">' + esc(sido) + ' · ' + esc(prov.name) + ' 두 가지만 익명으로 기록합니다. ' +
-      '정확한 좌표와 시각, 누구인지는 저장하지 않습니다.</p>';
-    document.getElementById('fpVisitGo').addEventListener('click', function (e) {
-      var b = e.currentTarget;
-      b.disabled = true; b.textContent = '기록하는 중…';
-      db().then(function (d) {
-        if (!d) throw 0;
-        return d.collection('visits').doc().set({
-          sido: pending.sido, prov: pending.prov,
-          day: new Date().toISOString().slice(0, 10)
-        });
-      }).then(function () {
-        b.textContent = '기록했습니다';
-        box.insertAdjacentHTML('beforeend',
-          '<button type="button" class="linkish" id="fpVisitSee">방문 지도 보기 →</button>');
-        document.getElementById('fpVisitSee').addEventListener('click', function () { GC.go('visits'); });
-        rows = null;
-      }).catch(function () {
-        b.disabled = false; b.textContent = '이 지역을 방문 지도에 남기기';
-        box.querySelector('.fp-visit-n').textContent =
-          '지금은 기록할 수 없습니다. 이 페이지를 볼 수만 있는 상태이거나 저장 기능이 꺼져 있습니다.';
-      });
-    });
-  };
-
-  function load() {
-    return db().then(function (d) {
-      if (!d) return null;
-      return d.collection('visits').limit(1000).get();
-    }).then(function (snap) {
-      if (!snap) return null;
-      return (snap.docs || []).map(function (x) { return x.data || {}; });
-    }).catch(function () { return null; });
-  }
-
-  /* 순차 색상 — 한 색조를 밝은 쪽에서 어두운 쪽으로 (개수는 크기이지 정체성이 아닙니다) */
-  function ramp(t) {
-    var steps = getComputedStyle(document.documentElement)
-      .getPropertyValue('--ramp').trim().split(/\s+/);
-    if (steps.length < 5) steps = ['#EFE3D8', '#E0BFA2', '#CE9468', '#B96B38', '#A8471F'];
-    return steps[Math.max(0, Math.min(steps.length - 1, Math.floor(t * steps.length - 1e-9)))];
-  }
-
-  function draw(counts, max) {
-    var host = document.getElementById('vzMap');
-    host.innerHTML = '';
-    var b = { minX: 1e9, minY: 1e9, maxX: -1e9, maxY: -1e9 };
-    GC.base.sido.forEach(function (s) {
-      s.rings.forEach(function (r) { r.forEach(function (c) {
-        var q = GC.project(c[0], c[1]);
-        b.minX = Math.min(b.minX, q[0]); b.maxX = Math.max(b.maxX, q[0]);
-        b.minY = Math.min(b.minY, q[1]); b.maxY = Math.max(b.maxY, q[1]);
-      }); });
-    });
-    var pad = 8;
-    var svg = el('svg', {
-      viewBox: [b.minX - pad, b.minY - pad, (b.maxX - b.minX) + pad * 2, (b.maxY - b.minY) + pad * 2].join(' '),
-      class: 'kmap vz-svg', role: 'img',
-      'aria-label': '시·도별 방문 기록 수. ' + Object.keys(counts).map(function (k) {
-        return k + ' ' + counts[k] + '건';
-      }).join(', ')
-    });
-    GC.base.sido.forEach(function (s) {
-      var d = '';
-      s.rings.forEach(function (r) { d += GC.pathOf(r); });
-      var n = counts[s.name] || 0;
-      var p = el('path', {
-        d: d, class: 'vz-sido' + (n ? '' : ' is-zero'),
-        fill: n ? ramp(max ? n / max : 0) : 'var(--surface-2)'
-      });
-      var t = el('title'); t.textContent = s.name + ' ' + n + '건';
-      p.appendChild(t);
-      svg.appendChild(p);
-    });
-    host.appendChild(svg);
-  }
-
-  function render(data) {
-    var box = document.getElementById('vzBody');
-    if (data === null) {
-      box.innerHTML = '<p class="vz-off">이 환경에서는 방문 기록을 읽을 수 없습니다. ' +
-        'claude.ai에서 이 페이지를 열면 집계가 보입니다.</p>';
-      return;
-    }
-    if (!data.length) {
-      box.innerHTML = '<p class="vz-off">아직 기록이 없습니다. ' +
-        '<button type="button" class="linkish" id="vzGoFp">내 발밑</button>에서 지역을 조회한 뒤 ' +
-        '&lsquo;방문 지도에 남기기&rsquo;를 누르면 첫 기록이 됩니다.</p>';
-      document.getElementById('vzGoFp').addEventListener('click', function () { GC.go('footprint'); });
-      return;
-    }
-
-    var bySido = {}, byProv = {};
-    data.forEach(function (r) {
-      if (r.sido) bySido[r.sido] = (bySido[r.sido] || 0) + 1;
-      if (r.prov) byProv[r.prov] = (byProv[r.prov] || 0) + 1;
-    });
-    var sidoRows = Object.keys(bySido).map(function (k) { return [k, bySido[k]]; })
-      .sort(function (a, b) { return b[1] - a[1]; });
-    var provRows = Object.keys(byProv).map(function (k) {
-      var p = GC.byId(k);
-      return [p ? p.name : k, byProv[k], p];
-    }).sort(function (a, b) { return b[1] - a[1]; });
-    var max = sidoRows.length ? sidoRows[0][1] : 0;
-
-    box.innerHTML =
-      '<div class="vz-top">' +
-        '<div class="vz-stat"><b>' + data.length + '</b><span>건의 기록</span></div>' +
-        '<div class="vz-stat"><b>' + sidoRows.length + '</b><span>개 시·도</span></div>' +
-        '<div class="vz-stat"><b>' + provRows.length + '</b><span>개 지질구</span></div>' +
-      '</div>' +
-      '<div class="vz-grid">' +
-        '<figure class="vz-fig"><figcaption>시·도별 기록 수</figcaption>' +
-          '<div id="vzMap"></div>' +
-          '<div class="vz-scale"><span>적음</span><i class="vz-ramp"></i><span>많음 (' + max + '건)</span></div>' +
-        '</figure>' +
-        '<div class="vz-lists">' +
-          '<h4 class="tr-sub">지역</h4><ul class="vz-bars">' +
-            sidoRows.map(function (r) {
-              return '<li><span class="vz-l">' + esc(r[0]) + '</span>' +
-                '<span class="vz-b"><i style="width:' + (r[1] / max * 100) + '%"></i></span>' +
-                '<span class="vz-v">' + r[1] + '</span></li>';
-            }).join('') + '</ul>' +
-          '<h4 class="tr-sub">지질구</h4><ul class="vz-bars">' +
-            provRows.map(function (r) {
-              return '<li><span class="vz-l"><i class="vz-sw" style="background:' +
-                (r[2] ? GC.provFill(r[2]) : 'var(--text-3)') + '"></i>' + esc(r[0]) + '</span>' +
-                '<span class="vz-b"><i style="width:' + (r[1] / provRows[0][1] * 100) + '%"></i></span>' +
-                '<span class="vz-v">' + r[1] + '</span></li>';
-            }).join('') + '</ul>' +
-        '</div>' +
-      '</div>';
-    draw(bySido, max);
-  }
-
-  GC.initVisits = function () {
-    document.getElementById('vzBody').innerHTML = '<p class="vz-off">불러오는 중…</p>';
-    load().then(function (d) { rows = d; render(d); });
-  };
 })();
 
 /* 자료 출처 — 전용 페이지와, 각 페이지 하단의 출처 줄 */
@@ -5154,7 +5020,7 @@ window.GC = window.GC || {};
 window.GC = window.GC || {};
 
 (function () {
-  var PAGES = ['home', 'footprint', 'map', 'mountains', 'geoparks', 'trails', 'stories', 'rock', 'visits', 'quiz', 'sources', 'about'];
+  var PAGES = ['home', 'footprint', 'map', 'mountains', 'geoparks', 'trails', 'stories', 'rock', 'sources', 'about'];
   var inited = {};
   var current = null;
 
@@ -5164,9 +5030,7 @@ window.GC = window.GC || {};
     geoparks: function () { GC.initGeoparks(); },
     trails: function () { GC.initTrails(); },
     stories: function () { GC.initStories(); },
-    rock: function () { GC.initRockId(); },
-    visits: function () { GC.initVisits(); },
-    quiz: function () { GC.initQuiz(); }
+    rock: function () { GC.initRockId(); }
   };
 
   function parse() {

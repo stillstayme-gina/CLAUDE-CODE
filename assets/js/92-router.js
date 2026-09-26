@@ -2,7 +2,7 @@
 window.GC = window.GC || {};
 
 (function () {
-  var PAGES = ['home', 'footprint', 'map', 'mountains', 'geoparks', 'trails', 'stories', 'rock', 'visits', 'quiz', 'sources', 'about'];
+  var PAGES = ['home', 'footprint', 'map', 'mountains', 'geoparks', 'trails', 'stories', 'rock', 'sources', 'about'];
   var inited = {};
   var current = null;
 
@@ -12,9 +12,7 @@ window.GC = window.GC || {};
     geoparks: function () { GC.initGeoparks(); },
     trails: function () { GC.initTrails(); },
     stories: function () { GC.initStories(); },
-    rock: function () { GC.initRockId(); },
-    visits: function () { GC.initVisits(); },
-    quiz: function () { GC.initQuiz(); }
+    rock: function () { GC.initRockId(); }
   };
 
   function parse() {

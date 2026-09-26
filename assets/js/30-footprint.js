@@ -90,8 +90,6 @@ window.GC = window.GC || {};
         note: p.name + ' · ' + p.ageText
       });
     });
-
-    if (GC.offerVisit) GC.offerVisit(placeName, p);
   };
 
   /* 홈과 발밑 페이지가 같은 동작을 공유합니다 */

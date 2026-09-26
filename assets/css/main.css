@@ -324,8 +324,18 @@ p{margin:0}
 .story-bd{padding:4px 22px 24px; display:grid; gap:15px; max-width:66ch}
 .story-bd p{font-size:15px; color:var(--text-2); line-height:1.85}
 .story-punch{font-family:var(--f-disp)!important; font-size:16.5px!important; color:var(--text)!important; padding:16px 18px; background:var(--surface-2); border-radius:2px; line-height:1.7!important}
-.story-go{font-size:13.5px!important; color:var(--text-3)!important; padding-top:4px; border-top:1px solid var(--line-soft)}
-.story-go span{display:block; font:600 11px/1 var(--f-mono); letter-spacing:.1em; color:var(--accent); margin-bottom:7px}
+.story-go{padding-top:16px; border-top:1px solid var(--line-soft)}
+.story-go h5{font:600 11px/1 var(--f-mono); letter-spacing:.1em; color:var(--accent); margin-bottom:12px}
+.story-go ul{list-style:none; margin:0; padding:0; display:grid; gap:7px}
+.place{
+  display:grid; gap:5px; width:100%; text-align:left; cursor:pointer;
+  padding:13px 15px; border-radius:2px; color:var(--text);
+  background:var(--surface-2); border:1px solid var(--line-soft); transition:.16s;
+}
+.place:hover{border-color:var(--accent); transform:translateX(3px)}
+.place-n{font-family:var(--f-disp); font-size:15px; font-weight:600}
+.place-w{font-size:13.2px; line-height:1.65; color:var(--text-2)}
+.place-go{font:600 11.5px/1 var(--f-mono); color:var(--accent)}
 
 /* ── 지진 ─────────────────────────────────────────────── */
 .quake-list{list-style:none; margin:0 0 18px; padding:0; display:grid; gap:10px}
@@ -905,3 +915,7 @@ p{margin:0}
 .fp-ask-s{font-size:13.4px; line-height:1.7; color:var(--text-2); margin-bottom:15px}
 .fp-ask-b{display:flex; flex-wrap:wrap; gap:8px}
 .fp-auto{margin-bottom:16px; font-size:13.8px}
+.tr-lg b{font-weight:600; color:var(--text-2)}
+.tr-units h5 b{font-weight:600; color:var(--text-2)}
+.tr-plain{font-size:13.2px!important; color:var(--text-3)!important; margin-bottom:7px}
+.tr-foot{align-items:center}
