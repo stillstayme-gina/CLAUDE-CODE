@@ -138,13 +138,15 @@
 ```
 assets/html/body.part.html   마크업 (단일 소스)
 assets/css/main.css          디자인 토큰 + 컴포넌트
-assets/js/0*-data-*.js       데이터 (시대 · 지질구 · 바탕지도 · 지질공원 · 암석 · 산 · 이야기 · 퀴즈)
+assets/js/0*-data-*.js       데이터 (시대 · 지질구 · 바탕지도 · 지질공원 · 암석)
+assets/js/1*-data-*.js       데이터 (트레일 · 산 160곳 · 자료 출처)
 assets/js/10-geo.js          투영 · 점-다각형 판정 · 지질구 조회
 assets/js/11-store.js        localStorage · 거리 계산
+assets/js/15-geoloc.js       위치 확인 (iframe 차단 감지 포함)
 assets/js/20-map.js          SVG 지질도 + 타임 슬라이더
 assets/js/30-footprint.js    내 발밑
 assets/js/35-geoparks.js     지질공원 · 체크인 · 도감
-assets/js/40~50-*.js         산 · 이야기 · 퀴즈
+assets/js/40~55-*.js         산 도감 · 이야기 · 트레일
 assets/js/45-rockid.js       돌 이름 검색표
 assets/js/90-app.js          부팅
 assets/js/92-router.js       해시 라우터
@@ -180,9 +182,9 @@ python3 -m http.server 8777 # http://localhost:8777
 - 지질도·지질공원·지진 원자료를 실제로 연동하려면 KIGAM 지질정보시스템,
   국가지질공원 누리집, 기상청 지진화산 정보의 **공공누리 유형 확인**이 선행되어야 합니다.
 
-## 다음 단계
+## 아직 안 한 것
 
-- 트레일 확대, 그리고 실제 GPX 경로·측량 고도 반영 (지금은 개략값)
-- 산에서 데이터가 안 터지는 상황을 위한 오프라인 카드
-- 교실 모드: 교육과정 연계 워크시트
-- 지질명소 확대, 사진, 그리고 명소별 접근·예약 정보
+- **북한 지역** — 지도가 휴전선 아래만 그립니다. 백두산은 이야기로만 다룹니다.
+- **화석과 광물** — 암석까지입니다. 삼엽충·공룡 발자국은 장소 안내 수준입니다.
+- **실측 자료** — 트레일 고도와 지층 경계는 개략값입니다. GPX와 측량 자료로 바꿔야 합니다.
+- **오프라인** — 산에서 데이터가 안 터질 때를 위한 저장 기능.
