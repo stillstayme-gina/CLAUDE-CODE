@@ -899,3 +899,12 @@ p{margin:0}
 .pick-sd:hover,.pick-gu:hover{color:var(--accent); border-color:var(--accent)}
 .pick-sd.is-on{color:var(--accent-ink); background:var(--accent); border-color:var(--accent); font-weight:600}
 .pick-gu{font-size:13px; padding:8px 11px; background:var(--surface-2)}
+
+.about-me{list-style:none; margin:4px 0 8px; padding:0; display:grid; gap:11px}
+.about-me li{
+  position:relative; padding-left:19px; font-size:15.6px; line-height:1.75; color:var(--text);
+}
+.about-me li::before{
+  content:""; position:absolute; left:0; top:.62em; width:7px; height:7px;
+  border-radius:2px; background:var(--accent);
+}

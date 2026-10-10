@@ -413,7 +413,9 @@ window.GC = window.GC || {};
       document.getElementById('mapFocusN').textContent = f.name || '';
       document.getElementById('mapFocusS').textContent = f.sub || '';
       document.getElementById('mapFocusD').textContent = off
-        ? '이 자리는 본토 지도 밖입니다. 지도 오른쪽 위 동해 삽도에서 확인하세요.'
+        ? (f.lng > 130
+            ? '이 자리는 본토 지도 밖입니다. 지도 오른쪽 위 동해 삽도에서 확인하세요.'
+            : '이 자리는 본토 지도 밖의 섬입니다. 지도에는 표시되지 않습니다.')
         : (f.note || '');
       bar.hidden = false;
     }
