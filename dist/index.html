@@ -887,6 +887,22 @@ p{margin:0}
 .about-limit-h{margin-top:48px; margin-bottom:16px}
 .about-src{margin-top:20px; font-size:14px; line-height:1.85; color:var(--text-2); max-width:62ch}
 .about-src a{color:var(--accent); text-decoration:underline; text-underline-offset:3px}
+
+/* ── 지역 고르기 (위치가 막혀도 두 번이면 끝) ─────────── */
+.fp-pick{margin:4px 0 18px}
+.pick-row{display:flex; flex-wrap:wrap; gap:6px}
+.pick-row--sub{
+  margin-top:10px; padding-top:12px; border-top:1px solid var(--line-soft);
+  max-height:188px; overflow-y:auto;
+}
+.pick-sd,.pick-gu{
+  cursor:pointer; border-radius:2px; transition:.15s;
+  font:500 13.5px/1 var(--f-body); padding:9px 13px;
+  color:var(--text-2); background:var(--surface); border:1px solid var(--line-soft);
+}
+.pick-sd:hover,.pick-gu:hover{color:var(--accent); border-color:var(--accent)}
+.pick-sd.is-on{color:var(--accent-ink); background:var(--accent); border-color:var(--accent); font-weight:600}
+.pick-gu{font-size:13px; padding:8px 11px; background:var(--surface-2)}
 </style>
 <header class="topbar">
   <a class="brand" href="#/" data-nav="home">
@@ -1001,6 +1017,7 @@ p{margin:0}
   </div>
   <p class="fp-status" id="fpStatus" role="status"></p>
   <div class="fp-newtab" id="fpNewTab" hidden></div>
+  <div class="fp-pick" id="fpPick"></div>
   <div class="fp-card" id="fpCard"></div>
   <p class="src-line" id="src-footprint"></p>
 </section>
@@ -1265,32 +1282,33 @@ p{margin:0}
 
   <article class="about">
     <p class="about-lead">
-      땅속을 궁금해하다가, 에너지로, 다시 경영으로 옮겨 왔습니다.
-      지금은 둘 다 아닌 일을 하지만 주말이면 여전히 산에 있습니다.
-    </p>
-
-    <p>
-      지구시스템과학을 스스로 골라 재미있게 공부했고, 땅속에 갇힌 것들이 어떻게 흐르는지가
-      궁금해 저류층의 모세관압을 모델링해 석사 학위를 받았습니다. 그렇게 에너지 회사에
-      들어갔다가, 또 다른 분야가 눈에 들어와 경영대학원을 한 번 더 마쳤습니다.
+      산에 오르면 사람들은 대개 위를 봅니다. 저는 어쩐지 자꾸 발밑이 궁금했습니다.
     </p>
     <p>
-      지금은 에너지도 지질도 아닌 일을 합니다. 그래도 새로운 곳에 서면 늘 발밑을 먼저
-      생각하게 됩니다.
+      지구시스템과학을 스스로 골라 재미있게 공부했습니다. 그러다 땅속에 갇힌 것들이
+      어떻게 움직이는지가 궁금해져서, 저류층의 모세관압을 모델링해 석사 학위를 받고
+      에너지 회사로 갔습니다. 몇 해 뒤 또 다른 세계가 눈에 들어와 경영대학원을 한 번 더
+      마쳤고, 지금은 에너지도 지질도 아닌 일을 합니다.
+    </p>
+    <p>
+      전공은 멀어졌지만 버릇은 남았습니다. 낯선 곳에 서면 저 바위는 언제 저렇게 되었을까부터
+      생각하게 됩니다. 그 버릇 덕분에 같은 산을 두 번째 오를 때가 늘 더 재미있었습니다.
     </p>
 
     <blockquote class="about-q">아는 만큼 보입니다</blockquote>
 
     <p>
-      이탈리아 돌로미티의 그 날카로운 봉우리는 백운암(Dolomite)이라는 암석이
-      유난히 단단하고 수직으로 잘 쪼개지기 때문에 생깁니다.
-      우리는 사실 암석의 성질을 보러 거기까지 간 것입니다.
+      많이들 찾는 이탈리아 돌로미티의 그 날카로운 봉우리는, 백운암(Dolomite)이라는 암석이
+      유난히 단단하고 수직으로 잘 쪼개지기 때문에 생깁니다. 우리는 사진을 찍으러 간다고
+      생각하지만, 사실은 암석의 성질을 보러 거기까지 간 것입니다.
     </p>
     <p>
-      동네 뒷산도 같은 원리로 지금의 모양이 되었습니다. 다만 무엇을 봐야 할지 모를 뿐입니다.
+      동네 뒷산도 다르지 않습니다. 둥근 능선에도, 깎아지른 절벽에도 그렇게 된 이유가 있습니다.
+      다만 아무도 알려주지 않았을 뿐입니다.
     </p>
     <p class="about-close">
-      그냥 지나치지 마시라고, 알게 된 것을 나누고 싶어서 이 페이지를 만듭니다.
+      그래서 그냥 지나치지 마시라고, 제가 알게 된 것을 여기 꺼내 둡니다.
+      다음에 산에 오르실 때 한 가지만 더 보이면, 그걸로 충분합니다.
     </p>
 
     <div class="about-how">
@@ -3337,7 +3355,47 @@ GC.peaks = [
 ['용눈이오름',248,'제주',126.8300,33.4500],['거문오름',456,'제주',126.7200,33.4600],
 ['어승생악',1169,'제주',126.4900,33.3900],['다랑쉬오름',382,'제주',126.8400,33.4600],
 ['물영아리오름',508,'제주',126.7100,33.3400],['군산오름',334,'제주',126.3700,33.2500],
-['성인봉',984,'경북',130.8656,37.5011]
+['성인봉',984,'경북',130.8656,37.5011],
+/* 동네 산 — 도시 가까이, 주말마다 사람이 오르는 곳들 */
+['안산',296,'서울',126.9550,37.5770],['북악산',342,'서울',126.9810,37.5980],
+['용마산',348,'서울',127.0950,37.5770],['대모산',293,'서울',127.0750,37.4700],
+['구룡산',306,'서울',127.0600,37.4660],['우면산',293,'서울',127.0100,37.4720],
+['봉산',208,'서울',126.9050,37.6100],['개운산',134,'서울',127.0220,37.5950],
+['응봉산',95,'서울',127.0350,37.5470],['봉화산',160,'서울',127.0900,37.6150],
+['백양산',642,'부산',129.0200,35.1850],['금련산',415,'부산',129.1100,35.1550],
+['승학산',497,'부산',128.9850,35.1200],['구덕산',562,'부산',129.0000,35.1100],
+['엄광산',504,'부산',129.0150,35.1350],
+['앞산',660,'대구',128.5700,35.8180],['함지산',287,'대구',128.5650,35.9350],
+['와룡산',300,'대구',128.5200,35.8850],['용지봉',629,'대구',128.6600,35.8000],
+['문학산',213,'인천',126.6650,37.4370],['청량산',172,'인천',126.6700,37.4180],
+['만월산',187,'인천',126.7200,37.4700],
+['어등산',290,'광주',126.7750,35.1750],['금당산',304,'광주',126.8700,35.1300],
+['분적산',415,'광주',126.9000,35.1000],
+['보문산',457,'대전',127.4050,36.3000],['식장산',598,'대전',127.4700,36.3100],
+['계족산',429,'대전',127.4300,36.3950],['장태산',374,'대전',127.3300,36.2350],
+['문수산',600,'울산',129.2550,35.5400],['무룡산',452,'울산',129.3800,35.5900],
+['소래산',299,'인천',126.7750,37.4550],['원미산',167,'경기',126.7900,37.5100],
+['왕방산',737,'경기',127.1100,37.8800],['불곡산',470,'경기',127.0500,37.8250],
+['모락산',385,'경기',126.9750,37.3700],['수암봉',395,'경기',126.8800,37.3450],
+['검단산',657,'경기',127.2350,37.5400],['예봉산',683,'경기',127.2600,37.5700],
+['운길산',610,'경기',127.3100,37.5700],['무갑산',578,'경기',127.3000,37.4300],
+['앵자봉',667,'경기',127.3600,37.4000],
+['봉의산',302,'강원',127.7300,37.8850],['금병산',652,'강원',127.7600,37.8050],
+['대룡산',899,'강원',127.7900,37.8550],['구봉산',441,'강원',127.7600,37.8400],
+['우암산',353,'충북',127.5000,36.6400],['부모산',232,'충북',127.4200,36.6400],
+['봉수산',534,'충남',126.9300,36.6900],['팔봉산',362,'충남',126.4100,36.7200],
+['성흥산',268,'충남',126.8800,36.2300],
+['건지산',99,'전북',127.1300,35.8550],['기린봉',271,'전북',127.1650,35.8150],
+['고덕산',603,'전북',127.1950,35.7600],
+['금성산',451,'전남',126.7150,35.0450],['병풍산',822,'전남',126.9300,35.2800],
+['삼인산',581,'전남',126.9500,35.2700],
+['비봉산',579,'경북',128.3550,36.1300],['천생산',407,'경북',128.4200,36.1450],
+['오봉산',235,'경북',128.7000,36.5600],
+['장복산',582,'경남',128.6500,35.1450],['비음산',510,'경남',128.7400,35.2600],
+['천주산',639,'경남',128.6200,35.2800],['굴암산',662,'경남',128.8300,35.1700],
+['사라봉',148,'제주',126.5450,33.5200],['별도봉',136,'제주',126.5580,33.5150],
+['고근산',396,'제주',126.5300,33.2750],['영주산',326,'제주',126.8050,33.4000],
+['노꼬메오름',834,'제주',126.3950,33.3900],['금오름',428,'제주',126.3050,33.3550]
 ];
 
 GC.peakNote =
@@ -4054,6 +4112,7 @@ window.GC = window.GC || {};
         return;
       }
       status.textContent = '';
+      GC.store.set('lastRegion', r[0]);
       GC.showFootprint(r[0], r[1], r[2]);
       if (thenGo) GC.go('footprint');
     }
@@ -4140,6 +4199,52 @@ window.GC = window.GC || {};
     });
   }
 
+  /* 시·도 → 시·군·구 두 단계. 위치 권한이 막힌 환경에서도 두 번만 누르면 됩니다 */
+  function initPicker() {
+    var host = document.getElementById('fpPick');
+    if (!host) return;
+    var ORDER = ['서울', '인천', '경기', '강원', '충북', '충남', '대전', '세종',
+                 '전북', '전남', '광주', '경북', '대구', '경남', '부산', '울산', '제주'];
+    var groups = {};
+    GC.regions.forEach(function (r) {
+      var sd = r[0].split(' ')[0].replace('특별자치시', '').replace('특별자치도', '');
+      (groups[sd] = groups[sd] || []).push(r);
+    });
+    var avail = ORDER.filter(function (k) { return groups[k]; });
+    var openSd = GC.store.get('lastSido', null);
+
+    function draw() {
+      host.innerHTML =
+        '<div class="pick-row">' + avail.map(function (k) {
+          return '<button type="button" class="pick-sd' + (k === openSd ? ' is-on' : '') +
+            '" data-sd="' + k + '">' + esc(k) + '</button>';
+        }).join('') + '</div>' +
+        (openSd ? '<div class="pick-row pick-row--sub">' + groups[openSd].map(function (r) {
+          return '<button type="button" class="pick-gu" data-r="' + esc(r[0]) + '">' +
+            esc(r[0].split(' ').slice(1).join(' ') || r[0]) + '</button>';
+        }).join('') + '</div>' : '');
+
+      Array.prototype.forEach.call(host.querySelectorAll('.pick-sd'), function (b) {
+        b.addEventListener('click', function () {
+          openSd = (openSd === b.getAttribute('data-sd')) ? null : b.getAttribute('data-sd');
+          GC.store.set('lastSido', openSd);
+          draw();
+        });
+      });
+      Array.prototype.forEach.call(host.querySelectorAll('.pick-gu'), function (b) {
+        b.addEventListener('click', function () {
+          var name = b.getAttribute('data-r');
+          var r = GC.regions.filter(function (x) { return x[0] === name; })[0];
+          if (!r) return;
+          GC.store.set('lastRegion', name);
+          GC.showFootprint(r[0], r[1], r[2]);
+          document.getElementById('fpCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    }
+    draw();
+  }
+
   GC.initFootprint = function () {
     var list = document.getElementById('fpList');
     GC.regions.forEach(function (r) {
@@ -4150,9 +4255,13 @@ window.GC = window.GC || {};
 
     bind('hm', true);
     bind('fp', false);
+    initPicker();
 
     /* 빈 화면으로 시작하지 않도록 예시 하나 */
-    var seed = GC.regions.filter(function (x) { return x[0] === '서울 종로구'; })[0] || GC.regions[0];
+    var last = GC.store.get('lastRegion', null);
+    var seed = (last && GC.regions.filter(function (x) { return x[0] === last; })[0]) ||
+               GC.regions.filter(function (x) { return x[0] === '서울 종로구'; })[0] ||
+               GC.regions[0];
     document.getElementById('fpRegion').value = seed[0];
     GC.showFootprint(seed[0], seed[1], seed[2]);
 

@@ -883,3 +883,19 @@ p{margin:0}
 .about-limit-h{margin-top:48px; margin-bottom:16px}
 .about-src{margin-top:20px; font-size:14px; line-height:1.85; color:var(--text-2); max-width:62ch}
 .about-src a{color:var(--accent); text-decoration:underline; text-underline-offset:3px}
+
+/* ── 지역 고르기 (위치가 막혀도 두 번이면 끝) ─────────── */
+.fp-pick{margin:4px 0 18px}
+.pick-row{display:flex; flex-wrap:wrap; gap:6px}
+.pick-row--sub{
+  margin-top:10px; padding-top:12px; border-top:1px solid var(--line-soft);
+  max-height:188px; overflow-y:auto;
+}
+.pick-sd,.pick-gu{
+  cursor:pointer; border-radius:2px; transition:.15s;
+  font:500 13.5px/1 var(--f-body); padding:9px 13px;
+  color:var(--text-2); background:var(--surface); border:1px solid var(--line-soft);
+}
+.pick-sd:hover,.pick-gu:hover{color:var(--accent); border-color:var(--accent)}
+.pick-sd.is-on{color:var(--accent-ink); background:var(--accent); border-color:var(--accent); font-weight:600}
+.pick-gu{font-size:13px; padding:8px 11px; background:var(--surface-2)}

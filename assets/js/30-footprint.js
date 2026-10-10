@@ -110,6 +110,7 @@ window.GC = window.GC || {};
         return;
       }
       status.textContent = '';
+      GC.store.set('lastRegion', r[0]);
       GC.showFootprint(r[0], r[1], r[2]);
       if (thenGo) GC.go('footprint');
     }
@@ -196,6 +197,52 @@ window.GC = window.GC || {};
     });
   }
 
+  /* 시·도 → 시·군·구 두 단계. 위치 권한이 막힌 환경에서도 두 번만 누르면 됩니다 */
+  function initPicker() {
+    var host = document.getElementById('fpPick');
+    if (!host) return;
+    var ORDER = ['서울', '인천', '경기', '강원', '충북', '충남', '대전', '세종',
+                 '전북', '전남', '광주', '경북', '대구', '경남', '부산', '울산', '제주'];
+    var groups = {};
+    GC.regions.forEach(function (r) {
+      var sd = r[0].split(' ')[0].replace('특별자치시', '').replace('특별자치도', '');
+      (groups[sd] = groups[sd] || []).push(r);
+    });
+    var avail = ORDER.filter(function (k) { return groups[k]; });
+    var openSd = GC.store.get('lastSido', null);
+
+    function draw() {
+      host.innerHTML =
+        '<div class="pick-row">' + avail.map(function (k) {
+          return '<button type="button" class="pick-sd' + (k === openSd ? ' is-on' : '') +
+            '" data-sd="' + k + '">' + esc(k) + '</button>';
+        }).join('') + '</div>' +
+        (openSd ? '<div class="pick-row pick-row--sub">' + groups[openSd].map(function (r) {
+          return '<button type="button" class="pick-gu" data-r="' + esc(r[0]) + '">' +
+            esc(r[0].split(' ').slice(1).join(' ') || r[0]) + '</button>';
+        }).join('') + '</div>' : '');
+
+      Array.prototype.forEach.call(host.querySelectorAll('.pick-sd'), function (b) {
+        b.addEventListener('click', function () {
+          openSd = (openSd === b.getAttribute('data-sd')) ? null : b.getAttribute('data-sd');
+          GC.store.set('lastSido', openSd);
+          draw();
+        });
+      });
+      Array.prototype.forEach.call(host.querySelectorAll('.pick-gu'), function (b) {
+        b.addEventListener('click', function () {
+          var name = b.getAttribute('data-r');
+          var r = GC.regions.filter(function (x) { return x[0] === name; })[0];
+          if (!r) return;
+          GC.store.set('lastRegion', name);
+          GC.showFootprint(r[0], r[1], r[2]);
+          document.getElementById('fpCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    }
+    draw();
+  }
+
   GC.initFootprint = function () {
     var list = document.getElementById('fpList');
     GC.regions.forEach(function (r) {
@@ -206,9 +253,13 @@ window.GC = window.GC || {};
 
     bind('hm', true);
     bind('fp', false);
+    initPicker();
 
     /* 빈 화면으로 시작하지 않도록 예시 하나 */
-    var seed = GC.regions.filter(function (x) { return x[0] === '서울 종로구'; })[0] || GC.regions[0];
+    var last = GC.store.get('lastRegion', null);
+    var seed = (last && GC.regions.filter(function (x) { return x[0] === last; })[0]) ||
+               GC.regions.filter(function (x) { return x[0] === '서울 종로구'; })[0] ||
+               GC.regions[0];
     document.getElementById('fpRegion').value = seed[0];
     GC.showFootprint(seed[0], seed[1], seed[2]);
 
