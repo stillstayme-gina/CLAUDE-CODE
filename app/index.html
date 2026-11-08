@@ -1,269 +1,471 @@
 <title>주말아이길</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Gaegu:wght@700&family=Gowun+Dodum&display=swap">
 <style>
-/* 레이아웃: 한 열 모바일 앱. 상단 연령 선택 → 탭(루트/장소) → 카드 목록 */
+/* 레이아웃: 스티커북 느낌의 한 열 모바일 앱. 하늘 배경 → 헤더(해·구름) → 나이 → 서울 지도 → 탭(추천/만들기/장소) → 스티커 카드 */
 :root{
-  --bg:#F3F6F2; --surface:#FFFFFF; --fg:#1E2A24; --muted:#5E6F66; --line:#DCE4DD;
-  --accent:#2E7D5B; --accent-soft:#DDEFE5; --sun:#F2B632; --sun-soft:#FDF1D3;
-  --yes:#2E7D5B; --no:#B4483A; --no-soft:#F7E1DD;
-  --display:"Jua","Noto Sans KR",system-ui,sans-serif;
-  --body:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo",sans-serif;
+  --bg:#E6F4FF; --paper:#FFFFFF; --ink:#22314D; --muted:#5C6B85; --shadow:#22314D;
+  --sun:#FFC83D; --tomato:#FF6B57; --grass:#33B36B; --sky:#3A9BEF; --grape:#9B7BE8; --peach:#FFD9C7;
+  --sun-soft:#FFF1C7; --grass-soft:#D8F3E3; --sky-soft:#D6EBFF; --tomato-soft:#FFE0DA; --grape-soft:#EAE2FF;
+  --river:#7CC4F7;
+  --display:"Jua","Gowun Dodum",system-ui,sans-serif;
+  --hand:"Gaegu","Jua",system-ui,sans-serif;
+  --body:"Gowun Dodum",system-ui,-apple-system,"Apple SD Gothic Neo",sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#121915; --surface:#1B241F; --fg:#E7EFE9; --muted:#9BB0A4; --line:#2B3831;
-  --accent:#6FCB9F; --accent-soft:#1F3A2D; --sun:#F2C55C; --sun-soft:#3A3120;
-  --yes:#6FCB9F; --no:#E88C7E; --no-soft:#3D2520; color-scheme:dark}}
+  --bg:#13203A; --paper:#1D2B48; --ink:#EEF3FF; --muted:#A9B6D3; --shadow:#0A1224;
+  --sun:#FFCF57; --tomato:#FF8A78; --grass:#57CC8A; --sky:#6DB6F5; --grape:#B49CF0; --peach:#5A3B33;
+  --sun-soft:#3D3720; --grass-soft:#1C3A2E; --sky-soft:#1D3456; --tomato-soft:#47292A; --grape-soft:#2F2850;
+  --river:#2F6EA8; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#121915; --surface:#1B241F; --fg:#E7EFE9; --muted:#9BB0A4; --line:#2B3831;
-  --accent:#6FCB9F; --accent-soft:#1F3A2D; --sun:#F2C55C; --sun-soft:#3A3120;
-  --yes:#6FCB9F; --no:#E88C7E; --no-soft:#3D2520; color-scheme:dark}
+  --bg:#13203A; --paper:#1D2B48; --ink:#EEF3FF; --muted:#A9B6D3; --shadow:#0A1224;
+  --sun:#FFCF57; --tomato:#FF8A78; --grass:#57CC8A; --sky:#6DB6F5; --grape:#B49CF0; --peach:#5A3B33;
+  --sun-soft:#3D3720; --grass-soft:#1C3A2E; --sky-soft:#1D3456; --tomato-soft:#47292A; --grape-soft:#2F2850;
+  --river:#2F6EA8; color-scheme:dark}
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.55}
-.wrap{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px;display:flex;flex-direction:column;gap:18px}
-header h1{font-family:var(--display);font-weight:400;font-size:30px;margin:0;line-height:1.2;text-wrap:balance}
-header p{margin:4px 0 0;color:var(--muted);font-size:14px}
-.label{font-size:12px;letter-spacing:.06em;color:var(--muted);font-weight:700;margin-bottom:8px}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{font:inherit;font-size:14px;border:1.5px solid var(--line);background:var(--surface);color:var(--fg);padding:8px 14px;border-radius:999px;cursor:pointer}
-.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:700}
-.chip:focus-visible,.btn:focus-visible,.tab:focus-visible,a:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
-.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.tabs{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px}
-.tab{font:inherit;flex:1;border:0;background:transparent;color:var(--muted);padding:9px;border-radius:9px;cursor:pointer;font-weight:500}
-.tab[aria-selected="true"]{background:var(--accent-soft);color:var(--fg);font-weight:700}
-.toggle{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
-.toggle input{width:18px;height:18px;accent-color:var(--accent)}
-.list{display:flex;flex-direction:column;gap:14px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
-.card h2{font-family:var(--display);font-weight:400;font-size:21px;margin:0;line-height:1.3}
-.meta{display:flex;flex-wrap:wrap;gap:6px}
-.tag{font-size:12px;padding:3px 8px;border-radius:6px;background:var(--accent-soft);color:var(--fg)}
-.tag.sun{background:var(--sun-soft)}
-.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0}
-.steps li{display:grid;grid-template-columns:52px 1fr;gap:10px;padding:8px 0;border-top:1px dashed var(--line)}
-.steps li:first-child{border-top:0}
-.time{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:2px}
-.steps b{font-weight:700}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;
+  background-image:radial-gradient(circle at 1px 1px, color-mix(in srgb,var(--sky) 22%,transparent) 1.5px, transparent 0);background-size:22px 22px}
+.wrap{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px 56px;display:flex;flex-direction:column;gap:20px}
+button{font:inherit;color:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px dashed var(--tomato);outline-offset:3px}
+
+/* 헤더 */
+.hero{position:relative;background:var(--sun);border:3px solid var(--ink);border-radius:28px;box-shadow:5px 5px 0 var(--shadow);padding:20px 20px 18px;overflow:hidden}
+.hero svg{position:absolute;right:-6px;top:-6px;width:130px;height:auto}
+.hero h1{font-family:var(--display);font-weight:400;font-size:40px;line-height:1.05;margin:0;color:#22314D;position:relative}
+.hero p{font-family:var(--hand);font-size:19px;margin:8px 0 0;color:#22314D;position:relative;max-width:calc(100% - 100px);line-height:1.25}
+
+.sec-title{font-family:var(--display);font-size:20px;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+.sec-title .dot{width:14px;height:14px;border-radius:50%;border:2.5px solid var(--ink);background:var(--grass)}
+
+/* 나이 스티커 */
+.ages{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.age{border:3px solid var(--ink);border-radius:20px;background:var(--paper);padding:10px 4px 8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;box-shadow:3px 3px 0 var(--shadow);transition:transform .12s}
+.age .face{font-size:30px;line-height:1}
+.age b{font-family:var(--display);font-weight:400;font-size:17px}
+.age small{font-family:var(--hand);font-size:15px;color:var(--muted)}
+.age[aria-pressed="true"]{background:var(--c);transform:translate(-2px,-2px) rotate(-2deg);box-shadow:5px 5px 0 var(--shadow)}
+.age[aria-pressed="true"] small,.age[aria-pressed="true"] b{color:#22314D}
+
+/* 지도 */
+.mapbox{background:var(--paper);border:3px solid var(--ink);border-radius:24px;box-shadow:4px 4px 0 var(--shadow);padding:10px}
+.mapbox svg{width:100%;height:auto;display:block}
+.zone{cursor:pointer}
+.zone path{stroke:var(--ink);stroke-width:2.5;transition:transform .15s}
+.zone text{font-family:var(--display);font-size:15px;fill:#22314D;pointer-events:none}
+.zone .cnt{font-family:var(--hand);font-size:13px}
+.zone[aria-pressed="true"] path{stroke-width:5}
+.zone:focus-visible path{stroke:var(--tomato);stroke-dasharray:6 4}
+.river{fill:none;stroke:var(--river);stroke-width:14;stroke-linecap:round}
+.regions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.rchip{border:2.5px solid var(--ink);background:var(--paper);border-radius:999px;padding:6px 13px;cursor:pointer;font-family:var(--display);font-size:15px}
+.rchip[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+
+/* 탭 */
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tab{border:3px solid var(--ink);border-radius:16px;background:var(--paper);padding:10px 4px;cursor:pointer;font-family:var(--display);font-size:16px}
+.tab[aria-selected="true"]{background:var(--tomato);color:#fff;box-shadow:3px 3px 0 var(--shadow)}
+.rain{display:flex;align-items:center;gap:8px;font-family:var(--hand);font-size:19px;cursor:pointer;width:max-content}
+.rain input{width:22px;height:22px;accent-color:var(--sky)}
+
+/* 카드 */
+.list{display:flex;flex-direction:column;gap:18px}
+.card{background:var(--paper);border:3px solid var(--ink);border-radius:24px;box-shadow:5px 5px 0 var(--shadow);padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0;position:relative}
+.card:nth-child(4n+1){--tone:var(--sun-soft)} .card:nth-child(4n+2){--tone:var(--grass-soft)}
+.card:nth-child(4n+3){--tone:var(--sky-soft)} .card:nth-child(4n){--tone:var(--grape-soft)}
+.card-top{display:flex;gap:12px;align-items:center}
+.badge{flex:none;width:54px;height:54px;border-radius:50%;border:3px solid var(--ink);background:var(--tone,var(--sun-soft));display:grid;place-items:center;font-size:28px;transform:rotate(-6deg)}
+.card h2{font-family:var(--display);font-weight:400;font-size:22px;margin:0;line-height:1.25;text-wrap:balance}
+.card .sub{font-family:var(--hand);font-size:17px;color:var(--muted);margin:0;line-height:1.2}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:12.5px;padding:3px 9px;border-radius:999px;border:2px solid var(--ink);background:var(--paper)}
+.tag.in{background:var(--sky-soft)} .tag.out{background:var(--grass-soft)} .tag.free{background:var(--sun-soft)} .tag.book{background:var(--tomato-soft)}
+.steps{list-style:none;margin:0;padding:0 0 0 6px;display:flex;flex-direction:column;position:relative}
+.steps::before{content:"";position:absolute;left:31px;top:14px;bottom:14px;border-left:3px dotted var(--muted)}
+.steps li{display:grid;grid-template-columns:52px 1fr;gap:10px;padding:6px 0;position:relative;align-items:start}
+.time{font-family:var(--hand);font-size:16px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;text-align:center;font-variant-numeric:tabular-nums;position:relative;z-index:1;line-height:1.5}
+.steps b{font-weight:700;font-size:15.5px}
 .steps small{display:block;color:var(--muted);font-size:13px}
-.meal{background:var(--sun-soft);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px}
-.meal-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;flex-wrap:wrap}
-.meal-head b{font-size:15px}
-.status{display:flex;flex-wrap:wrap;gap:6px;font-size:12px}
-.pill{padding:3px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface);white-space:nowrap}
-.pill.yes{color:var(--yes);border-color:var(--yes)}
-.pill.no{color:var(--no);border-color:var(--no)}
+.meal{background:var(--peach);border:2.5px dashed var(--ink);border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:9px}
+.meal-head{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
+.meal-head b{font-family:var(--display);font-weight:400;font-size:17px}
+.pills{display:flex;flex-wrap:wrap;gap:6px;font-size:12.5px}
+.pill{padding:2px 9px;border-radius:999px;background:var(--paper);border:2px solid var(--ink);white-space:nowrap}
+.pill.yes{background:var(--grass);color:#fff} .pill.no{background:var(--tomato);color:#fff}
 .vote{display:flex;gap:8px;flex-wrap:wrap}
-.btn{font:inherit;font-size:13px;border:1.5px solid var(--line);background:var(--surface);color:var(--fg);padding:7px 12px;border-radius:10px;cursor:pointer}
-.btn.on-yes{border-color:var(--yes);color:var(--yes);font-weight:700}
-.btn.on-no{border-color:var(--no);background:var(--no-soft);color:var(--no);font-weight:700}
-.btn[disabled]{opacity:.5;cursor:not-allowed}
-a.link{color:var(--accent);font-size:13px;font-weight:500}
-.note{font-size:12px;color:var(--muted);margin:0}
-.empty{color:var(--muted);text-align:center;padding:24px 0}
-footer{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+.btn{border:2.5px solid var(--ink);background:var(--paper);padding:6px 12px;border-radius:14px;cursor:pointer;font-family:var(--display);font-size:14.5px;box-shadow:2px 2px 0 var(--shadow)}
+.btn:active{transform:translate(2px,2px);box-shadow:none}
+.btn.on-yes{background:var(--grass);color:#fff} .btn.on-no{background:var(--tomato);color:#fff}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn.big{font-size:16px;padding:9px 14px}
+a.link{color:var(--sky);font-family:var(--display);font-size:14px;text-decoration:none;border-bottom:2px solid currentColor}
+.note{font-size:12.5px;color:var(--muted);margin:0}
+.empty{font-family:var(--hand);font-size:20px;color:var(--muted);text-align:center;padding:20px 8px;border:3px dashed var(--muted);border-radius:22px}
+
+/* 코스 만들기 */
+.builder{background:var(--sun-soft);border:3px solid var(--ink);border-radius:24px;padding:14px;display:flex;flex-direction:column;gap:12px;box-shadow:5px 5px 0 var(--shadow)}
+.builder h3{font-family:var(--display);font-weight:400;font-size:20px;margin:0}
+.slots{display:flex;flex-direction:column;gap:8px}
+.slot{display:flex;align-items:center;gap:10px;background:var(--paper);border:2.5px solid var(--ink);border-radius:16px;padding:8px 10px}
+.slot .n{flex:none;width:28px;height:28px;border-radius:50%;background:var(--tomato);color:#fff;display:grid;place-items:center;font-family:var(--display)}
+.slot .t{flex:1;min-width:0}
+.slot .t b{display:block}
+.slot .t small{color:var(--muted);font-size:12.5px}
+.x{border:2px solid var(--ink);background:var(--paper);border-radius:10px;width:32px;height:32px;cursor:pointer;font-family:var(--display)}
+.pick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.pcard{border:2.5px solid var(--ink);border-radius:18px;background:var(--paper);padding:10px;display:flex;flex-direction:column;gap:4px;cursor:pointer;text-align:left;min-width:0;box-shadow:3px 3px 0 var(--shadow)}
+.pcard .em{font-size:26px;line-height:1}
+.pcard b{font-family:var(--display);font-weight:400;font-size:15.5px;line-height:1.25}
+.pcard small{color:var(--muted);font-size:12px}
+.pcard[aria-pressed="true"]{background:var(--grass-soft);box-shadow:none;transform:translate(2px,2px)}
+.pcard[aria-pressed="true"] .em::after{content:" ✔"; font-size:18px;color:var(--grass)}
+footer{font-size:12.5px;color:var(--muted);text-align:center;padding:4px 8px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
 <div class="wrap">
-  <header>
+  <header class="hero">
+    <svg viewBox="0 0 140 120" aria-hidden="true">
+      <g stroke="#22314D" stroke-width="3" stroke-linecap="round">
+        <line x1="95" y1="8" x2="95" y2="20"/><line x1="95" y1="70" x2="95" y2="82"/>
+        <line x1="58" y1="45" x2="70" y2="45"/><line x1="120" y1="45" x2="132" y2="45"/>
+        <line x1="69" y1="19" x2="77" y2="27"/><line x1="113" y1="63" x2="121" y2="71"/>
+        <line x1="121" y1="19" x2="113" y2="27"/><line x1="77" y1="63" x2="69" y2="71"/>
+      </g>
+      <circle cx="95" cy="45" r="20" fill="#FFF3B0" stroke="#22314D" stroke-width="3"/>
+      <circle cx="88" cy="42" r="2.5" fill="#22314D"/><circle cx="102" cy="42" r="2.5" fill="#22314D"/>
+      <path d="M87 51 q8 7 16 0" fill="none" stroke="#22314D" stroke-width="3" stroke-linecap="round"/>
+      <path d="M40 104 q-14 0 -12 -12 q2 -10 13 -8 q4 -12 18 -9 q12 2 11 14 q10 0 9 9 q-1 7 -10 6 z" fill="#fff" stroke="#22314D" stroke-width="3"/>
+    </svg>
     <h1>주말아이길</h1>
-    <p>서울·근교, 아이 나이에 맞는 주말 하루 코스</p>
+    <p>이번 주말엔 어디 갈까?<br>아이랑 걷는 서울 하루</p>
   </header>
 
   <section>
-    <div class="label">아이 나이</div>
-    <div class="chips" id="ages" role="group" aria-label="아이 나이"></div>
+    <h2 class="sec-title"><span class="dot"></span>우리 아이는 몇 살?</h2>
+    <div class="ages" id="ages" role="group" aria-label="아이 나이"></div>
   </section>
 
-  <div class="row">
-    <div class="tabs" role="tablist" style="flex:1;min-width:220px">
-      <button class="tab" role="tab" id="tab-routes" aria-selected="true">추천 루트</button>
-      <button class="tab" role="tab" id="tab-places" aria-selected="false">장소 전체</button>
+  <section>
+    <h2 class="sec-title"><span class="dot" style="background:var(--sky)"></span>어느 동네로 갈까?</h2>
+    <div class="mapbox">
+      <svg viewBox="0 0 340 240" id="map" role="group" aria-label="서울 지역 선택"></svg>
+      <div class="regions" id="regions"></div>
     </div>
-    <label class="toggle"><input type="checkbox" id="indoor"> 비 오는 날(실내만)</label>
+  </section>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tab-routes">추천 코스</button>
+    <button class="tab" role="tab" id="tab-build">코스 만들기</button>
+    <button class="tab" role="tab" id="tab-places">장소 보기</button>
   </div>
+  <label class="rain"><input type="checkbox" id="indoor"> ☔ 비 오는 날이라 실내만</label>
 
   <div class="list" id="list"></div>
 
-  <footer>
-    식당 평점과 유아의자 정보는 아직 확인 전입니다. 직접 가 보신 분이 "유아의자 있어요/없어요"를 눌러 주시면 다른 부모님께 바로 보입니다.
-    운영시간·예약은 방문 전 각 장소 공식 사이트에서 확인하세요.
-  </footer>
+  <footer>식당 평점과 유아의자는 아직 확인 전이에요. 다녀온 분이 "유아의자 있어요/없어요"를 눌러주면 다른 부모님께도 바로 보여요.<br>운영시간·예약은 각 장소 공식 사이트에서 꼭 확인하세요.</footer>
 </div>
 
 <script>
 const AGES=[
-  {id:"toddler",label:"3세 이하",min:0,max:36},
-  {id:"preschool",label:"3~6세",min:36,max:84},
-  {id:"lowerElem",label:"7~10세",min:84,max:131}
+  {id:"toddler",label:"3세 이하",face:"👶",hint:"유모차 OK",min:0,max:36,c:"var(--sun)"},
+  {id:"preschool",label:"3~6세",face:"🧒",hint:"뛰어놀기",min:36,max:84,c:"var(--grass)"},
+  {id:"lowerElem",label:"7~10세",face:"🎒",hint:"초등 저학년",min:84,max:131,c:"var(--sky)"}
 ];
-const PLACES={
-  "seoul-botanic-park":{name:"서울식물원",area:"서울 강서(마곡)",indoor:true,min:0,max:131,tags:["유모차","온실"]},
-  "seoul-forest":{name:"서울숲",area:"서울 성동",indoor:false,min:0,max:131,tags:["유모차","꽃사슴"]},
-  "lotteworld-aquarium":{name:"롯데월드 아쿠아리움",area:"서울 송파(잠실)",indoor:true,min:0,max:131,tags:["수족관","수유실"]},
-  "seoul-sangsang-nara":{name:"서울상상나라",area:"서울 광진",indoor:true,min:0,max:96,tags:["영유아놀이","예약"]},
-  "seoul-childrens-grand-park":{name:"서울어린이대공원",area:"서울 광진",indoor:false,min:24,max:131,tags:["동물원","무료"]},
-  "nmk-childrens-museum":{name:"국립중앙박물관 어린이박물관",area:"서울 용산",indoor:true,min:36,max:131,tags:["체험","예약"]},
-  "kidzania-seoul":{name:"키자니아 서울",area:"서울 송파(잠실)",indoor:true,min:36,max:131,tags:["직업체험"]},
-  "seoul-grand-park":{name:"서울대공원 동물원",area:"경기 과천",indoor:false,min:24,max:131,tags:["동물원","코끼리열차"]},
-  "mmca-gwacheon-kids":{name:"국립현대미술관 과천 어린이미술관",area:"경기 과천",indoor:true,min:36,max:131,tags:["미술"]},
-  "gwacheon-science":{name:"국립과천과학관",area:"경기 과천",indoor:true,min:36,max:131,tags:["과학","천체투영관"]},
-  "gyeonggi-childrens-museum":{name:"경기도어린이박물관",area:"경기 용인",indoor:true,min:24,max:120,tags:["체험","예약"]},
-  "aviation-museum":{name:"국립항공박물관",area:"서울 강서",indoor:true,min:60,max:131,tags:["비행기"]},
-  "seoul-science-center":{name:"서울시립과학관",area:"서울 노원",indoor:true,min:72,max:131,tags:["과학"]},
-  "seodaemun-natural-history":{name:"서대문자연사박물관",area:"서울 서대문",indoor:true,min:48,max:131,tags:["공룡"]},
-  "koreajobworld":{name:"한국잡월드",area:"경기 성남(분당)",indoor:true,min:48,max:131,tags:["직업체험","예약"]}
+const REGIONS=[
+  {id:"all",label:"전체"},
+  {id:"nw",label:"서북권",gu:"마포·서대문·은평",fill:"var(--grape-soft)"},
+  {id:"center",label:"도심권",gu:"종로·중구·용산",fill:"var(--sun-soft)"},
+  {id:"ne",label:"동북권",gu:"성동·광진·노원 등",fill:"var(--grass-soft)"},
+  {id:"sw",label:"서남권",gu:"강서·영등포·동작 등",fill:"var(--sky-soft)"},
+  {id:"se",label:"동남권",gu:"강남·송파·강동",fill:"var(--tomato-soft)"},
+  {id:"gg",label:"경기 근교",gu:"과천·용인·성남·포천",fill:"var(--peach)"}
+];
+// 장소: r=권역, gu=구, in=실내, min/max=권장 개월 수
+const P={
+ "nmk-kids":{n:"국립중앙박물관 어린이박물관",e:"🏺",r:"center",gu:"용산",in:1,min:36,max:131,t:["국립","예약","무료"]},
+ "hangeul":{n:"국립한글박물관 한글놀이터",e:"🔤",r:"center",gu:"용산",in:1,min:36,max:131,t:["국립","예약","무료"]},
+ "war-kids":{n:"전쟁기념관 어린이박물관",e:"🚁",r:"center",gu:"용산",in:1,min:36,max:131,t:["예약","무료"]},
+ "yongsan-park":{n:"용산가족공원",e:"🌳",r:"center",gu:"용산",in:0,min:0,max:131,t:["유모차","무료"]},
+ "ichon-hangang":{n:"이촌한강공원",e:"🚲",r:"center",gu:"용산",in:0,min:0,max:131,t:["유모차","무료"]},
+ "folk-kids":{n:"국립민속박물관 어린이박물관",e:"🎎",r:"center",gu:"종로",in:1,min:36,max:131,t:["국립","예약","무료"]},
+ "gyeongbok":{n:"경복궁",e:"🏯",r:"center",gu:"종로",in:0,min:24,max:131,t:["궁궐"]},
+ "palace-museum":{n:"국립고궁박물관",e:"👑",r:"center",gu:"종로",in:1,min:60,max:131,t:["국립","무료"]},
+ "kids-science":{n:"국립어린이과학관",e:"🔬",r:"center",gu:"종로(혜화)",in:1,min:36,max:131,t:["국립","예약"]},
+ "history-museum":{n:"대한민국역사박물관",e:"📜",r:"center",gu:"종로",in:1,min:72,max:131,t:["국립","무료"]},
+ "seoul-history":{n:"서울역사박물관",e:"🏙️",r:"center",gu:"종로",in:1,min:60,max:131,t:["무료"]},
+ "namsan":{n:"남산 케이블카·N서울타워",e:"🚡",r:"center",gu:"중구·용산",in:0,min:36,max:131,t:["전망"]},
+ "natural-history":{n:"서대문자연사박물관",e:"🦕",r:"nw",gu:"서대문",in:1,min:36,max:131,t:["공룡"]},
+ "worldcup-park":{n:"월드컵공원·하늘공원",e:"🌾",r:"nw",gu:"마포",in:0,min:24,max:131,t:["무료","억새"]},
+ "seoul-ship":{n:"서울함공원",e:"⚓",r:"nw",gu:"마포(망원)",in:0,min:48,max:131,t:["군함"]},
+ "mangwon-hangang":{n:"망원한강공원",e:"🛝",r:"nw",gu:"마포",in:0,min:0,max:131,t:["유모차","무료"]},
+ "botanic":{n:"서울식물원",e:"🌵",r:"sw",gu:"강서(마곡)",in:1,min:0,max:131,t:["유모차","온실"]},
+ "aviation":{n:"국립항공박물관",e:"✈️",r:"sw",gu:"강서",in:1,min:60,max:131,t:["국립","비행기"]},
+ "heojun":{n:"허준박물관",e:"🌿",r:"sw",gu:"강서",in:1,min:60,max:131,t:["한의학"]},
+ "yeouido-hangang":{n:"여의도한강공원",e:"🪁",r:"sw",gu:"영등포",in:0,min:0,max:131,t:["유모차","무료"]},
+ "boramae":{n:"보라매공원",e:"🛩️",r:"sw",gu:"동작",in:0,min:0,max:131,t:["유모차","무료"]},
+ "seoul-forest":{n:"서울숲",e:"🦌",r:"ne",gu:"성동",in:0,min:0,max:131,t:["유모차","꽃사슴","무료"]},
+ "sangsang":{n:"서울상상나라",e:"🧸",r:"ne",gu:"광진",in:1,min:0,max:96,t:["영유아","예약"]},
+ "kids-grand-park":{n:"서울어린이대공원",e:"🐘",r:"ne",gu:"광진",in:0,min:24,max:131,t:["동물원","무료"]},
+ "science-center":{n:"서울시립과학관",e:"🧪",r:"ne",gu:"노원",in:1,min:72,max:131,t:["과학"]},
+ "life-museum":{n:"서울생활사박물관",e:"📻",r:"ne",gu:"노원",in:1,min:48,max:131,t:["무료","옛날물건"]},
+ "dream-forest":{n:"북서울꿈의숲",e:"🌲",r:"ne",gu:"강북",in:0,min:0,max:131,t:["유모차","무료"]},
+ "lw-aquarium":{n:"롯데월드 아쿠아리움",e:"🐠",r:"se",gu:"송파(잠실)",in:1,min:0,max:131,t:["수족관"]},
+ "lw-adventure":{n:"롯데월드 어드벤처",e:"🎠",r:"se",gu:"송파(잠실)",in:1,min:36,max:131,t:["놀이공원"]},
+ "kidzania":{n:"키자니아 서울",e:"👩‍🚒",r:"se",gu:"송파(잠실)",in:1,min:36,max:131,t:["직업체험"]},
+ "coex-aquarium":{n:"코엑스 아쿠아리움",e:"🦈",r:"se",gu:"강남",in:1,min:0,max:131,t:["수족관"]},
+ "baekje":{n:"한성백제박물관",e:"🏹",r:"se",gu:"송파",in:1,min:60,max:131,t:["무료","역사"]},
+ "olympic-park":{n:"올림픽공원(몽촌토성)",e:"🌼",r:"se",gu:"송파",in:0,min:0,max:131,t:["유모차","무료"]},
+ "amsa":{n:"서울 암사동 유적",e:"🪨",r:"se",gu:"강동",in:0,min:48,max:131,t:["선사시대"]},
+ "grand-park":{n:"서울대공원 동물원",e:"🦒",r:"gg",gu:"과천",in:0,min:24,max:131,t:["동물원"]},
+ "mmca-kids":{n:"국립현대미술관 과천 어린이미술관",e:"🎨",r:"gg",gu:"과천",in:1,min:36,max:131,t:["국립","미술"]},
+ "gwacheon-science":{n:"국립과천과학관",e:"🚀",r:"gg",gu:"과천",in:1,min:36,max:131,t:["국립","천체투영관"]},
+ "gg-kids-museum":{n:"경기도어린이박물관",e:"🎪",r:"gg",gu:"용인",in:1,min:24,max:120,t:["예약"]},
+ "jobworld":{n:"한국잡월드",e:"🧑‍🍳",r:"gg",gu:"성남(분당)",in:1,min:48,max:131,t:["직업체험","예약"]},
+ "arboretum":{n:"국립수목원",e:"🍃",r:"gg",gu:"포천",in:0,min:0,max:131,t:["국립","예약"]}
 };
-const MEALS={
-  "lotteworld-mall":{name:"롯데월드몰 식당가",q:"롯데월드몰 식당"},
-  "iparkmall":{name:"용산 아이파크몰 식당가",q:"용산 아이파크몰 식당"},
-  "kondae":{name:"건대 스타시티몰 식당가",q:"건대 스타시티 식당"},
-  "gimpo-mall":{name:"롯데몰 김포공항점 식당가",q:"롯데몰 김포공항 식당"},
-  "pangyo-hyundai":{name:"현대백화점 판교점 식당가",q:"현대백화점 판교점 식당"},
-  "magok":{name:"마곡나루역 주변 식당",q:"마곡나루역 식당"},
-  "seongsu":{name:"서울숲·성수 주변 식당",q:"서울숲 식당"},
-  "gwacheon":{name:"과천 서울대공원 주변 식당",q:"서울대공원 식당"},
-  "seodaemun":{name:"서대문자연사박물관 주변 식당",q:"서대문자연사박물관 식당"}
+// 식당 후보(평점·유아의자 미확인). q=네이버 지도 검색어
+const M={
+ "iparkmall":{n:"용산 아이파크몰 식당가",r:"center",q:"용산 아이파크몰 식당"},
+ "seochon":{n:"서촌·경복궁 주변 식당",r:"center",q:"서촌 식당"},
+ "daehakro":{n:"대학로 주변 식당",r:"center",q:"대학로 식당"},
+ "gwanghwamun":{n:"광화문 주변 식당",r:"center",q:"광화문 식당"},
+ "namsan-food":{n:"남산·명동 주변 식당",r:"center",q:"남산 식당"},
+ "seodaemun":{n:"서대문자연사박물관 주변 식당",r:"nw",q:"서대문자연사박물관 식당"},
+ "sangam":{n:"상암 월드컵경기장 주변 식당",r:"nw",q:"상암 월드컵경기장 식당"},
+ "mangwon":{n:"망원동 주변 식당",r:"nw",q:"망원동 식당"},
+ "magok":{n:"마곡나루역 주변 식당",r:"sw",q:"마곡나루역 식당"},
+ "gimpo-mall":{n:"롯데몰 김포공항점 식당가",r:"sw",q:"롯데몰 김포공항 식당"},
+ "thehyundai":{n:"더현대 서울 식당가",r:"sw",q:"더현대 서울 식당"},
+ "boramae-food":{n:"보라매공원 주변 식당",r:"sw",q:"보라매공원 식당"},
+ "seongsu":{n:"서울숲·성수 주변 식당",r:"ne",q:"서울숲 식당"},
+ "kondae":{n:"건대 스타시티몰 식당가",r:"ne",q:"건대 스타시티 식당"},
+ "nowon":{n:"롯데백화점 노원점 식당가",r:"ne",q:"롯데백화점 노원점 식당"},
+ "dream-food":{n:"북서울꿈의숲 주변 식당",r:"ne",q:"북서울꿈의숲 식당"},
+ "lotteworld-mall":{n:"롯데월드몰 식당가",r:"se",q:"롯데월드몰 식당"},
+ "coex":{n:"코엑스몰 식당가",r:"se",q:"코엑스몰 식당"},
+ "olympic-food":{n:"올림픽공원 주변 식당",r:"se",q:"올림픽공원 식당"},
+ "amsa-food":{n:"암사동 주변 식당",r:"se",q:"암사동 식당"},
+ "gwacheon":{n:"서울대공원·과천 주변 식당",r:"gg",q:"서울대공원 식당"},
+ "pangyo":{n:"현대백화점 판교점 식당가",r:"gg",q:"현대백화점 판교점 식당"},
+ "yongin":{n:"경기도어린이박물관 주변 식당",r:"gg",q:"경기도어린이박물관 식당"},
+ "pocheon":{n:"국립수목원 주변 식당",r:"gg",q:"국립수목원 식당"}
 };
-const ROUTES=[
-  {id:"r1",title:"잠실 실내 코스",ages:["toddler","preschool"],indoor:true,steps:[
-    ["10:00","lotteworld-aquarium","유모차 그대로 관람"],["12:00","meal","lotteworld-mall"],["13:30",null,"석촌호수 유모차 산책 또는 귀가 후 낮잠"]]},
-  {id:"r2",title:"마곡 식물원 코스",ages:["toddler","preschool","lowerElem"],indoor:true,steps:[
-    ["10:00","seoul-botanic-park","온실 먼저, 날씨 좋으면 호수원 산책"],["12:00","meal","magok"]]},
-  {id:"r3",title:"서울숲 꽃사슴 코스",ages:["toddler","preschool"],indoor:false,steps:[
-    ["10:00","seoul-forest","꽃사슴 방사장, 잔디밭 놀이"],["12:00","meal","seongsu"]]},
-  {id:"r4",title:"광진 하루 코스",ages:["toddler","preschool"],indoor:false,steps:[
-    ["10:00","seoul-sangsang-nara","회차 예약 필수"],["12:00","meal","kondae"],["14:00","seoul-childrens-grand-park","동물원·놀이터"]]},
-  {id:"r5",title:"과천 동물원·미술관 코스",ages:["preschool","lowerElem"],indoor:false,steps:[
-    ["10:00","seoul-grand-park","코끼리열차로 입구 이동"],["12:30","meal","gwacheon"],["14:00","mmca-gwacheon-kids","같은 동선에 있음"]]},
-  {id:"r6",title:"용산 박물관 코스",ages:["preschool","lowerElem"],indoor:true,steps:[
-    ["10:00","nmk-childrens-museum","회차 예약 필수"],["12:00","meal","iparkmall"]]},
-  {id:"r7",title:"과학관 하루 코스",ages:["preschool","lowerElem"],indoor:true,steps:[
-    ["10:00","gwacheon-science","미취학은 유아체험관, 초등은 천체투영관"],["12:30","meal","gwacheon"]]},
-  {id:"r8",title:"비행기 코스",ages:["lowerElem"],indoor:true,steps:[
-    ["10:00","aviation-museum","체험은 키·나이 제한 확인"],["12:30","meal","gimpo-mall"]]},
-  {id:"r9",title:"직업체험 코스",ages:["lowerElem"],indoor:true,steps:[
-    ["10:00","koreajobworld","어린이체험관 예약 필수"],["13:00","meal","pangyo-hyundai"]]},
-  {id:"r10",title:"공룡 코스",ages:["preschool","lowerElem"],indoor:true,steps:[
-    ["10:00","seodaemun-natural-history","공룡 골격 전시"],["12:00","meal","seodaemun"]]},
-  {id:"r11",title:"용인 어린이박물관 코스",ages:["toddler","preschool"],indoor:true,steps:[
-    ["10:00","gyeonggi-childrens-museum","회차 예약 필수, 서울에서 차로 약 1시간"]]}
+const T="toddler",K="preschool",E="lowerElem";
+// 추천 코스: [시간, 장소id | "meal" | null, 메모 | 식당id]
+const R=[
+ {n:"용산 박물관 나들이",r:"center",a:[K,E],s:[["10:00","nmk-kids","회차 예약 필수"],["12:00","meal","iparkmall"],["14:00","yongsan-park","박물관 뒤 공원에서 뛰어놀기"]]},
+ {n:"한글 놀이 코스",r:"center",a:[K,E],s:[["10:00","hangeul","한글놀이터 회차 예약"],["12:00","meal","iparkmall"],["14:00","nmk-kids","어린이박물관까지 걸어서 이동"]]},
+ {n:"헬리콥터 보러 가자",r:"center",a:[K,E],s:[["10:00","war-kids","야외 전시장의 비행기·탱크도 꼭"],["12:30","meal","iparkmall"],["14:00","ichon-hangang","한강 자전거·놀이터"]]},
+ {n:"경복궁 옛날 탐험",r:"center",a:[K,E],s:[["10:00","folk-kids","옛날 놀이 체험"],["11:30","gyeongbok","한복 입으면 무료 입장"],["12:30","meal","seochon"],["14:00","palace-museum","왕의 물건 구경"]]},
+ {n:"혜화 꼬마 과학자",r:"center",a:[K,E],s:[["10:00","kids-science","미취학·초등 전시관 구분, 예약"],["12:30","meal","daehakro"]]},
+ {n:"광화문 역사 산책",r:"center",a:[E],s:[["10:00","history-museum","옥상정원에서 경복궁 전망"],["12:00","meal","gwanghwamun"],["13:30","seoul-history","서울 옛 모습 모형"]]},
+ {n:"남산 케이블카 타기",r:"center",a:[K,E],s:[["10:30","namsan","케이블카는 주말 대기 길어요"],["12:30","meal","namsan-food"]]},
+ {n:"용산가족공원 피크닉",r:"center",a:[T,K],s:[["10:00","yongsan-park","돗자리·유모차 챙기기"],["12:00","meal","iparkmall"]]},
+ {n:"공룡 만나러 가자",r:"nw",a:[K,E],s:[["10:00","natural-history","공룡 골격 전시"],["12:00","meal","seodaemun"]]},
+ {n:"군함 탐험 & 한강",r:"nw",a:[K,E],s:[["10:00","seoul-ship","진짜 군함과 잠수함 내부"],["12:00","meal","mangwon"],["13:30","mangwon-hangang","놀이터·자전거"]]},
+ {n:"하늘공원 억새 코스",r:"nw",a:[T,K,E],s:[["10:00","worldcup-park","가을 억새, 맹꽁이 전기차"],["12:30","meal","sangam"]]},
+ {n:"마곡 식물원 코스",r:"sw",a:[T,K,E],s:[["10:00","botanic","온실 먼저, 날씨 좋으면 호수원"],["12:00","meal","magok"]]},
+ {n:"비행기 박물관",r:"sw",a:[K,E],s:[["10:00","aviation","체험은 키·나이 제한 확인"],["12:30","meal","gimpo-mall"]]},
+ {n:"허준 할아버지 & 식물원",r:"sw",a:[E],s:[["10:00","heojun","약초 체험"],["12:00","meal","magok"],["14:00","botanic","온실 탐험"]]},
+ {n:"여의도 한강 피크닉",r:"sw",a:[T,K],s:[["10:30","yeouido-hangang","연날리기·물빛광장"],["12:30","meal","thehyundai"]]},
+ {n:"보라매공원 비행기 공원",r:"sw",a:[T,K],s:[["10:00","boramae","전시된 비행기 구경, 놀이터"],["12:00","meal","boramae-food"]]},
+ {n:"서울숲 꽃사슴 코스",r:"ne",a:[T,K],s:[["10:00","seoul-forest","꽃사슴 방사장, 잔디밭"],["12:00","meal","seongsu"]]},
+ {n:"광진 하루 종일 코스",r:"ne",a:[T,K],s:[["10:00","sangsang","회차 예약 필수"],["12:00","meal","kondae"],["14:00","kids-grand-park","동물원·놀이터"]]},
+ {n:"노원 과학 & 옛날 물건",r:"ne",a:[E],s:[["10:00","science-center","초등 눈높이 과학 전시"],["12:30","meal","nowon"],["14:00","life-museum","옛날 학교·생활 체험"]]},
+ {n:"꿈의숲 산책",r:"ne",a:[T,K],s:[["10:00","dream-forest","전망대·잔디광장"],["12:00","meal","dream-food"]]},
+ {n:"잠실 바다 친구들",r:"se",a:[T,K],s:[["10:00","lw-aquarium","유모차 그대로 관람"],["12:00","meal","lotteworld-mall"],["13:30",null,"석촌호수 유모차 산책"]]},
+ {n:"꿈꾸는 직업체험",r:"se",a:[K,E],s:[["10:00","kidzania","만 3세 이상, 부 단위 운영"],["13:30","meal","lotteworld-mall"]]},
+ {n:"롯데월드 놀이공원",r:"se",a:[K,E],s:[["10:00","lw-adventure","키 제한 놀이기구 확인"],["12:30","meal","lotteworld-mall"]]},
+ {n:"코엑스 상어 구경",r:"se",a:[T,K],s:[["10:30","coex-aquarium","실내라 비 오는 날 좋아요"],["12:30","meal","coex"]]},
+ {n:"백제 시대로 시간여행",r:"se",a:[E],s:[["10:00","baekje","백제 역사 체험"],["12:00","meal","olympic-food"],["13:30","olympic-park","몽촌토성 산책, 나홀로나무"]]},
+ {n:"선사시대 움집 탐험",r:"se",a:[K,E],s:[["10:00","amsa","움집·선사체험"],["12:00","meal","amsa-food"]]},
+ {n:"과천 동물원 & 미술관",r:"gg",a:[K,E],s:[["10:00","grand-park","코끼리열차로 입구까지"],["12:30","meal","gwacheon"],["14:00","mmca-kids","같은 동선에 있어요"]]},
+ {n:"우주 과학 여행",r:"gg",a:[K,E],s:[["10:00","gwacheon-science","미취학은 유아체험관, 초등은 천체투영관"],["12:30","meal","gwacheon"]]},
+ {n:"용인 어린이박물관",r:"gg",a:[T,K],s:[["10:00","gg-kids-museum","회차 예약, 서울에서 차로 약 1시간"],["12:30","meal","yongin"]]},
+ {n:"잡월드 직업체험",r:"gg",a:[E],s:[["10:00","jobworld","어린이체험관 예약 필수"],["13:00","meal","pangyo"]]},
+ {n:"국립수목원 숲 소풍",r:"gg",a:[T,K,E],s:[["10:00","arboretum","사전 예약제, 차량 예약 필수"],["12:30","meal","pocheon"]]}
 ];
 
-let state={age:"preschool",tab:"routes",indoor:false};
-try{const s=JSON.parse(localStorage.getItem("weekend-kids")||"{}");Object.assign(state,s)}catch(e){}
-const save=()=>{try{localStorage.setItem("weekend-kids",JSON.stringify(state))}catch(e){}};
-
-let votes={}, myId=null, db=null, myVotes={};
+let S={age:"preschool",region:"all",tab:"routes",indoor:false,my:[]};
+try{Object.assign(S,JSON.parse(localStorage.getItem("weekend-kids-v2")||"{}"))}catch(e){}
+S.my=(S.my||[]).filter(id=>P[id]);
+const save=()=>{try{localStorage.setItem("weekend-kids-v2",JSON.stringify(S))}catch(e){}};
+let votes={},myVotes={},db=null,myId=null;
 const $=s=>document.querySelector(s);
-const el=(t,c,txt)=>{const e=document.createElement(t);if(c)e.className=c;if(txt!=null)e.textContent=txt;return e};
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
 const naver=q=>"https://map.naver.com/p/search/"+encodeURIComponent(q);
+const age=()=>AGES.find(a=>a.id===S.age)||AGES[1];
+const fitAge=p=>{const a=age();return p.min<a.max&&p.max>a.min};
+const inRegion=r=>S.region==="all"||r===S.region;
+const regionLabel=id=>(REGIONS.find(r=>r.id===id)||{}).label;
+function set(k,v){S[k]=v;save();renderAll()}
 
 function renderAges(){
   const box=$("#ages");box.textContent="";
-  AGES.forEach(a=>{const b=el("button","chip",a.label);b.setAttribute("aria-pressed",String(state.age===a.id));
-    b.onclick=()=>{state.age=a.id;save();renderAges();render()};box.append(b)});
+  AGES.forEach(a=>{const b=el("button","age");b.style.setProperty("--c",a.c);b.setAttribute("aria-pressed",String(S.age===a.id));
+    b.append(el("span","face",a.face),el("b",null,a.label),el("small",null,a.hint));b.onclick=()=>set("age",a.id);box.append(b)});
+}
+const ZONES={
+  nw:{d:"M18 70 Q20 28 70 24 Q120 20 132 52 Q140 92 118 108 Q70 116 30 104 Q14 92 18 70Z",x:74,y:66},
+  center:{d:"M138 46 Q150 18 196 22 Q232 28 228 64 Q226 102 184 106 Q142 104 138 78Z",x:183,y:62},
+  ne:{d:"M236 38 Q244 8 290 12 Q330 18 326 62 Q322 104 280 108 Q238 106 234 72Z",x:281,y:58},
+  sw:{d:"M14 160 Q16 132 60 134 Q130 132 150 156 Q160 200 120 214 Q60 226 26 206 Q10 186 14 160Z",x:84,y:176},
+  se:{d:"M168 158 Q176 132 236 134 Q314 132 326 164 Q332 206 282 216 Q206 226 176 204 Q164 186 168 158Z",x:248,y:176}
+};
+function count(r){return R.filter(x=>x.r===r&&x.a.includes(S.age)).length}
+function renderMap(){
+  const svg=$("#map");const ns="http://www.w3.org/2000/svg";svg.textContent="";
+  const mk=(t,a)=>{const e=document.createElementNS(ns,t);for(const k in a)e.setAttribute(k,a[k]);return e};
+  Object.entries(ZONES).forEach(([id,z])=>{
+    const reg=REGIONS.find(r=>r.id===id);
+    const g=mk("g",{class:"zone",tabindex:"0",role:"button","aria-pressed":String(S.region===id),"aria-label":reg.label+" "+reg.gu});
+    g.append(mk("path",{d:z.d,fill:reg.fill.replace("var(","").replace(")","")}));
+    g.lastChild.style.fill=reg.fill;
+    const t=mk("text",{x:z.x,y:z.y,"text-anchor":"middle"});t.textContent=(S.region===id?"⭐ ":"")+reg.label;g.append(t);
+    const c=mk("text",{x:z.x,y:z.y+18,"text-anchor":"middle",class:"cnt"});c.textContent="코스 "+count(id)+"개";g.append(c);
+    const go=()=>set("region",S.region===id?"all":id);
+    g.addEventListener("click",go);g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}});
+    svg.append(g);
+  });
+  svg.insertBefore(mk("path",{class:"river",d:"M4 128 Q50 112 100 124 T200 120 T336 124"}),svg.firstChild);
+  const lbl=mk("text",{x:300,y:139,"font-size":"11","font-family":"Gaegu, sans-serif",fill:"currentColor"});lbl.textContent="한강 ~";svg.append(lbl);
+  const box=$("#regions");box.textContent="";
+  REGIONS.forEach(r=>{if(["nw","center","ne","sw","se"].includes(r.id))return;
+    const b=el("button","rchip",r.id==="gg"?"🚗 "+r.label:"🗺️ "+r.label);b.setAttribute("aria-pressed",String(S.region===r.id));
+    b.onclick=()=>set("region",r.id);box.append(b)});
+  const sel=REGIONS.find(r=>r.id===S.region);
+  if(sel&&sel.gu){const n=el("span","note","선택: "+sel.label+" ("+sel.gu+")");n.style.alignSelf="center";box.append(n)}
+}
+function tags(p){
+  const w=el("div","tags");
+  w.append(el("span","tag "+(p.in?"in":"out"),p.in?"🏠 실내":"🌤 야외"));
+  w.append(el("span","tag",regionLabel(p.r)+" · "+p.gu));
+  p.t.forEach(x=>w.append(el("span","tag"+(x==="무료"?" free":x==="예약"?" book":""),x)));
+  return w;
 }
 function mealBox(id){
-  const m=MEALS[id], v=votes[id]||{yes:0,no:0};
+  const m=M[id],v=votes[id]||{yes:0,no:0},mine=myVotes[id];
   const box=el("div","meal");
-  const head=el("div","meal-head");
-  const t=el("div");t.append(el("b",null,"🍽 "+m.name));
-  const a=el("a","link","네이버 지도에서 보기 ↗");a.href=naver(m.q);a.target="_blank";a.rel="noopener";
-  head.append(t,a);
-  const st=el("div","status");
-  st.append(el("span","pill","평점 미확인"));
-  if(v.yes||v.no){
-    if(v.yes)st.append(el("span","pill yes","유아의자 있어요 "+v.yes));
-    if(v.no)st.append(el("span","pill no","없어요 "+v.no));
-  }else st.append(el("span","pill","유아의자 제보 없음"));
-  const vote=el("div","vote");
-  const mine=myVotes[id];
-  const by=el("button","btn"+(mine===true?" on-yes":""),"👍 유아의자 있어요");
-  const bn=el("button","btn"+(mine===false?" on-no":""),"없어요");
-  if(!db){by.disabled=bn.disabled=true}
-  by.onclick=()=>castVote(id,true);bn.onclick=()=>castVote(id,false);
-  vote.append(by,bn);
-  box.append(head,st,vote);
-  if(!db)box.append(el("p","note","로그인한 상태에서 제보할 수 있어요."));
+  const h=el("div","meal-head");h.append(el("b",null,"🍚 "+m.n));
+  const a=el("a","link","네이버 지도 ↗");a.href=naver(m.q);a.target="_blank";a.rel="noopener";h.append(a);
+  const ps=el("div","pills");ps.append(el("span","pill","⭐ 평점 확인 전"));
+  if(v.yes)ps.append(el("span","pill yes","🪑 유아의자 있어요 "+v.yes));
+  if(v.no)ps.append(el("span","pill no","없어요 "+v.no));
+  if(!v.yes&&!v.no)ps.append(el("span","pill","🪑 유아의자 제보 없음"));
+  const vt=el("div","vote");
+  const by=el("button","btn"+(mine===true?" on-yes":""),"🪑 있어요");
+  const bn=el("button","btn"+(mine===false?" on-no":""),"🙅 없어요");
+  if(!db)by.disabled=bn.disabled=true;
+  by.onclick=()=>vote(id,true);bn.onclick=()=>vote(id,false);
+  vt.append(by,bn);box.append(h,ps,vt);
+  if(!db)box.append(el("p","note","로그인하면 제보할 수 있어요."));
   return box;
 }
 function routeCard(r){
   const c=el("article","card");
-  c.append(el("h2",null,r.title));
-  const meta=el("div","meta");
-  meta.append(el("span","tag"+(r.indoor?"":" sun"),r.indoor?"실내 위주":"야외 포함"));
-  const areas=[...new Set(r.steps.filter(s=>s[1]&&s[1]!=="meal").map(s=>PLACES[s[1]].area))];
-  areas.forEach(a=>meta.append(el("span","tag",a)));
-  c.append(meta);
+  const first=P[r.s.find(s=>P[s[1]])[1]];
+  const top=el("div","card-top");top.append(el("div","badge",first.e));
+  const tt=el("div");tt.append(el("h2",null,r.n));
+  const ind=r.s.every(s=>!P[s[1]]||P[s[1]].in);
+  tt.append(el("p","sub",regionLabel(r.r)+" · "+(ind?"실내 코스":"야외 포함")));
+  top.append(tt);c.append(top);
   const ol=el("ol","steps");let meal=null;
-  r.steps.forEach(([time,pid,note])=>{
-    const li=el("li");li.append(el("span","time",time));
-    const d=el("div");
-    if(pid==="meal"){d.append(el("b",null,"점심"));d.append(el("small",null,MEALS[note].name));meal=note}
-    else if(pid){d.append(el("b",null,PLACES[pid].name));d.append(el("small",null,note))}
-    else d.append(el("b",null,note));
-    li.append(d);ol.append(li);
-  });
-  c.append(ol);
-  if(meal)c.append(mealBox(meal));
-  return c;
+  r.s.forEach(([time,pid,x])=>{const li=el("li");li.append(el("span","time",time));const d=el("div");
+    if(pid==="meal"){d.append(el("b",null,"🍚 점심"));d.append(el("small",null,M[x].n));meal=x}
+    else if(pid){d.append(el("b",null,P[pid].e+" "+P[pid].n));d.append(el("small",null,x))}
+    else d.append(el("b",null,"🚶 "+x));
+    li.append(d);ol.append(li)});
+  c.append(ol);if(meal)c.append(mealBox(meal));return c;
 }
 function placeCard(id){
-  const p=PLACES[id];const c=el("article","card");
-  const head=el("div","row");head.append(el("h2",null,p.name));
-  const a=el("a","link","지도 ↗");a.href=naver(p.name);a.target="_blank";a.rel="noopener";head.append(a);
-  c.append(head);
-  const meta=el("div","meta");
-  meta.append(el("span","tag"+(p.indoor?"":" sun"),p.indoor?"실내":"야외"));
-  meta.append(el("span","tag",p.area));
-  p.tags.forEach(t=>meta.append(el("span","tag",t)));
-  c.append(meta);return c;
+  const p=P[id],c=el("article","card");
+  const top=el("div","card-top");top.append(el("div","badge",p.e));
+  const tt=el("div");tt.append(el("h2",null,p.n));
+  const a=el("a","link","지도 ↗");a.href=naver(p.n);a.target="_blank";a.rel="noopener";tt.append(a);
+  top.append(tt);c.append(top,tags(p));
+  const add=el("button","btn",S.my.includes(id)?"✔ 내 코스에 담김":"＋ 내 코스에 담기");
+  add.onclick=()=>toggleMy(id);c.append(add);return c;
 }
-function render(){
-  $("#tab-routes").setAttribute("aria-selected",String(state.tab==="routes"));
-  $("#tab-places").setAttribute("aria-selected",String(state.tab==="places"));
-  $("#indoor").checked=state.indoor;
+function toggleMy(id){
+  const i=S.my.indexOf(id);
+  if(i>=0)S.my.splice(i,1);else{if(S.my.length>=3)S.my.shift();S.my.push(id)}
+  save();renderAll();
+}
+function builder(list){
+  const b=el("section","builder");
+  b.append(el("h3",null,"🧩 우리 가족 코스 만들기"));
+  b.append(el("p","note","지도에서 동네를 고르고, 아래에서 가고 싶은 곳을 최대 3곳까지 눌러 담으세요. 점심은 첫 장소 근처 식당으로 자동으로 넣어줘요."));
+  const slots=el("div","slots");
+  if(!S.my.length)slots.append(el("div","empty","아직 담은 곳이 없어요 🎈"));
+  const times=["10:00","13:30","15:30"];
+  S.my.forEach((id,i)=>{const p=P[id];const s=el("div","slot");
+    s.append(el("span","n",String(i+1)));const t=el("div","t");t.append(el("b",null,p.e+" "+p.n));
+    t.append(el("small",null,times[i]+" · "+regionLabel(p.r)+" "+p.gu+(fitAge(p)?"":" · ⚠️ 나이에 안 맞을 수 있어요")));s.append(t);
+    const up=el("button","x","↑");up.setAttribute("aria-label","앞으로");up.disabled=i===0;
+    up.onclick=()=>{[S.my[i-1],S.my[i]]=[S.my[i],S.my[i-1]];save();renderAll()};
+    const x=el("button","x","✕");x.setAttribute("aria-label","빼기");x.onclick=()=>toggleMy(id);
+    s.append(up,x);slots.append(s);
+    if(i===0){const ms=Object.keys(M).filter(k=>M[k].r===p.r);
+      const lunch=el("div","slot");lunch.append(el("span","n","🍚"));const lt=el("div","t");
+      lt.append(el("b",null,"12:00 점심"));lt.append(el("small",null,"아래 "+regionLabel(p.r)+" 식당 후보 중에서 골라요"));lunch.append(lt);slots.append(lunch);}
+  });
+  b.append(slots);
+  if(S.my.length){
+    const regs=new Set(S.my.map(id=>P[id].r));
+    if(regs.size>1)b.append(el("p","note","⚠️ 서로 다른 권역이 섞여 있어요. 이동 시간이 길어질 수 있어요."));
+    const clr=el("button","btn","🧹 다 비우기");clr.onclick=()=>{S.my=[];save();renderAll()};b.append(clr);
+  }
+  list.append(b);
+  if(S.my.length){const r=P[S.my[0]].r;Object.keys(M).filter(k=>M[k].r===r).forEach(k=>list.append(mealBox(k)));}
+  const head=el("h2","sec-title");head.innerHTML='<span class="dot" style="background:var(--tomato)"></span>';
+  head.append((S.region==="all"?"전체":regionLabel(S.region))+"에서 담을 곳");list.append(head);
+  const ids=Object.keys(P).filter(id=>{const p=P[id];return inRegion(p.r)&&fitAge(p)&&(!S.indoor||p.in)});
+  const grid=el("div","pick");
+  ids.forEach(id=>{const p=P[id];const c=el("button","pcard");c.setAttribute("aria-pressed",String(S.my.includes(id)));
+    c.append(el("span","em",p.e),el("b",null,p.n),el("small",null,(p.in?"실내":"야외")+" · "+p.gu));c.onclick=()=>toggleMy(id);grid.append(c)});
+  if(!ids.length)list.append(el("div","empty","이 조건에 맞는 장소가 없어요"));else list.append(grid);
+}
+function renderList(){
+  ["routes","build","places"].forEach(t=>$("#tab-"+t).setAttribute("aria-selected",String(S.tab===t)));
+  $("#indoor").checked=S.indoor;
   const list=$("#list");list.textContent="";
-  const age=AGES.find(a=>a.id===state.age)||AGES[1];
-  if(state.tab==="routes"){
-    const rs=ROUTES.filter(r=>r.ages.includes(age.id)&&(!state.indoor||r.indoor));
+  if(S.tab==="routes"){
+    const rs=R.filter(r=>inRegion(r.r)&&r.a.includes(S.age)&&(!S.indoor||r.s.every(s=>!P[s[1]]||P[s[1]].in)));
     rs.forEach(r=>list.append(routeCard(r)));
-    if(!rs.length)list.append(el("p","empty","조건에 맞는 루트가 없어요. '실내만'을 꺼 보세요."));
-  }else{
-    const ps=Object.keys(PLACES).filter(id=>{const p=PLACES[id];return p.min<age.max&&p.max>age.min&&(!state.indoor||p.indoor)});
-    ps.forEach(id=>list.append(placeCard(id)));
+    if(!rs.length)list.append(el("div","empty","이 동네엔 맞는 코스가 아직 없어요. 다른 동네를 골라보거나 '코스 만들기'로 직접 짜 보세요!"));
+  }else if(S.tab==="build")builder(list);
+  else{
+    const ids=Object.keys(P).filter(id=>{const p=P[id];return inRegion(p.r)&&fitAge(p)&&(!S.indoor||p.in)});
+    ids.forEach(id=>list.append(placeCard(id)));
+    if(!ids.length)list.append(el("div","empty","이 조건에 맞는 장소가 없어요"));
   }
 }
-$("#tab-routes").onclick=()=>{state.tab="routes";save();render()};
-$("#tab-places").onclick=()=>{state.tab="places";save();render()};
-$("#indoor").onchange=e=>{state.indoor=e.target.checked;save();render()};
+function renderAll(){renderAges();renderMap();renderList()}
+$("#tab-routes").onclick=()=>set("tab","routes");
+$("#tab-build").onclick=()=>set("tab","build");
+$("#tab-places").onclick=()=>set("tab","places");
+$("#indoor").onchange=e=>set("indoor",e.target.checked);
 
-async function castVote(mealId,has){
+async function vote(mid,has){
   if(!db||!myId)return;
-  const ref=db.collection("highchair").doc(mealId+"__"+myId);
-  try{
-    if(myVotes[mealId]===has){await ref.delete()}
-    else await ref.set({mealId,has,at:new Date().toISOString()});
-  }catch(e){console.warn(e)}
+  const ref=db.collection("highchair").doc(mid+"__"+myId);
+  try{if(myVotes[mid]===has)await ref.delete();else await ref.set({mealId:mid,has,at:new Date().toISOString()})}catch(e){console.warn(e)}
 }
 (async()=>{
   if(!window.claude||!claude.use)return;
   try{
     const [d,u]=await Promise.all([claude.use("db"),claude.use("user")]);
-    if(!d||!u)return;
-    myId=await u.id(); if(!myId)return;
-    db=d; render();
+    if(!d||!u)return;myId=await u.id();if(!myId)return;db=d;renderList();
     db.collection("highchair").onSnapshot(snap=>{
       const v={},mine={};
-      snap.docs.forEach(doc=>{const x=doc.data()||{};if(!MEALS[x.mealId])return;
-        v[x.mealId]=v[x.mealId]||{yes:0,no:0};v[x.mealId][x.has?"yes":"no"]++;
+      snap.docs.forEach(doc=>{const x=doc.data()||{};if(!M[x.mealId])return;
+        (v[x.mealId]=v[x.mealId]||{yes:0,no:0})[x.has?"yes":"no"]++;
         if(doc.id.endsWith("__"+myId))mine[x.mealId]=!!x.has});
-      votes=v;myVotes=mine;render();
-    },err=>console.warn(err));
+      votes=v;myVotes=mine;renderList();
+    },e=>console.warn(e));
   }catch(e){console.warn(e)}
 })();
-
-renderAges();render();
+renderAll();
 </script>
