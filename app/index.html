@@ -63,7 +63,13 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px dashed var(
 .rchip[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
 
 /* 탭 */
-.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px}
+.st{font-family:var(--display);font-size:13px;padding:2px 10px;border-radius:999px;border:2px solid var(--ink);white-space:nowrap}
+.st.now{background:var(--grass);color:#fff} .st.soon{background:var(--sky);color:#fff} .st.last{background:var(--tomato);color:#fff} .st.tbd{background:var(--sun-soft)} .st.end{background:var(--paper);color:var(--muted)}
+.info{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:13.5px;margin:0}
+.info dt{color:var(--muted)} .info dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.links{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.src{font-size:12px;color:var(--muted);margin:0}
 .tab{border:3px solid var(--ink);border-radius:16px;background:var(--paper);padding:10px 4px;cursor:pointer;font-family:var(--display);font-size:16px}
 .tab[aria-selected="true"]{background:var(--tomato);color:#fff;box-shadow:3px 3px 0 var(--shadow)}
 .rain{display:flex;align-items:center;gap:8px;font-family:var(--hand);font-size:19px;cursor:pointer;width:max-content}
@@ -158,6 +164,8 @@ footer{font-size:12.5px;color:var(--muted);text-align:center;padding:4px 8px}
   <div class="tabs" role="tablist">
     <button class="tab" role="tab" id="tab-routes">추천 코스</button>
     <button class="tab" role="tab" id="tab-build">코스 만들기</button>
+    <button class="tab" role="tab" id="tab-kc">키즈카페</button>
+    <button class="tab" role="tab" id="tab-ev">행사·축제</button>
     <button class="tab" role="tab" id="tab-places">장소 보기</button>
   </div>
   <label class="rain"><input type="checkbox" id="indoor"> ☔ 비 오는 날이라 실내만</label>
@@ -252,6 +260,63 @@ const M={
  "yongin":{n:"경기도어린이박물관 주변 식당",r:"gg",q:"경기도어린이박물관 식당"},
  "pocheon":{n:"국립수목원 주변 식당",r:"gg",q:"국립수목원 식당"}
 };
+
+// ── 공공 키즈카페 (서울형 키즈카페: 서울시·구청 운영). 예약은 우리동네키움포털.
+// a=[최소개월,최대개월] 또는 null(지점별 확인 필요)
+const KIUM="https://umppa.seoul.go.kr/icare/user/kidsCafe/BD_selectKidsCafeList.do";
+const KC=[
+ ["kc-sirip1","서울형 키즈카페 시립 1호점(대방동)","sw","동작","노량진로 10 스페이스살림 지하2층",[36,119],"화~일 09:30~17:30, 하루 3회차 · 2시간 3,000원(돌봄 +2,000원) · 자료마다 0~9세/3~9세로 달라 확인 필요","서울시 보도자료"],
+ ["kc-mokdong","서울형 키즈카페 시립 목동점","sw","양천","안양천로 1131 지식산업센터 2층 (신목동역 2번 출구)",[84,131],"초등학생 전용으로 소개됨 · 키움센터와 같은 건물","서울시 미디어허브"],
+ ["kc-sinjeong7","서울형 키즈카페 양천구 신정7동점","sw","양천","",null,"","육아 커뮤니티 목록"],
+ ["kc-sinwol3","서울형 키즈카페 양천구 신월3동점","sw","양천","",null,"2025년 개관","뉴시스·문화일보"],
+ ["kc-mok4","서울형 키즈카페 양천구 목4동점","sw","양천","",null,"2025년 개관","뉴시스·문화일보"],
+ ["kc-euncheon","서울형 키즈카페 관악구 은천동점","sw","관악","국회단지4길 32, 3층(봉천동)",[6,23],"6~24개월 영아 전용 · 회차당 3,000원(보호자 포함) · 베이비스파","관악구 보도자료"],
+ ["kc-nangok","서울형 키즈카페 관악구 난곡동점","sw","관악","난곡로24가길 53, 2층(신림동)",null,"","관악구청"],
+ ["kc-nanhyang","서울형 키즈카페 관악구 난향동점","sw","관악","",null,"","관악구청"],
+ ["kc-boramae","서울형 키즈카페 관악구 보라매동점","sw","관악","",null,"","관악구청"],
+ ["kc-sinsa-gw","서울형 키즈카페 관악구 신사동점","sw","관악","",null,"","관악구청"],
+ ["kc-sangam","서울형 키즈카페 마포구 상암동점","nw","마포","상암산로1길 71 마포구육아종합지원센터 2~3층",null,"","서울시 미디어허브"],
+ ["kc-nogosan","서울형 키즈카페 시립 노고산점","nw","마포","백범로 24 빌리브디에이블 3층(노고산동)",null,"시립","서울시 미디어허브"],
+ ["kc-hangangro","서울형 키즈카페 용산구 한강로동점","center","용산","",null,"","육아 커뮤니티 목록"],
+ ["kc-myeonmok4","서울형 키즈카페 중랑구 면목4동점","ne","중랑","용마산로 209(면목동)",null,"","중랑구청"],
+ ["kc-yangwon","중랑실내놀이터 양원(서울형 키즈카페)","ne","중랑","용마산로 670 신내역프라디움 시티원스퀘어 지하1층",null,"중랑구 최대 규모","중랑구청"],
+ ["kc-mangu","서울형 키즈카페 중랑구 망우역점","ne","중랑","망우로60길 37(망우동)",null,"","중랑구청"],
+ ["kc-dobong2","도봉구 도봉2동 2호점 'HOLA 플레이그라운드'","ne","도봉","도봉로180나길 19, 1층",null,"","서울시 미디어허브"],
+ ["kc-chang3","도봉구 창3동점 '우당탕탕 숲속 대탐험'","ne","도봉","우이천로4길 24-5 육아종합지원센터 1층",null,"","서울시 미디어허브"],
+ ["kc-jungpyeong","서울형 키즈카페 노원구 중평공원점","ne","노원","동일로203길 73 중평공원 내(하계동)",null,"통창으로 공원이 보이는 공원형 키즈카페","서울시 미디어허브"],
+ ["kc-beoljip","서울형 키즈카페 성북구 벌집어린이공원점","ne","성북","월곡로7길 56-7(종암동)",null,"","서울시 미디어허브"],
+ ["kc-jeongneung3","서울형 키즈카페 성북구 정릉3동점","ne","성북","솔샘로17길 8, 1층",null,"","서울시 미디어허브"],
+ ["kc-seongbuk","서울형 키즈카페 성북구 성북동점","ne","성북","성북로4길 21, 2층",null,"","서울시 미디어허브"],
+ ["kc-junggok3","서울형 키즈카페 광진구 중곡3동점","ne","광진","",null,"","육아 커뮤니티 목록"],
+ ["kc-geumho","서울형 키즈카페 성동구 금호2·3가동점","ne","성동","",null,"","육아 커뮤니티 목록"],
+ ["kc-jamsil","하하호호 놀이터 송파 1호점(잠실근린공원점)","se","송파","백제고분로15길 9, 1·2층(잠실동)",[48,119],"연나이 4~9세(2017~2022년생)","송파구청"],
+ ["kc-jangji","하하호호 놀이터 송파 5호점(장지동점)","se","송파","송이로33길 9, 1층",null,"","송파구청"],
+ ["kc-yeoksam1","서울형 키즈카페 강남구 역삼1동점","se","강남","언주로107길 4, 2층(역삼동)",null,"","육아 커뮤니티 자료(2025)"],
+ ["kc-amsa1","서울형 키즈카페 강동구 암사1동점","se","강동","",null,"","육아 커뮤니티 목록"],
+ ["kc-seocho-art","서리풀노리학교 문화예술공원점","se","서초","바우뫼로12길 40(양재동)",[48,83],"4~6세 · 자료에 따라 운영 요일 다름","서초구·우리동네키움포털"],
+ ["kc-bangbae2","서리풀노리학교 방배2동점","se","서초","방배천로24길 8(방배동)",[0,83],"0~6세 · 화~일 운영","서초구·우리동네키움포털"],
+ ["kc-seocho1","서리풀노리학교 서초1동점","se","서초","사임당로 115 헤센파크힐 L층",[0,83],"0~6세 · 월요일·공휴일 휴관","우리동네키움포털"],
+ ["kc-yangjae1","서리풀노리학교 양재1동점","se","서초","양재천로 125-10(양재동)",[0,83],"0~6세 · 화~일 운영","서초구·우리동네키움포털"],
+ ["kc-yangjae1-2","서리풀노리학교 양재1동 2호점","se","서초","양재대로2길 110(우면동)",[0,83],"0~6세 · 화~일 운영","서초구·우리동네키움포털"]
+];
+KC.forEach(([id,n,r,gu,addr,a,note,src])=>{P[id]={n,e:"🧸",r,gu,in:1,kind:"kc",addr,min:a?a[0]:0,max:a?a[1]:131,ageKnown:!!a,note,src,t:["서울형 키즈카페","예약"]}});
+
+// ── 행사·축제 (오늘 날짜 기준으로 진행 중/예정/끝남 자동 표시). sure=false면 공식 날짜 미확정
+const FUN="https://festival.seoul.go.kr/festival/seasonal/list.do";
+const EV=[
+ ["ev-outdoor-kc","여기저기 서울형 야외 키즈카페(가을)","all","한강공원·서울식물원·푸른수목원·근린공원 등 30곳","2026-09-01","2026-11-30",false,[48,119],0,"주말 운영 · 아동 5,000원, 보호자 무료 · 우리동네키움포털 예약(일부 현장 접수) · 장소 예: 잠원·여의도·뚝섬한강공원, 허준근린공원, 구의공원","서울시 발표(2026.4)",KIUM],
+ ["ev-pinocchio","서울대공원 가을축제 '예술로 물드는 피노키오의 숲'","gg","서울대공원(과천)","2026-10-31","2026-11-08",true,null,0,"","육아 커뮤니티 정리",FUN],
+ ["ev-nowon-moon","노원달빛산책","ne","당현천 1.3km 구간","2026-10-16","2026-11-08",true,null,0,"매일 17:30 점등 · 무료","노원구",FUN],
+ ["ev-kids-theater","제33회 전국어린이연극잔치","center","아르코꿈밭극장(대학로)","2026-11-04","2026-11-20",true,[36,131],1,"어린이 연극 공연 · 공연별 예매","공연 정보 사이트",FUN],
+ ["ev-namsan-night","반짝반짝 남산밤길","center","남산골한옥마을","2026-11-21","2026-11-21",true,null,0,"토요일 저녁 · 현장 선착순 700명","행사 정보 사이트",FUN],
+ ["ev-boardgame","2026 보드게임페스타 시즌2","se","세텍(SETEC, 강남 대치동)","2026-11-21","2026-11-22",true,[60,131],1,"2008년 이후 출생은 무료 입장","행사 정보 사이트",FUN],
+ ["ev-lantern","서울빛초롱축제","center","청계천 일대","2026-12-01","2027-01-31",false,null,0,"무료 · 공식 안내는 '12월'만 공개, 일부 특별관은 사전 예약","FUN SEOUL",FUN],
+ ["ev-gwanghwamun","광화문 마켓(크리스마스 마켓)","center","광화문광장","2026-12-04","2026-12-31",false,null,0,"유럽식 크리스마스 빌리지·체험존 · 저녁 트리 라이트쇼 · 유모차는 혼잡할 수 있음","FUN SEOUL(12월 예정)",FUN],
+ ["ev-skate","서울광장 스케이트장","center","서울광장","2026-12-18","2027-02-09",false,[48,131],1,"이용료 1,000원(대여 포함 예정)","SNS 공지 정리(공식 확인 필요)",FUN],
+ ["ev-seoul-light","서울라이트 DDP 겨울","center","동대문디자인플라자","2026-12-17","2027-01-10",false,null,0,"미디어 파사드 · 공식 일정 '12월 17일 예정'","FUN SEOUL",FUN]
+];
+EV.forEach(([id,n,r,place,start,end,sure,a,ind,note,src,link])=>{P[id]={n,e:"🎉",r,gu:place,in:ind,kind:"ev",start,end,sure,min:a?a[0]:0,max:a?a[1]:131,ageKnown:!!a,note,src,link,t:["행사"]}});
+
 const T="toddler",K="preschool",E="lowerElem";
 // 추천 코스: [시간, 장소id | "meal" | null, 메모 | 식당id]
 const R=[
@@ -298,8 +363,17 @@ const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=nu
 const naver=q=>"https://map.naver.com/p/search/"+encodeURIComponent(q);
 const age=()=>AGES.find(a=>a.id===S.age)||AGES[1];
 const fitAge=p=>{const a=age();return p.min<a.max&&p.max>a.min};
+const inRegion2=r=>r==="all"||inRegion(r);
+const TODAY=(()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")})();
+function evStatus(p){
+  if(p.end<TODAY)return {c:"end",t:"끝남"};
+  if(p.start>TODAY){const dd=Math.round((new Date(p.start)-new Date(TODAY))/864e5);return {c:"soon",t:"D-"+dd}}
+  if(p.end===TODAY)return {c:"last",t:"오늘 마지막"};
+  return {c:"now",t:"진행 중"};
+}
+const fmtD=s=>{const [y,m,d]=s.split("-");return +m+"/"+(+d)};
 const inRegion=r=>S.region==="all"||r===S.region;
-const regionLabel=id=>(REGIONS.find(r=>r.id===id)||{}).label;
+const regionLabel=id=>id==="all"?"서울 곳곳":(REGIONS.find(r=>r.id===id)||{}).label;
 function set(k,v){S[k]=v;save();renderAll()}
 
 function renderAges(){
@@ -315,6 +389,7 @@ const ZONES={
   se:{d:"M168 158 Q176 132 236 134 Q314 132 326 164 Q332 206 282 216 Q206 226 176 204 Q164 186 168 158Z",x:248,y:176}
 };
 function count(r){return R.filter(x=>x.r===r&&x.a.includes(S.age)).length}
+function countKc(r){return Object.values(P).filter(p=>p.kind==="kc"&&p.r===r&&fitAge(p)).length}
 function renderMap(){
   const svg=$("#map");const ns="http://www.w3.org/2000/svg";svg.textContent="";
   const mk=(t,a)=>{const e=document.createElementNS(ns,t);for(const k in a)e.setAttribute(k,a[k]);return e};
@@ -324,7 +399,7 @@ function renderMap(){
     g.append(mk("path",{d:z.d,fill:reg.fill.replace("var(","").replace(")","")}));
     g.lastChild.style.fill=reg.fill;
     const t=mk("text",{x:z.x,y:z.y,"text-anchor":"middle"});t.textContent=(S.region===id?"⭐ ":"")+reg.label;g.append(t);
-    const c=mk("text",{x:z.x,y:z.y+18,"text-anchor":"middle",class:"cnt"});c.textContent="코스 "+count(id)+"개";g.append(c);
+    const c=mk("text",{x:z.x,y:z.y+18,"text-anchor":"middle",class:"cnt"});c.textContent="코스 "+count(id)+" · 키카 "+countKc(id);g.append(c);
     const go=()=>set("region",S.region===id?"all":id);
     g.addEventListener("click",go);g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}});
     svg.append(g);
@@ -421,14 +496,47 @@ function builder(list){
   if(S.my.length){const r=P[S.my[0]].r;Object.keys(M).filter(k=>M[k].r===r).forEach(k=>list.append(mealBox(k)));}
   const head=el("h2","sec-title");head.innerHTML='<span class="dot" style="background:var(--tomato)"></span>';
   head.append((S.region==="all"?"전체":regionLabel(S.region))+"에서 담을 곳");list.append(head);
-  const ids=Object.keys(P).filter(id=>{const p=P[id];return inRegion(p.r)&&fitAge(p)&&(!S.indoor||p.in)});
+  const ids=Object.keys(P).filter(id=>{const p=P[id];return inRegion2(p.r)&&fitAge(p)&&(!S.indoor||p.in)&&!(p.kind==="ev"&&p.end<TODAY)});
   const grid=el("div","pick");
   ids.forEach(id=>{const p=P[id];const c=el("button","pcard");c.setAttribute("aria-pressed",String(S.my.includes(id)));
-    c.append(el("span","em",p.e),el("b",null,p.n),el("small",null,(p.in?"실내":"야외")+" · "+p.gu));c.onclick=()=>toggleMy(id);grid.append(c)});
+    c.append(el("span","em",p.e),el("b",null,p.n),el("small",null,p.kind==="ev"?fmtD(p.start)+"~"+fmtD(p.end)+" · "+p.gu:(p.in?"실내":"야외")+" · "+p.gu));c.onclick=()=>toggleMy(id);grid.append(c)});
   if(!ids.length)list.append(el("div","empty","이 조건에 맞는 장소가 없어요"));else list.append(grid);
 }
+
+function infoList(rows){const dl=el("dl","info");rows.forEach(([k,v])=>{if(!v)return;dl.append(el("dt",null,k),el("dd",null,v))});return dl}
+function ageText(p){
+  if(!p.ageKnown)return "지점별로 달라요 · 예약 페이지에서 확인";
+  const f=m=>m<36?m+"개월":Math.floor(m/12)+"세";
+  return f(p.min)+" ~ "+(p.max>=131?"초등":f(p.max));
+}
+function kcCard(id){
+  const p=P[id],c=el("article","card");
+  const top=el("div","card-top");top.append(el("div","badge",p.e));
+  const tt=el("div");tt.append(el("h2",null,p.n));tt.append(el("p","sub",regionLabel(p.r)+" · "+p.gu+"구"));
+  top.append(tt);c.append(top);
+  c.append(infoList([["주소",p.addr||"예약 페이지에서 확인"],["나이",ageText(p)],["안내",p.note]]));
+  const lk=el("div","links");
+  const a1=el("a","link","예약하기(키움포털) ↗");a1.href=KIUM;a1.target="_blank";a1.rel="noopener";
+  const a2=el("a","link","지도 ↗");a2.href=naver(p.addr?(p.gu+"구 "+p.addr):p.n);a2.target="_blank";a2.rel="noopener";
+  lk.append(a1,a2);c.append(lk);
+  const add=el("button","btn",S.my.includes(id)?"✔ 내 코스에 담김":"＋ 내 코스에 담기");add.onclick=()=>toggleMy(id);c.append(add);
+  c.append(el("p","src","출처: "+p.src+" · 운영 여부·요금은 예약 페이지에서 꼭 확인"));
+  return c;
+}
+function evCard(id){
+  const p=P[id],c=el("article","card"),st=evStatus(p);
+  const top=el("div","card-top");top.append(el("div","badge",p.e));
+  const tt=el("div");tt.append(el("h2",null,p.n));
+  const row=el("div","tags");row.append(el("span","st "+st.c,st.t));if(!p.sure)row.append(el("span","st tbd","날짜 확인 필요"));
+  tt.append(row);top.append(tt);c.append(top);
+  c.append(infoList([["기간",fmtD(p.start)+(p.start===p.end?"":" ~ "+fmtD(p.end))+(p.end.slice(0,4)!==p.start.slice(0,4)?" ("+p.end.slice(0,4)+")":"")],["장소",p.gu+(p.r==="all"?"":" · "+regionLabel(p.r))],["나이",p.ageKnown?ageText(p):"온 가족"],["안내",p.note]]));
+  const lk=el("div","links");const a=el("a","link","공식 안내 보기 ↗");a.href=p.link;a.target="_blank";a.rel="noopener";lk.append(a);c.append(lk);
+  if(st.c!=="end"){const add=el("button","btn",S.my.includes(id)?"✔ 내 코스에 담김":"＋ 내 코스에 담기");add.onclick=()=>toggleMy(id);c.append(add)}
+  c.append(el("p","src","출처: "+p.src));
+  return c;
+}
 function renderList(){
-  ["routes","build","places"].forEach(t=>$("#tab-"+t).setAttribute("aria-selected",String(S.tab===t)));
+  ["routes","build","kc","ev","places"].forEach(t=>$("#tab-"+t).setAttribute("aria-selected",String(S.tab===t)));
   $("#indoor").checked=S.indoor;
   const list=$("#list");list.textContent="";
   if(S.tab==="routes"){
@@ -436,8 +544,20 @@ function renderList(){
     rs.forEach(r=>list.append(routeCard(r)));
     if(!rs.length)list.append(el("div","empty","이 동네엔 맞는 코스가 아직 없어요. 다른 동네를 골라보거나 '코스 만들기'로 직접 짜 보세요!"));
   }else if(S.tab==="build")builder(list);
+  else if(S.tab==="kc"){
+    const ids=Object.keys(P).filter(id=>{const p=P[id];return p.kind==="kc"&&inRegion(p.r)&&fitAge(p)});
+    const intro=el("p","note","서울시·구청이 운영하는 '서울형 키즈카페'예요. 대부분 2시간 몇천 원이고, 우리동네키움포털에서 미리 예약해요. 나이를 모르는 지점은 모든 나이에서 보여줘요.");
+    list.append(intro);
+    ids.sort((a,b)=>(P[b].ageKnown-P[a].ageKnown)).forEach(id=>list.append(kcCard(id)));
+    if(!ids.length)list.append(el("div","empty","이 동네엔 찾은 키즈카페가 아직 없어요. 다른 동네를 골라보세요."));
+  }else if(S.tab==="ev"){
+    const ids=Object.keys(P).filter(id=>{const p=P[id];return p.kind==="ev"&&inRegion2(p.r)&&fitAge(p)&&(!S.indoor||p.in)&&p.end>=TODAY});
+    list.append(el("p","note","오늘("+fmtD(TODAY)+") 기준이에요. 끝난 행사는 자동으로 빠져요. '날짜 확인 필요'는 공식 일정이 아직 안 나온 행사예요."));
+    ids.sort((a,b)=>P[a].start<P[b].start?-1:1).forEach(id=>list.append(evCard(id)));
+    if(!ids.length)list.append(el("div","empty","지금 이 조건에 맞는 행사가 없어요."));
+  }
   else{
-    const ids=Object.keys(P).filter(id=>{const p=P[id];return inRegion(p.r)&&fitAge(p)&&(!S.indoor||p.in)});
+    const ids=Object.keys(P).filter(id=>{const p=P[id];return !p.kind&&inRegion(p.r)&&fitAge(p)&&(!S.indoor||p.in)});
     ids.forEach(id=>list.append(placeCard(id)));
     if(!ids.length)list.append(el("div","empty","이 조건에 맞는 장소가 없어요"));
   }
@@ -446,6 +566,8 @@ function renderAll(){renderAges();renderMap();renderList()}
 $("#tab-routes").onclick=()=>set("tab","routes");
 $("#tab-build").onclick=()=>set("tab","build");
 $("#tab-places").onclick=()=>set("tab","places");
+$("#tab-kc").onclick=()=>set("tab","kc");
+$("#tab-ev").onclick=()=>set("tab","ev");
 $("#indoor").onchange=e=>set("indoor",e.target.checked);
 
 async function vote(mid,has){
