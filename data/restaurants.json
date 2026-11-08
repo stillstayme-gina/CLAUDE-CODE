@@ -1,0 +1,24 @@
+{
+  "_comment": "검증 전 후보. naverRating/highChair는 직접 확인 후 채워야 함. 쇼핑몰 식당가는 유아의자·수유실 비율이 높아 1차 후보로 둠.",
+  "verificationRules": {
+    "minRating": 4.0,
+    "requireHighChair": true,
+    "fallbackIfNoRating": "네이버 별점이 비공개인 경우 방문자 리뷰 수 + '아이와 가기 좋아요' 키워드 리뷰 + 편의시설의 '유아의자' 표시로 판단"
+  },
+  "restaurantAreas": [
+    { "id": "lotteworld-mall-dining", "name": "롯데월드몰 식당가", "nearPlaces": ["lotteworld-aquarium", "kidzania-seoul"], "type": "쇼핑몰 식당가",
+      "naverRating": null, "highChair": "unverified", "nursingRoom": "확인 필요" },
+    { "id": "iparkmall-yongsan-dining", "name": "용산 아이파크몰 식당가", "nearPlaces": ["nmk-childrens-museum"], "type": "쇼핑몰 식당가",
+      "naverRating": null, "highChair": "unverified", "nursingRoom": "확인 필요" },
+    { "id": "lotte-kondae-dining", "name": "건대 스타시티몰·롯데백화점 건대점 식당가", "nearPlaces": ["seoul-childrens-grand-park", "seoul-sangsang-nara"], "type": "쇼핑몰 식당가",
+      "naverRating": null, "highChair": "unverified", "nursingRoom": "확인 필요" },
+    { "id": "lottemall-gimpo-dining", "name": "롯데몰 김포공항점 식당가", "nearPlaces": ["aviation-museum"], "type": "쇼핑몰 식당가",
+      "naverRating": null, "highChair": "unverified", "nursingRoom": "확인 필요" },
+    { "id": "pangyo-hyundai-dining", "name": "현대백화점 판교점 식당가", "nearPlaces": ["koreajobworld"], "type": "백화점 식당가",
+      "naverRating": null, "highChair": "unverified", "nursingRoom": "확인 필요" },
+    { "id": "magok-dining", "name": "마곡나루역 주변 상권", "nearPlaces": ["seoul-botanic-park"], "type": "상권(개별 식당 선별 필요)",
+      "naverRating": null, "highChair": "unverified", "nursingRoom": "확인 필요" },
+    { "id": "seongsu-dining", "name": "성수동(서울숲 인근) 상권", "nearPlaces": ["seoul-forest"], "type": "상권(개별 식당 선별 필요)",
+      "naverRating": null, "highChair": "unverified", "nursingRoom": "확인 필요" }
+  ]
+}

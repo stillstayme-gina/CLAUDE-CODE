@@ -1,0 +1,8 @@
+{
+  "_comment": "연령 구분은 개월 단위로 저장해 나중에 구간을 바꿔도 장소 데이터는 그대로 쓸 수 있게 함",
+  "ageGroups": [
+    { "id": "toddler",  "label": "3세 이하",            "minMonths": 0,  "maxMonths": 36 },
+    { "id": "preschool","label": "3~6세",               "minMonths": 36, "maxMonths": 84 },
+    { "id": "lowerElem","label": "7~10세(초등 저학년)", "minMonths": 84, "maxMonths": 131 }
+  ]
+}
